@@ -1,0 +1,37 @@
+@(user: User)(content: Html)
+
+<html>
+    <head>
+        <title>adtube</title>
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")"></script>
+        <dl id="topbar">
+            @if(user==null) {
+                <dt>
+                    You are not logged in
+                    (<a href="@routes.Login.get()">Log In</a>)
+                </dt>
+            } else {
+                <dt>
+                    Logged in as: <b>@user.getUsername()</b>
+                    (<a href="@routes.Login.logout()">Log Out</a>)
+                    (<a href="@routes.Index.get()" id="logo">Home</a>)
+                    (<a href="@routes.YourVideos.get()">Your Videos</a>)
+                </dt>
+            }
+            <dt>
+                @if(flash.contains("success")) {
+                    <p class="success">@flash.get("success")</p>
+                }
+                @if(flash.contains("failure")) {
+                    <p class="failure">@flash.get("failure")</p>
+                }
+            </dt>
+        </dl>
+        <hr>
+    </head>
+    <body>
+        @content
+    </body>
+</html>

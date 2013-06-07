@@ -1,0 +1,11 @@
+@(form: Form[Signup.SignupInfo])
+
+@main(null) {
+    @helper.form(routes.Signup.post()) {
+        <h1>Sign up</h1>
+        <p><input type="text" name="username" placeholder="Username" value="@form("username").value"></p>
+        <p><input type="password" name="password" placeholder="Password"></p>
+        <p><input type="password" name="passwordRepeat" placeholder="Repeat Password"></p>
+        <p><button type="submit">Sign up</button></p>
+    }
+}

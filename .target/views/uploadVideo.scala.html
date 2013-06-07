@@ -1,0 +1,12 @@
+@(user: User, form: Form[UploadVideo.UploadVideoInfo])
+
+@main(user) {
+    @helper.form(routes.UploadVideo.post(), 'enctype -> "multipart/form-data") {
+        <h1>Upload video</h1>
+        <p><input type="file" name="file" placeholder="Select file"></p>
+        <p><input type="text" name="title" placeholder="Title"></p>
+        <p><textarea rows="4" cols="50" name="description" placeholder="Description"></textarea></p>
+        <p><input type="text" name="payFormula" placeholder="Pay formula"></p>
+        <p><button type="submit">Upload</button></p>
+    }
+}

@@ -1,0 +1,11 @@
+@(user: User)
+
+@main(user) {
+    <p><a href="@routes.UploadVideo.get()">Upload video</a></p>
+    <article class="videos">
+        <div class="folder" data-folder-id="@user.getUsername()">
+            <header><h3>Your videos:</h3></header>
+            <ul class="list">@user.getVideos().map {video => @views.html.videos.item(user,video)}</ul>
+        </div>
+    </article>
+}
