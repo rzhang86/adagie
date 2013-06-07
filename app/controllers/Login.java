@@ -9,6 +9,7 @@ import views.html.*;
 
 public class Login extends Controller {  
     public static Result get() {
+        if (session().get("username") != null) return redirect(routes.Index.get());
     	return ok(login.render(form(LoginInfo.class)));
     }
 

@@ -37,17 +37,15 @@ import views.html.*;
 	        // todo: send a list of top few videos, to lessen queries
 	        for (VideoPayoutRate videoPayoutRate : videoPayoutRates) {
         		// todo: dont send video by form like this? may not be safe someone could change source to different video id
-                WatchedVideo watchedVideo = new WatchedVideo(user, videoPayoutRate.video);
-                watchedVideo.setStartTime(Calendar.getInstance());
-                watchedVideo.setEndTime(null);
-                watchedVideo.setPayout(videoPayoutRate.payout);
-                watchedVideo.save();
-        		return ok(index.render(user, balance, committedBalance, consumerProfile, watchedVideo, form(VideoEndedInfo.class)));
+	            WatchingVideo watchingVideo = user.findWatchingVideo()
+                    .setStartTime(Calendar.getInstance())
+                    .setVideo(videoPayoutRate.video)
+                    .setPayout(videoPayoutRate.payout)
+                    .saveGet();
+        		return ok(index.render(user, watchingVideo, form(VideoEndedInfo.class)));
 	        }
         }
-        ConsumerProfile c = ConsumerProfile.find.ref(user.getUsername());
-        //System.out.println("YOHO: " + user.username + " " + c.a7);
-        return ok(index.render(user, balance, committedBalance, consumerProfile, null, form(VideoEndedInfo.class)));
+        return ok(index.render(user, null, form(VideoEndedInfo.class)));
     }
     
     public static class VideoPayoutRate implements Comparable<VideoPayoutRate>{
@@ -65,31 +63,36 @@ import views.html.*;
     }
 
     public static class VideoEndedInfo {
-        public String watchedVideoId;
+        public String videoId;
     }
     
-    // only get paid if watched being tracked
+    // only get paid if watching video is being tracked
     @Transactional public static Result post() {
         Form<VideoEndedInfo> videoEndedInfoForm = form(VideoEndedInfo.class).bindFromRequest();
         try {
-            WatchedVideo watchedVideo = WatchedVideo.find.ref(Long.parseLong(videoEndedInfoForm.get().watchedVideoId));
             User user = User.find.ref(request().username());
-            if (!watchedVideo.getUser().getUsername().equals(user.getUsername())) flash("failure", "Video was not tracked");
+            WatchingVideo watchingVideo = user.findWatchingVideo();
+            Video video = Video.find.ref(Long.parseLong(videoEndedInfoForm.get().videoId));
+            if (!watchingVideo.getVideo().equals(video)) flash("failure", "Video was not tracked");
             else {
                 Calendar currentTime = Calendar.getInstance();
-                Calendar endTime = watchedVideo.getStartTime();
-                endTime.add(Calendar.SECOND, watchedVideo.getVideo().getDuration());
+                Calendar endTime = watchingVideo.getStartTime();
+                endTime.add(Calendar.SECOND, watchingVideo.getVideo().getDuration());
                 if (currentTime.before(endTime)) flash("failure", "Video ended prematurely");
+                else if (user.getWatchedVideos().contains(video)) flash("failure", "You have already been paid for watching this video recently");
                 else {
-                    watchedVideo.setEndTime(currentTime);
-                    watchedVideo.save();
-    	        	CommittedBalance committedBalancePayer = CommittedBalance.find.ref(watchedVideo.getVideo().getUser().getUsername());
-    	        	committedBalancePayer.setAmount(committedBalancePayer.getAmount() - watchedVideo.getPayout());
-    	        	committedBalancePayer.save();
-    	        	Balance balancePayee = Balance.find.ref(watchedVideo.getVideo().getUser().getUsername());
-    	        	balancePayee.setAmount(balancePayee.getAmount() + watchedVideo.getPayout());
-    	        	balancePayee.save();
-                    flash("Success", "You earned " + Video.centsToDollars(watchedVideo.getPayout()));
+                    WatchedVideo watchedVideo = WatchedVideo.create(user, video)
+                        .setStartTime(watchingVideo.getStartTime())
+                        .setEndTime(currentTime)
+                        .setPayout(watchingVideo.getPayout())
+                        .saveGet();
+                    Long payout = watchedVideo.getPayout();
+                    CommittedBalance committedBalance = video.getUser().findCommittedBalance();
+                    committedBalance.setAmount(committedBalance.getAmount() - payout).save();
+    	        	Balance balancePayee = user.findBalance();
+    	        	balancePayee.setAmount(balancePayee.getAmount() + payout).save();
+    	        	watchingVideo.setStartTime(null).setVideo(null).setPayout(0L).save();
+                    flash("Success", "You earned " + Video.centsToDollars(payout));
                     return redirect(routes.Index.get());
                 }
             }

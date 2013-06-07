@@ -1,34 +1,34 @@
-@(user: User, balance: Balance, committedBalance: CommittedBalance, consumerProfile: ConsumerProfile, watchedVideo: WatchedVideo, form: Form[Index.VideoEndedInfo])
+@(user: User, watchingVideo: WatchingVideo, form: Form[Index.VideoEndedInfo])
 
 @main(user) {
     <header>
         <hgroup>
             <h1>Home</h1>
-            <h2>@user.getUsername() (balance: @Video.centsToDollars(balance.getAmount()), committed: @Video.centsToDollars(committedBalance.getAmount()))</h2>
+            <h2>@user.getUsername() (balance: @Video.centsToDollars(user.findBalance().getAmount()), committed: @Video.centsToDollars(user.findCommittedBalance().getAmount()))</h2>
             <p></p>
-            @if(watchedVideo!=null) {
-                <li data-video-id="@watchedVideo.getVideo().getId()">
+            @if(watchingVideo!=null) {
+                <li data-video-id="@(watchingVideo.getVideo().getId())">
                     <p>
                         <video id="myVideo" autoplay controls preload="auto" width="320" height="240">
-                            <source src="assets/uploads/@(watchedVideo.video.id).webm" type='video/webm'>
-                            <source src="assets/uploads/@(watchedVideo.video.id).mp4" type='video/mp4'>
+                            <source src="assets/uploads/@(watchingVideo.getVideo().getId()).webm" type='video/webm'>
+                            <source src="assets/uploads/@(watchingVideo.getVideo().getId()).mp4" type='video/mp4'>
                             Your browser does not support the HTML5 video.
                         </video>
                     </p>
-                    <h4>@watchedVideo.getVideo().getTitle()</h4>
-                    <p>@watchedVideo.getVideo().getDescription()</p>
+                    <h4>@watchingVideo.getVideo().getTitle()</h4>
+                    <p>@watchingVideo.getVideo().getDescription()</p>
                 </li>
                 @helper.form(routes.Index.post(), 'id -> "myForm") {
-                    <input type="text" name="watchedVideoId" value="@watchedVideo.getId()" hidden>
+                    <input type="text" name="videoId" value="@(watchingVideo.getVideo().getId())" hidden>
                 }
             } else {
                 You have already watched all paying videos
             }
         </hgroup>
     </header>
-    <p>amount spent in past 7 days: @Video.centsToDollars(consumerProfile.getA7()) - purchase frequency: @consumerProfile.getF7()</p>
-    <p>amount spent in past 30 days: @Video.centsToDollars(consumerProfile.getA30()) - purchase frequency: @consumerProfile.getF30()</p>
-    <p>amount spent in past 365 days: @Video.centsToDollars(consumerProfile.getA365()) - purchase frequency: @consumerProfile.getF365()</p>
+    <p>amount spent in past 7 days: @Video.centsToDollars(user.findConsumerProfile().getA7()) - purchase frequency: @user.findConsumerProfile().getF7()</p>
+    <p>amount spent in past 30 days: @Video.centsToDollars(user.findConsumerProfile().getA30()) - purchase frequency: @user.findConsumerProfile().getF30()</p>
+    <p>amount spent in past 365 days: @Video.centsToDollars(user.findConsumerProfile().getA365()) - purchase frequency: @user.findConsumerProfile().getF365()</p>
     <script type="text/javascript">
     $(document).ready(function() {
         document.getElementById('myVideo').removeAttribute("controls");

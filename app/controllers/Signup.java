@@ -31,10 +31,7 @@ public class Signup extends Controller {
             else if (password.length() < 6) flash("failure", "Password must be at least 6 characters");
             else if (!password.equals(passwordRepeat)) flash("failure", "Passwords do not match");
             else {
-                (new User(username, password)).save();
-                (new Balance(username)).save();
-                (new CommittedBalance(username)).save();
-                (new ConsumerProfile(username)).save();
+                User.create(username, password);
                 session("username", username);
                 flash("success", "You have signed up");
                 return redirect(routes.Index.get());

@@ -18,31 +18,43 @@ import play.db.ebean.*;
     public Long getId() {return this.id;}
     
     @Required @ManyToOne public User user;
+    public Video setUser(User user) {this.user = user; return this;}
     public User getUser() {return this.user;}
     
     @OneToMany(cascade=CascadeType.ALL, mappedBy="video") public List<WatchedVideo> watchedVideos = new ArrayList<WatchedVideo>();
     public List<WatchedVideo> getWatchedVideos() {return this.watchedVideos;}
     
+    @OneToMany(cascade=CascadeType.ALL, mappedBy="video") public List<WatchingVideo> watchingVideos = new ArrayList<WatchingVideo>();
+    public List<WatchingVideo> getWatchingVideos() {return this.watchingVideos;}
+    
     public String title = "Untitled";
-    public void setTitle(String title) {this.title = title;}
+    public Video setTitle(String title) {this.title = title; return this;}
     public String getTitle() {return this.title;}
     
     public String description = "No description";
-    public void setDescription(String description) {this.description = description;}
+    public Video setDescription(String description) {this.description = description; return this;}
     public String getDescription() {return this.description;}
     
     public Integer duration = 0;
-    public void setDuration(Integer duration) {this.duration = duration;}
+    public Video setDuration(Integer duration) {this.duration = duration; return this;}
     public Integer getDuration() {return this.duration;}
     
     public String payFormula = "";
-    public void setPayFormula(String payFormula) {this.payFormula = payFormula;}
+    public Video setPayFormula(String payFormula) {this.payFormula = payFormula; return this;}
     public String getPayFormula() {return this.payFormula;}
     
-    
-    public Video(User user) {
-        this.user = user;
+    public static Video create(User user) {
+        Video video = new Video();
+        video.setUser(user);
+        video.save();
+        return video;
     }
+
+    public static void destroy(Video video) {
+        video.delete();
+    }
+    
+    public Video saveGet() {this.save(); return this;}
     
     public static Finder<Long, Video> find = new Finder<Long, Video>(Long.class, Video.class);
     

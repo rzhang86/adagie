@@ -17,43 +17,31 @@ public class Global extends GlobalSettings {
         if (User.find.findRowCount() == 0) {
             //Ebean.save((List) Yaml.load("test-data.yml"));
             //User user = User.find.ref("Ray");
-            User userRay = new User("Ray", "secret");
+            User userRay = User.create("Ray", "secret");
             userRay.save();
-            Balance balanceRay = new Balance(userRay.getUsername());
-            balanceRay.setAmount(10000L);
-            balanceRay.save();
-            CommittedBalance committedBalanceRay = new CommittedBalance(userRay.getUsername());
-            committedBalanceRay.setAmount(10000L);
-            committedBalanceRay.save();
-            ConsumerProfile consumerProfileRay = new ConsumerProfile(userRay.getUsername());
-            consumerProfileRay.save();
-            CreditCardAccount creditCardAccountRay = new CreditCardAccount(userRay);
-            creditCardAccountRay.setOfxUser("cim2phat4u");
-            creditCardAccountRay.setOfxPassword("zhaamE_263");
-            creditCardAccountRay.setFiUrl("https://online.americanexpress.com/myca/ofxdl/desktop/desktopDownload.do?request_type=nl_ofxdownload");
-            creditCardAccountRay.setFiOrganizationName("AMEX");
-            creditCardAccountRay.setFiId("3101");
-            creditCardAccountRay.setCcNumber("379718849191002");
-            creditCardAccountRay.save();
+            userRay.findBalance().setAmount(10000L).save();
+            userRay.findCommittedBalance().setAmount(10000L).save();
+            CreditCardAccount creditCardAccountRay = CreditCardAccount.create(userRay)
+                .setOfxUser("cim2phat4u")
+                .setOfxPassword("zhaamE_263")
+                .setFiUrl("https://online.americanexpress.com/myca/ofxdl/desktop/desktopDownload.do?request_type=nl_ofxdownload")
+                .setFiOrganizationName("AMEX")
+                .setFiId("3101")
+                .setCcNumber("379718849191002")
+                .saveGet();
             
-            User userKatie = new User("Katie", "secret");
+            User userKatie = User.create("Katie", "secret");
             userKatie.save();
-            Balance balanceKatie = new Balance(userKatie.getUsername());
-            balanceKatie.setAmount(10000L);
-            balanceKatie.save();
-            CommittedBalance committedBalanceKatie = new CommittedBalance(userKatie.getUsername());
-            committedBalanceKatie.setAmount(10000L);
-            committedBalanceKatie.save();
-            ConsumerProfile consumerProfileKatie = new ConsumerProfile(userKatie.getUsername());
-            consumerProfileKatie.save();
-            CreditCardAccount creditCardAccountKatie = new CreditCardAccount(userKatie);
-            creditCardAccountKatie.setOfxUser("kwang318");
-            creditCardAccountKatie.setOfxPassword("651Anthony3083");
-            creditCardAccountKatie.setFiUrl("https://www.accountonline.com/cards/svc/CitiOfxManager.do");
-            creditCardAccountKatie.setFiOrganizationName("Citigroup");
-            creditCardAccountKatie.setFiId("24909");
-            creditCardAccountKatie.setCcNumber("4128003460359667");
-            creditCardAccountKatie.save();
+            userKatie.findBalance().setAmount(10000L).save();
+            userKatie.findCommittedBalance().setAmount(10000L).save();
+            CreditCardAccount creditCardAccountKatie = CreditCardAccount.create(userKatie)
+                .setOfxUser("kwang318")
+                .setOfxPassword("651Anthony3083")
+                .setFiUrl("https://www.accountonline.com/cards/svc/CitiOfxManager.do")
+                .setFiOrganizationName("Citigroup")
+                .setFiId("24909")
+                .setCcNumber("4128003460359667")
+                .saveGet();
         }
 
         // start looping maintenance threads
@@ -72,7 +60,7 @@ public class Global extends GlobalSettings {
             //while(applicationIsLive) {
             	DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
                 for (User user : User.find.all()) {
-                	ConsumerProfile consumerProfile = ConsumerProfile.find.byId(user.getUsername());
+                	ConsumerProfile consumerProfile = user.findConsumerProfile();
                     for (CreditCardAccount creditCardAccount : user.getCreditCardAccounts()) {
                     	try {
                     	    /*
@@ -105,7 +93,7 @@ public class Global extends GlobalSettings {
             						"CCNumber=" + creditCardAccount.getCcNumber() + ";");
                     		Statement statement = connection.createStatement();
                     		ResultSet resultSet;
-                    		ResultSetMetaData metaData;
+                    		//ResultSetMetaData metaData;
                         	Calendar today = Calendar.getInstance();
                     		Calendar daysAgo7 = Calendar.getInstance(); daysAgo7.add(Calendar.DAY_OF_YEAR, -7);
                     		Calendar daysAgo30 = Calendar.getInstance(); daysAgo30.add(Calendar.DAY_OF_YEAR, -30);
@@ -114,29 +102,27 @@ public class Global extends GlobalSettings {
                     				"where DatePosted < '" + dateFormat.format(today.getTime()) + "' " +
                     				"and DatePosted > '" + dateFormat.format(daysAgo365.getTime()) + "'"); // todo: paginate
                     		resultSet = statement.getResultSet();
-                    		metaData = resultSet.getMetaData();
-                    		consumerProfile.setA7(0L);
-                    		consumerProfile.setA30(0L);
-                    		consumerProfile.setA365(0L);
-                    		consumerProfile.setF7(0);
-                    		consumerProfile.setF30(0);
-                    		consumerProfile.setF365(0);
+                    		//metaData = resultSet.getMetaData();
+                    		consumerProfile.setA7(0L).setA30(0L).setA365(0L).setF7(0).setF30(0).setF365(0);
                     		while (resultSet.next()) {
                     			Date datePosted = dateFormat.parse(resultSet.getString(1));
                     			int amount = Integer.parseInt(resultSet.getString(2).replaceAll(",", "").replaceAll("\\.", ""));
             					if (amount < 0) {
             						amount *= -1;
             						if (datePosted.after(daysAgo365.getTime())) { 
-            							consumerProfile.setA365(consumerProfile.getA365() + (long) amount);
-            							consumerProfile.setF365(consumerProfile.getF365() + 1);
+            							consumerProfile
+            							    .setA365(consumerProfile.getA365() + (long) amount)
+            							    .setF365(consumerProfile.getF365() + 1);
             						}
             						if (datePosted.after(daysAgo30.getTime())) {
-            							consumerProfile.setA30(consumerProfile.getA30() + (long) amount);
-            							consumerProfile.setF30(consumerProfile.getF30() + 1);
+            							consumerProfile
+            							    .setA30(consumerProfile.getA30() + (long) amount)
+            							    .setF30(consumerProfile.getF30() + 1);
             						}
             						if (datePosted.after(daysAgo7.getTime())) {
-            							consumerProfile.setA7(consumerProfile.getA7() + (long) amount);
-            							consumerProfile.setF7(consumerProfile.getF7() + 1);
+            							consumerProfile
+            							    .setA7(consumerProfile.getA7() + (long) amount)
+            							    .setF7(consumerProfile.getF7() + 1);
             						}
             					}
                     		}

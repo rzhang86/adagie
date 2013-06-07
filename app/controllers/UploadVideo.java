@@ -30,17 +30,17 @@ import views.html.videos.*;
     // todo: keep connection open and show progress when uploading long jobs
     // todo: adjust ffmpeg resolution
     public static Result post() {
-        Video video = new Video(User.find.ref(request().username()));
-        video.save();
+        Video video = Video.create(User.find.ref(request().username()));
         MultipartFormData formData = request().body().asMultipartFormData();
         File file = new File("public/uploads/" + video.getId() + "-temp.mp4");
         File tempFile = new File("public/uploads/" + video.getId() + "-temp.mp4");
         File finalFileMp4 = new File("public/uploads/" + video.getId() + ".mp4");
         File finalFileWebm = new File("public/uploads/" + video.getId() + ".webm");
         try {
-            video.setTitle(formData.asFormUrlEncoded().get("title")[0]);
-            video.setDescription(formData.asFormUrlEncoded().get("description")[0]);
-            video.setPayFormula(formData.asFormUrlEncoded().get("payFormula")[0]);
+            video
+                .setTitle(formData.asFormUrlEncoded().get("title")[0])
+                .setDescription(formData.asFormUrlEncoded().get("description")[0])
+                .setPayFormula(formData.asFormUrlEncoded().get("payFormula")[0]);
             file = formData.getFile("file").getFile();
             Process process;
             process = Runtime.getRuntime().exec("cmd /C lib\\ffmpeg -y -i " + file.getAbsolutePath() + " -vf scale=320:trunc(ow/a/2)*2 " + tempFile.getAbsolutePath());
@@ -51,8 +51,7 @@ import views.html.videos.*;
             getDuration(process);
             if (!finalFileMp4.exists() || !finalFileWebm.exists() || duration == 0) flash("failure", "Video improperly formatted");
             else {
-                video.setDuration(duration);
-                video.save();
+                video.setDuration(duration).save();
                 flash("success", "Video uploaded");
                 file.delete();
                 tempFile.delete();
@@ -69,19 +68,17 @@ import views.html.videos.*;
     }
     
     public static int getDuration(Process process) {
-        int durationError = 0;
-        int durationOutput = 0;
+        int duration = 0;
         try {
             BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
             BufferedReader outputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
-            while ((line = errorReader.readLine()) != null) {durationError = getDurationReader(line);}
-            while ((line = outputReader.readLine()) != null) {durationOutput = getDurationReader(line);}
+            while ((line = errorReader.readLine()) != null) { if (duration == 0) duration = getDurationReader(line);}
+            while ((line = outputReader.readLine()) != null) { if (duration == 0) duration = getDurationReader(line);}
             process.waitFor();
         }
         catch (Exception e) {}
-        System.out.println("dur: " + (durationError > durationOutput ? durationError : durationOutput));
-        return (durationError > durationOutput ? durationError : durationOutput);
+        return duration;
     }
     
     public static int getDurationReader(String line) {
@@ -89,7 +86,6 @@ import views.html.videos.*;
         if (line.contains("Duration: ")) {
             String[] durationTokens = line.split("Duration: ")[1].split(",")[0].split(":");
             duration = (Integer.parseInt(durationTokens[0]) * 60 * 60) + (Integer.parseInt(durationTokens[1]) * 60) + ((int) Double.parseDouble(durationTokens[2]));
-            System.out.println("durrr: " + duration); 
         }
         return duration;
     }

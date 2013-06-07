@@ -64,6 +64,14 @@ create table watched_video (
   constraint pk_watched_video primary key (id))
 ;
 
+create table watching_video (
+  username                  varchar(255) not null,
+  video_id                  bigint,
+  start_time                timestamp,
+  payout                    bigint,
+  constraint pk_watching_video primary key (username))
+;
+
 create sequence balance_seq;
 
 create sequence committed_balance_seq;
@@ -78,6 +86,8 @@ create sequence video_seq;
 
 create sequence watched_video_seq;
 
+create sequence watching_video_seq;
+
 alter table credit_card_account add constraint fk_credit_card_account_user_1 foreign key (user_username) references user (username) on delete restrict on update restrict;
 create index ix_credit_card_account_user_1 on credit_card_account (user_username);
 alter table video add constraint fk_video_user_2 foreign key (user_username) references user (username) on delete restrict on update restrict;
@@ -86,6 +96,8 @@ alter table watched_video add constraint fk_watched_video_user_3 foreign key (us
 create index ix_watched_video_user_3 on watched_video (user_username);
 alter table watched_video add constraint fk_watched_video_video_4 foreign key (video_id) references video (id) on delete restrict on update restrict;
 create index ix_watched_video_video_4 on watched_video (video_id);
+alter table watching_video add constraint fk_watching_video_video_5 foreign key (video_id) references video (id) on delete restrict on update restrict;
+create index ix_watching_video_video_5 on watching_video (video_id);
 
 
 
@@ -107,6 +119,8 @@ drop table if exists video;
 
 drop table if exists watched_video;
 
+drop table if exists watching_video;
+
 SET REFERENTIAL_INTEGRITY TRUE;
 
 drop sequence if exists balance_seq;
@@ -122,4 +136,6 @@ drop sequence if exists user_seq;
 drop sequence if exists video_seq;
 
 drop sequence if exists watched_video_seq;
+
+drop sequence if exists watching_video_seq;
 
