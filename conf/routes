@@ -6,10 +6,11 @@
 GET     /                           controllers.Application.index()
 POST    /                           controllers.Application.readVideoEndedForm()
 GET     /profile                    controllers.Application.myProfile()
+POST    /profile                    controllers.Application.readCreditCardAccountForm()
 GET     /videos                     controllers.Application.myVideos()
-GET     /upload                     controllers.Application.uploadVideo()
-POST    /upload                     controllers.Application.readUploadVideoForm()
+POST    /videos                     controllers.Application.readUploadVideoForm()
 GET     /delete/:videoId            controllers.Application.deleteVideo(videoId: Long)
+
 GET     /login                      controllers.Login.login()
 POST    /login                      controllers.Login.readLoginForm()
 GET     /logout                     controllers.Login.logout()

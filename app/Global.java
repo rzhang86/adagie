@@ -3,7 +3,10 @@ import java.text.*;
 import java.util.*;
 import java.util.Date;
 
+import com.avaje.ebean.*;
+
 import play.*;
+import play.libs.*;
 
 import models.*;
 
@@ -15,33 +18,47 @@ public class Global extends GlobalSettings {
     @Override public void onStart(Application app) {
         // Check if the database is empty
         if (User.find.findRowCount() == 0) {
-            //Ebean.save((List) Yaml.load("test-data.yml"));
-            //User user = User.find.ref("Ray");
+            Ebean.save((List) Yaml.load("data-FinancialInstitution.yml"));
+            
             User userRay = User.create("Ray", "secret");
             userRay.save();
             userRay.findBalance().setAmount(10000L).save();
             userRay.findCommittedBalance().setAmount(10000L).save();
+            /*
             CreditCardAccount creditCardAccountRay = CreditCardAccount.create(userRay)
                 .setOfxUser("cim2phat4u")
                 .setOfxPassword("zhaamE_263")
                 .setFiUrl("https://online.americanexpress.com/myca/ofxdl/desktop/desktopDownload.do?request_type=nl_ofxdownload")
                 .setFiOrganizationName("AMEX")
                 .setFiId("3101")
-                .setCcNumber("379718849191002")
                 .saveGet();
+            */
+            CreditCardAccount creditCardAccountRay = CreditCardAccount.create(userRay)
+                    .setOfxUser("cim2phat4u")
+                    .setOfxPassword("zhaamE_263")
+                    .setFinancialInstitution(FinancialInstitution.find.ref(424L))
+                    .setCcNumber("379718849191002")
+                    .saveGet();
             
             User userKatie = User.create("Katie", "secret");
             userKatie.save();
             userKatie.findBalance().setAmount(10000L).save();
             userKatie.findCommittedBalance().setAmount(10000L).save();
+            /*
             CreditCardAccount creditCardAccountKatie = CreditCardAccount.create(userKatie)
                 .setOfxUser("kwang318")
                 .setOfxPassword("651Anthony3083")
                 .setFiUrl("https://www.accountonline.com/cards/svc/CitiOfxManager.do")
                 .setFiOrganizationName("Citigroup")
                 .setFiId("24909")
-                .setCcNumber("4128003460359667")
                 .saveGet();
+            */
+            CreditCardAccount creditCardAccountKatie = CreditCardAccount.create(userKatie)
+                    .setOfxUser("kwang318")
+                    .setOfxPassword("651Anthony3083")
+                    .setFinancialInstitution(FinancialInstitution.find.ref(427L))
+                    .setCcNumber("4128003460359667")
+                    .saveGet();
         }
 
         // start looping maintenance threads
@@ -80,6 +97,7 @@ public class Global extends GlobalSettings {
                             properties.add("OFXVersion");
                             */
                     	    
+                    		/*
                     		Connection connection = DriverManager.getConnection(
                     				"jdbc:ofx:" +
             						"OFXVersion=102;" +
@@ -89,7 +107,19 @@ public class Global extends GlobalSettings {
             						"OFXPassword=" + creditCardAccount.getOfxPassword() + ";" +
             						"FIUrl=" + creditCardAccount.getFiUrl() + ";" +
             						"FIOrganizationName=" + creditCardAccount.getFiOrganizationName() + ";" +
-            						"FIId=" + creditCardAccount.getFiId() + ";" +
+            						"FIId=" + creditCardAccount.getFiId() + ";" );
+            				*/
+                    		
+                    		Connection connection = DriverManager.getConnection(
+                    				"jdbc:ofx:" +
+            						"OFXVersion=102;" +
+            						"ApplicationVersion=1401;" +
+            						"ApplicationId=QWIN;" +
+            						"OFXUser=" + creditCardAccount.getOfxUser() + ";" +
+            						"OFXPassword=" + creditCardAccount.getOfxPassword() + ";" +
+            						"FIUrl=" + creditCardAccount.getFinancialInstitution().getUrl() + ";" +
+            						"FIOrganizationName=" + creditCardAccount.getFinancialInstitution().getOrg() + ";" +
+            						"FIId=" + creditCardAccount.getFinancialInstitution().getFid() + ";" +
             						"CCNumber=" + creditCardAccount.getCcNumber() + ";");
                     		Statement statement = connection.createStatement();
                     		ResultSet resultSet;
@@ -98,7 +128,7 @@ public class Global extends GlobalSettings {
                     		Calendar daysAgo7 = Calendar.getInstance(); daysAgo7.add(Calendar.DAY_OF_YEAR, -7);
                     		Calendar daysAgo30 = Calendar.getInstance(); daysAgo30.add(Calendar.DAY_OF_YEAR, -30);
                     		Calendar daysAgo365 = Calendar.getInstance(); daysAgo365.add(Calendar.DAY_OF_YEAR, -365);
-                    		statement.executeQuery("select DatePosted, Amount from CCTransactions " +
+                			statement.executeQuery("select DatePosted, Amount from CCTransactions " +
                     				"where DatePosted < '" + dateFormat.format(today.getTime()) + "' " +
                     				"and DatePosted > '" + dateFormat.format(daysAgo365.getTime()) + "'"); // todo: paginate
                     		resultSet = statement.getResultSet();

@@ -60,7 +60,6 @@ public class Login extends Controller {
         Form<SignupForm> signupForm = form(SignupForm.class).bindFromRequest();
         try {
             String username = signupForm.get().username;
-            System.out.println("YOLO:" + username);
             String password = signupForm.get().password;
             String passwordRepeat = signupForm.get().passwordRepeat;
             if (username.length() < 0) flash("failure", "Username must be at least 1 character");

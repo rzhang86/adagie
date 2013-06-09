@@ -2,12 +2,18 @@
 
 @main(null, "signup") {
     <div class="jumbotron">
-        <h1>Sign up</h1>
-        <form action="@routes.Login.readSignupForm()" method="post">
-            <p><input type="text" class="span2" name="username" placeholder="Username" value="@form("username").value" maxlength=31></p>
-            <p><input type="password" class="span2" name="password" placeholder="Password" maxlength=31></p>
-            <p><input type="password" class="span2" name="passwordRepeat" placeholder="Repeat Password" maxlength=31></p>
-            <p><button type="submit" class="btn btn-info">Sign up</button></p>
-        </form>
+        <div class="container">
+            <div class="span1"></div>
+            <div class="well span8">
+                <h2>Sign up</h2>
+                <form action="@routes.Login.readSignupForm()" method="post">
+                    <p><input type="text" class="span2" name="username" placeholder="Username" value="@form("username").value" maxlength=31></p>
+                    <p><input type="password" class="span2" name="password" placeholder="Password" maxlength=31></p>
+                    <p><input type="password" class="span2" name="passwordRepeat" placeholder="Repeat Password" maxlength=31></p>
+                    <p><button type="submit" class="btn btn-info">Sign up</button></p>
+                </form>
+            </div>
+            <div class="span3"></div>
+        </div>
     </div>
 }

@@ -13,6 +13,10 @@ import play.db.ebean.*;
     public CreditCardAccount setUser(User user) {this.user = user; return this;}
     public User getUser() {return this.user;}
     
+    @ManyToOne public FinancialInstitution financialInstitution;
+    public CreditCardAccount setFinancialInstitution(FinancialInstitution financialInstitution) {this.financialInstitution = financialInstitution; return this;}
+    public FinancialInstitution getFinancialInstitution() {return this.financialInstitution;}
+    
     public String ofxUser = "";
     public CreditCardAccount setOfxUser(String ofxUser) {this.ofxUser = ofxUser; return this;}
     public String getOfxUser() {return this.ofxUser;}
@@ -21,19 +25,7 @@ import play.db.ebean.*;
     public CreditCardAccount setOfxPassword(String ofxPassword) {this.ofxPassword = ofxPassword; return this;}
     public String getOfxPassword() {return this.ofxPassword;}
     
-    public String fiUrl = "";
-    public CreditCardAccount setFiUrl(String fiUrl) {this.fiUrl = fiUrl; return this;}
-    public String getFiUrl() {return this.fiUrl;}
-    
-    public String fiOrganizationName = "";
-    public CreditCardAccount setFiOrganizationName(String fiOrganizationName) {this.fiOrganizationName = fiOrganizationName; return this;}
-    public String getFiOrganizationName() {return this.fiOrganizationName;}
-    
-    public String fiId = "";
-    public CreditCardAccount setFiId(String fiId) {this.fiId = fiId; return this;}
-    public String getFiId() {return this.fiId;}
-    
-    public String ccNumber = ""; //todo: make unique?
+    public String ccNumber = "";
     public CreditCardAccount setCcNumber(String ccNumber) {this.ccNumber = ccNumber; return this;}
     public String getCcNumber() {return this.ccNumber;}
     

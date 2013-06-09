@@ -8,10 +8,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
         <meta name="author" content="">
-        <link href="@routes.Assets.at("stylesheets/bootstrap.css")" rel="stylesheet">
+        <link href="@routes.Assets.at("css/bootstrap.css")" rel="stylesheet">
         <style type="text/css">
             body {
-                padding-top: 60px;
+                padding-top: 40px;
                 padding-bottom: 40px;
             }
 
@@ -26,16 +26,8 @@
             
             /* Main marketing message and sign up button */
             .jumbotron {
-                margin: 60px 0;
+                margin: 20px 0;
                 text-align: center;
-            }
-            .jumbotron h1 {
-                font-size: 72px;
-                line-height: 1;
-            }
-            .jumbotron .btn {
-                font-size: 21px;
-                padding: 14px 24px;
             }
             
             /* Supporting marketing content */
@@ -47,7 +39,7 @@
             }
         </style>
         <link href="@routes.Assets.at("stylesheets/bootstrap-responsive.css")" rel="stylesheet">
-        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("img/favicon.png")">
     </head>
     <body>
         <div class="navbar navbar-inverse navbar-fixed-top">
@@ -64,25 +56,13 @@
                     <div class="nav-collapse collapse">
                         <ul class="nav pull-left">
                             @if(user!=null) {
-                                <li @if(activeClass.equals("uploadVideo")) {class="active"}><a href="@routes.Application.uploadVideo()">Videos</a></li>
+                                <li @if(activeClass.equals("myVideos")) {class="active"}><a href="@routes.Application.myVideos()">Videos</a></li>
                                 <li @if(activeClass.equals("myProfile")) {class="active"})><a href="@routes.Application.myProfile()">Profile</a></li>
-                                <li><a href="#contact">Contact</a></li>
-                                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<b class="caret"></b></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#">Action</a></li>
-                                        <li><a href="#">Another action</a></li>
-                                        <li><a href="#">Something else here</a></li>
-                                        <li class="divider"></li>
-                                        <li class="nav-header">Nav header</li>
-                                        <li><a href="#">Separated link</a></li>
-                                        <li><a href="#">One more separated link</a></li>
-                                    </ul>
-                                </li>
                             }
                         </ul>
                         <ul class="nav pull-right">
                             @if(user!=null) {
-                                <li><a href="#">Logged in as <b>@user.getUsername()</b></a></li>
+                                <li class="active"><a href="#">Logged in as <b>@user.getUsername()</b></a></li>
                                 <li>
                                     <form class="navbar-form" action="@routes.Login.logout()" method="get">
                                         <button type="submit" class="btn btn-danger">Log out</button>
@@ -114,10 +94,12 @@
                     }
                 }
             </ul>
+            <ul class="nav pull-right">
+                @if(user!=null) {<li>balance: @Video.centsToDollars(user.findBalance().getAmount()), committed: @Video.centsToDollars(user.findCommittedBalance().getAmount())</li>}
+            </ul>
         </div>
+        <script type="text/javascript" src="@routes.Assets.at("js/jquery-1.9.0.min.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("js/bootstrap.js")"></script>
         @content
-        
-        <script type="text/javascript" src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")"></script>
-        <script type="text/javascript" src="@routes.Assets.at("javascripts/bootstrap.js")"></script>
     </body>
 </html>

@@ -29,13 +29,20 @@ create table consumer_profile (
 create table credit_card_account (
   id                        bigint not null,
   user_username             varchar(255),
+  financial_institution_id  bigint,
   ofx_user                  varchar(255),
   ofx_password              varchar(255),
-  fi_url                    varchar(255),
-  fi_organization_name      varchar(255),
-  fi_id                     varchar(255),
   cc_number                 varchar(255),
   constraint pk_credit_card_account primary key (id))
+;
+
+create table financial_institution (
+  id                        bigint not null,
+  name                      varchar(255),
+  url                       varchar(255),
+  org                       varchar(255),
+  fid                       varchar(255),
+  constraint pk_financial_institution primary key (id))
 ;
 
 create table user (
@@ -80,6 +87,8 @@ create sequence consumer_profile_seq;
 
 create sequence credit_card_account_seq;
 
+create sequence financial_institution_seq;
+
 create sequence user_seq;
 
 create sequence video_seq;
@@ -90,14 +99,16 @@ create sequence watching_video_seq;
 
 alter table credit_card_account add constraint fk_credit_card_account_user_1 foreign key (user_username) references user (username) on delete restrict on update restrict;
 create index ix_credit_card_account_user_1 on credit_card_account (user_username);
-alter table video add constraint fk_video_user_2 foreign key (user_username) references user (username) on delete restrict on update restrict;
-create index ix_video_user_2 on video (user_username);
-alter table watched_video add constraint fk_watched_video_user_3 foreign key (user_username) references user (username) on delete restrict on update restrict;
-create index ix_watched_video_user_3 on watched_video (user_username);
-alter table watched_video add constraint fk_watched_video_video_4 foreign key (video_id) references video (id) on delete restrict on update restrict;
-create index ix_watched_video_video_4 on watched_video (video_id);
-alter table watching_video add constraint fk_watching_video_video_5 foreign key (video_id) references video (id) on delete restrict on update restrict;
-create index ix_watching_video_video_5 on watching_video (video_id);
+alter table credit_card_account add constraint fk_credit_card_account_financi_2 foreign key (financial_institution_id) references financial_institution (id) on delete restrict on update restrict;
+create index ix_credit_card_account_financi_2 on credit_card_account (financial_institution_id);
+alter table video add constraint fk_video_user_3 foreign key (user_username) references user (username) on delete restrict on update restrict;
+create index ix_video_user_3 on video (user_username);
+alter table watched_video add constraint fk_watched_video_user_4 foreign key (user_username) references user (username) on delete restrict on update restrict;
+create index ix_watched_video_user_4 on watched_video (user_username);
+alter table watched_video add constraint fk_watched_video_video_5 foreign key (video_id) references video (id) on delete restrict on update restrict;
+create index ix_watched_video_video_5 on watched_video (video_id);
+alter table watching_video add constraint fk_watching_video_video_6 foreign key (video_id) references video (id) on delete restrict on update restrict;
+create index ix_watching_video_video_6 on watching_video (video_id);
 
 
 
@@ -112,6 +123,8 @@ drop table if exists committed_balance;
 drop table if exists consumer_profile;
 
 drop table if exists credit_card_account;
+
+drop table if exists financial_institution;
 
 drop table if exists user;
 
@@ -130,6 +143,8 @@ drop sequence if exists committed_balance_seq;
 drop sequence if exists consumer_profile_seq;
 
 drop sequence if exists credit_card_account_seq;
+
+drop sequence if exists financial_institution_seq;
 
 drop sequence if exists user_seq;
 
