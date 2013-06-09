@@ -1,42 +1,39 @@
-@(user: User, watchingVideo: WatchingVideo, form: Form[Index.VideoEndedInfo])
+@(user: User, watchingVideo: WatchingVideo, form: Form[Application.VideoEndedForm])
 
-@main(user) {
-    <header>
-        <hgroup>
-            <h1>Home</h1>
-            <h2>@user.getUsername() (balance: @Video.centsToDollars(user.findBalance().getAmount()), committed: @Video.centsToDollars(user.findCommittedBalance().getAmount()))</h2>
-            <p></p>
-            @if(watchingVideo!=null) {
-                <li data-video-id="@(watchingVideo.getVideo().getId())">
-                    <p>
-                        <video id="myVideo" autoplay controls preload="auto" width="320" height="240">
-                            <source src="assets/uploads/@(watchingVideo.getVideo().getId()).webm" type='video/webm'>
-                            <source src="assets/uploads/@(watchingVideo.getVideo().getId()).mp4" type='video/mp4'>
-                            Your browser does not support the HTML5 video.
-                        </video>
-                    </p>
-                    <h4>@watchingVideo.getVideo().getTitle()</h4>
-                    <p>@watchingVideo.getVideo().getDescription()</p>
-                </li>
-                @helper.form(routes.Index.post(), 'id -> "myForm") {
-                    <input type="text" name="videoId" value="@(watchingVideo.getVideo().getId())" hidden>
+@main(user, "index") {
+    <div class="jumbotron">
+        <header>
+            <hgroup>
+                @if(watchingVideo!=null) {
+                    <li data-video-id="@(watchingVideo.getVideo().getId())">
+                        <p>
+                            <video id="myVideo" autoplay controls preload="auto" width="320" height="240">
+                                <source src="assets/uploads/@(watchingVideo.getVideo().getId()).webm" type='video/webm'>
+                                <source src="assets/uploads/@(watchingVideo.getVideo().getId()).mp4" type='video/mp4'>
+                                Your browser does not support the HTML5 video.
+                            </video>
+                        </p>
+                        <h4>@watchingVideo.getVideo().getTitle()</h4>
+                        <p>@watchingVideo.getVideo().getDescription()</p>
+                    </li>
+                    <form action="@routes.Application.readVideoEndedForm()" method="post" id="myForm" enctype="multipart/form-data">
+                        <input type="hidden" name="videoId" value="@(watchingVideo.getVideo().getId())">
+                    </form>
+                } else {
+                    You have already watched all paying videos
                 }
-            } else {
-                You have already watched all paying videos
-            }
-        </hgroup>
-    </header>
-    <p>amount spent in past 7 days: @Video.centsToDollars(user.findConsumerProfile().getA7()) - purchase frequency: @user.findConsumerProfile().getF7()</p>
-    <p>amount spent in past 30 days: @Video.centsToDollars(user.findConsumerProfile().getA30()) - purchase frequency: @user.findConsumerProfile().getF30()</p>
-    <p>amount spent in past 365 days: @Video.centsToDollars(user.findConsumerProfile().getA365()) - purchase frequency: @user.findConsumerProfile().getF365()</p>
+            </hgroup>
+        </header>
+    </div>
+    
     <script type="text/javascript">
-    $(document).ready(function() {
-        document.getElementById('myVideo').removeAttribute("controls");
-    });
-    document.getElementById('myVideo').addEventListener('ended', onEnded, false);
-    function onEnded(e) {
-        if(!e) {e = window.event;}
-        document.getElementById("myForm").submit();
-    }
+        $(document).ready(function() {
+            document.getElementById('myVideo').removeAttribute("controls");
+        });
+        document.getElementById('myVideo').addEventListener('ended', onEnded, false);
+        function onEnded(e) {
+            if(!e) {e = window.event;}
+            document.getElementById("myForm").submit();
+        }
     </script>
 }

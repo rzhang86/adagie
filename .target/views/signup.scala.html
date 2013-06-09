@@ -1,11 +1,13 @@
-@(form: Form[Signup.SignupInfo])
+@(form: Form[Login.SignupForm])
 
-@main(null) {
-    @helper.form(routes.Signup.post()) {
+@main(null, "signup") {
+    <div class="jumbotron">
         <h1>Sign up</h1>
-        <p><input type="text" name="username" placeholder="Username" value="@form("username").value"></p>
-        <p><input type="password" name="password" placeholder="Password"></p>
-        <p><input type="password" name="passwordRepeat" placeholder="Repeat Password"></p>
-        <p><button type="submit">Sign up</button></p>
-    }
+        <form action="@routes.Login.readSignupForm()" method="post">
+            <p><input type="text" class="span2" name="username" placeholder="Username" value="@form("username").value" maxlength=31></p>
+            <p><input type="password" class="span2" name="password" placeholder="Password" maxlength=31></p>
+            <p><input type="password" class="span2" name="passwordRepeat" placeholder="Repeat Password" maxlength=31></p>
+            <p><button type="submit" class="btn btn-info">Sign up</button></p>
+        </form>
+    </div>
 }

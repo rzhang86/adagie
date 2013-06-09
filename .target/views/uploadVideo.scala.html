@@ -1,12 +1,27 @@
-@(user: User, form: Form[UploadVideo.UploadVideoInfo])
+@(user: User, form: Form[Application.UploadVideoForm])
 
-@main(user) {
-    @helper.form(routes.UploadVideo.post(), 'enctype -> "multipart/form-data") {
-        <h1>Upload video</h1>
-        <p><input type="file" name="file" placeholder="Select file"></p>
-        <p><input type="text" name="title" placeholder="Title"></p>
-        <p><textarea rows="4" cols="50" name="description" placeholder="Description"></textarea></p>
-        <p><input type="text" name="payFormula" placeholder="Pay formula"></p>
-        <p><button type="submit">Upload</button></p>
-    }
+@main(user, "uploadVideo") {
+    <section id="content">
+        <div id="container" class="clearfix">
+            <div class="item well span4">
+                <header><h1>Upload video</h1></header>
+                <form action="@routes.Application.readUploadVideoForm()" method="post" enctype="multipart/form-data">
+                    <p><input type="file" name="file" placeholder="Select file"></p>
+                    <p><input type="text" class="span4" name="title" placeholder="Title" value="@form("title").value" maxlength=63></p>
+                    <p><textarea rows="6" class="span4" name="description" placeholder="Description" maxlength=255>@(form("description").value)</textarea></p>
+                    <p><textarea rows="6" class="span4" name="payFormula" placeholder="Pay formula" maxlength=255>@(form("payFormula").value)</textarea></p>
+                    <p><button type="submit" class="btn btn-primary">Upload</button></p>
+                </form>
+            </div>
+            @user.getVideos().map {video => @views.html.videos.item(user,video)}
+        </div>
+        
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/masonry.min.js")"></script>
+        <script>
+            window.onload = function() {
+              var miniWall = new Masonry( document.getElementById('mini-container'), {columnWidth: 50, foo: 'bar'});
+              var wall = new Masonry( document.getElementById('container'), {columnWidth: 60});
+            };
+        </script>
+    </section>
 }

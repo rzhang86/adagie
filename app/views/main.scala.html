@@ -1,37 +1,123 @@
-@(user: User)(content: Html)
+@(user: User, activeClass: String)(content: Html)
 
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
-        <title>adtube</title>
-        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
-        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
-        <script type="text/javascript" src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")"></script>
-        <dl id="topbar">
-            @if(user==null) {
-                <dt>
-                    You are not logged in
-                    (<a href="@routes.Login.get()">Log In</a>)
-                </dt>
-            } else {
-                <dt>
-                    Logged in as: <b>@user.getUsername()</b>
-                    (<a href="@routes.Login.logout()">Log Out</a>)
-                    (<a href="@routes.Index.get()" id="logo">Home</a>)
-                    (<a href="@routes.YourVideos.get()">Your Videos</a>)
-                </dt>
+        <meta charset="utf-8">
+        <title>Adder</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link href="@routes.Assets.at("stylesheets/bootstrap.css")" rel="stylesheet">
+        <style type="text/css">
+            body {
+                padding-top: 60px;
+                padding-bottom: 40px;
             }
-            <dt>
-                @if(flash.contains("success")) {
-                    <p class="success">@flash.get("success")</p>
-                }
-                @if(flash.contains("failure")) {
-                    <p class="failure">@flash.get("failure")</p>
-                }
-            </dt>
-        </dl>
-        <hr>
+
+            /* Custom container */
+            .container-narrow {
+                margin: 0 auto;
+                max-width: 700px;
+            }
+            .container-narrow > hr {
+                margin: 30px 0;
+            }
+            
+            /* Main marketing message and sign up button */
+            .jumbotron {
+                margin: 60px 0;
+                text-align: center;
+            }
+            .jumbotron h1 {
+                font-size: 72px;
+                line-height: 1;
+            }
+            .jumbotron .btn {
+                font-size: 21px;
+                padding: 14px 24px;
+            }
+            
+            /* Supporting marketing content */
+            .marketing {
+                margin: 60px 0;
+            }
+            .marketing p + h4 {
+                margin-top: 28px;
+            }
+        </style>
+        <link href="@routes.Assets.at("stylesheets/bootstrap-responsive.css")" rel="stylesheet">
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
     </head>
     <body>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <button type="button" class="btn btn-navbar"
+                        data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span> <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <ul class="nav pull-left">
+                        <li @if(activeClass.equals("index")) {class="active"}><a class="brand" href="@routes.Application.index()">Adder</a></li>
+                    </ul>
+                    <div class="nav-collapse collapse">
+                        <ul class="nav pull-left">
+                            @if(user!=null) {
+                                <li @if(activeClass.equals("uploadVideo")) {class="active"}><a href="@routes.Application.uploadVideo()">Videos</a></li>
+                                <li @if(activeClass.equals("myProfile")) {class="active"})><a href="@routes.Application.myProfile()">Profile</a></li>
+                                <li><a href="#contact">Contact</a></li>
+                                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">Action</a></li>
+                                        <li><a href="#">Another action</a></li>
+                                        <li><a href="#">Something else here</a></li>
+                                        <li class="divider"></li>
+                                        <li class="nav-header">Nav header</li>
+                                        <li><a href="#">Separated link</a></li>
+                                        <li><a href="#">One more separated link</a></li>
+                                    </ul>
+                                </li>
+                            }
+                        </ul>
+                        <ul class="nav pull-right">
+                            @if(user!=null) {
+                                <li><a href="#">Logged in as <b>@user.getUsername()</b></a></li>
+                                <li>
+                                    <form class="navbar-form" action="@routes.Login.logout()" method="get">
+                                        <button type="submit" class="btn btn-danger">Log out</button>
+                                    </form>
+                                </li>
+                            } else {
+                                <li>
+                                    <form class="navbar-form" action="@routes.Login.readLoginForm()" method="post">
+                                        <input type="text" class="span2" name="username" placeholder="Username" maxlength=31>
+                                        <input type="password" class="span2" name="password" placeholder="Password" maxlength=31>
+                                        <button type="submit" class="btn btn-success">Log in</button>
+                                    </form>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container flasher">
+            <ul class="nav pull-left">
+                @if(flash.contains("success")) {
+                    <li class="success active">> @flash.get("success")</li>
+                } else {
+                    @if(flash.contains("failure")) {
+                        <li class="failure active">> @flash.get("failure")</li>
+                    } else {
+                        <li class="active">> </li>
+                    }
+                }
+            </ul>
+        </div>
         @content
+        
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/bootstrap.js")"></script>
     </body>
 </html>
