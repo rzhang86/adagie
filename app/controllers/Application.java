@@ -1,17 +1,14 @@
 package controllers;
 
 import java.io.*;
+import java.text.*;
 import java.util.*;
-
-import com.avaje.ebean.Expr;
-
-import controllers.Login.SignupForm;
-
 import play.mvc.*;
 import play.mvc.Http.*;
 import play.mvc.Http.MultipartFormData.*;
 import play.data.*;
-import play.db.ebean.Transactional;
+import play.db.ebean.*;
+import com.avaje.ebean.*;
 import static play.data.Form.*;
 
 import models.*;
@@ -26,13 +23,13 @@ import views.html.*;
         CommittedBalance committedBalance = CommittedBalance.find.ref(user.getUsername());
         ConsumerProfile consumerProfile = ConsumerProfile.find.ref(user.getUsername());
         List<Long> watchedVideoIds = new ArrayList<Long>();
-        for (WatchedVideo watchedVideo : user.getWatchedVideos()) if (watchedVideo.getEndTime() != null) watchedVideoIds.add(watchedVideo.getVideo().getId());
+        for (WatchedVideo watchedVideo : user.findWatchedVideos()) if (watchedVideo.getEndTime() != null) watchedVideoIds.add(watchedVideo.findVideo().getId());
         List<Video> unwatchedVideos = Video.find.where().ne("user", user).not(Expr.in("id", watchedVideoIds)).findList();
         if (unwatchedVideos.size() > 0) {
 	        List<VideoPayoutRate> videoPayoutRates = new ArrayList<VideoPayoutRate>();
 	        for (Video video : unwatchedVideos) {
 	        	long payout = video.getPayout(user);
-	        	CommittedBalance committedBalancePayer = CommittedBalance.find.ref(video.getUser().getUsername());
+	        	CommittedBalance committedBalancePayer = CommittedBalance.find.ref(video.findUser().getUsername());
 	        	if (payout <= committedBalancePayer.getAmount()) {
 			        VideoPayoutRate videoPayoutRate = new VideoPayoutRate(video, payout); 
 			        videoPayoutRates.add(videoPayoutRate);
@@ -233,5 +230,9 @@ import views.html.*;
         }
         catch (Exception e) {flash("failure", "Submission failed");}
         return ok(myProfile.render(user, creditCardAccountForm));
+    }
+
+    public static String centsToDollars(Long cents) {
+        return NumberFormat.getCurrencyInstance(Locale.US).format(cents / 100.0);
     }
 }

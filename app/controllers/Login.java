@@ -11,7 +11,6 @@ import views.html.*;
 public class Login extends Controller {
     public static Result login() {
         if (session().get("username") != null) return redirect(routes.Application.index());
-    	//return ok(login.render(form(LoginInfo.class)));
         return ok(login.render());
     }
 

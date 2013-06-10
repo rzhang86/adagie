@@ -9,6 +9,42 @@ create table balance (
   constraint pk_balance primary key (username))
 ;
 
+create table balance2 (
+  password                  varchar(255),
+  first_name                varchar(255),
+  middle_name               varchar(255),
+  last_name                 varchar(255),
+  birthday                  timestamp,
+  gender                    varchar(255),
+  address1street1           varchar(255),
+  address1street2           varchar(255),
+  address1city              varchar(255),
+  address1state             varchar(255),
+  address1zip               varchar(255),
+  address1latitude          double,
+  address1longitude         double,
+  email1                    varchar(255),
+  phone1                    varchar(255),
+  address2street1           varchar(255),
+  address2street2           varchar(255),
+  address2city              varchar(255),
+  address2state             varchar(255),
+  address2zip               varchar(255),
+  address2latitude          double,
+  address2longitude         double,
+  email2                    varchar(255),
+  phone2                    varchar(255),
+  profession1               integer,
+  profession2               integer,
+  interest1                 integer,
+  interest2                 integer,
+  interest3                 integer,
+  interest4                 integer,
+  interest5                 integer,
+  amount                    bigint,
+  constraint pk_balance2 primary key (password, first_name, middle_name, last_name, birthday, gender, address1street1, address1street2, address1city, address1state, address1zip, address1latitude, address1longitude, email1, phone1, address2street1, address2street2, address2city, address2state, address2zip, address2latitude, address2longitude, email2, phone2, profession1, profession2, interest1, interest2, interest3, interest4, interest5))
+;
+
 create table committed_balance (
   username                  varchar(255) not null,
   amount                    bigint,
@@ -48,6 +84,36 @@ create table financial_institution (
 create table user (
   username                  varchar(255) not null,
   password                  varchar(255),
+  first_name                varchar(255),
+  middle_name               varchar(255),
+  last_name                 varchar(255),
+  birthday                  timestamp,
+  gender                    varchar(255),
+  address1street1           varchar(255),
+  address1street2           varchar(255),
+  address1city              varchar(255),
+  address1state             varchar(255),
+  address1zip               varchar(255),
+  address1latitude          double,
+  address1longitude         double,
+  email1                    varchar(255),
+  phone1                    varchar(255),
+  address2street1           varchar(255),
+  address2street2           varchar(255),
+  address2city              varchar(255),
+  address2state             varchar(255),
+  address2zip               varchar(255),
+  address2latitude          double,
+  address2longitude         double,
+  email2                    varchar(255),
+  phone2                    varchar(255),
+  profession1               integer,
+  profession2               integer,
+  interest1                 integer,
+  interest2                 integer,
+  interest3                 integer,
+  interest4                 integer,
+  interest5                 integer,
   constraint pk_user primary key (username))
 ;
 
@@ -80,6 +146,8 @@ create table watching_video (
 ;
 
 create sequence balance_seq;
+
+create sequence balance2_seq;
 
 create sequence committed_balance_seq;
 
@@ -118,6 +186,8 @@ SET REFERENTIAL_INTEGRITY FALSE;
 
 drop table if exists balance;
 
+drop table if exists balance2;
+
 drop table if exists committed_balance;
 
 drop table if exists consumer_profile;
@@ -137,6 +207,8 @@ drop table if exists watching_video;
 SET REFERENTIAL_INTEGRITY TRUE;
 
 drop sequence if exists balance_seq;
+
+drop sequence if exists balance2_seq;
 
 drop sequence if exists committed_balance_seq;
 
