@@ -19,15 +19,17 @@ public class Global extends GlobalSettings {
         // Check if the database is empty
         if (User.find.findRowCount() == 0) {
             Ebean.save((List) Yaml.load("data-FinancialInstitution.yml"));
+            Ebean.save((List) Yaml.load("data-Occupation.yml"));
+            Ebean.save((List) Yaml.load("data-Interest.yml"));
             
-            User.create("Ray", "secret", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+            User.create("Ray", "secret", null, null, null, null, null);
             Balance.create("Ray", 10000L);
             CommittedBalance.create("Ray", 10000L);
             ConsumerProfile.create("Ray", 0L, 0L, 0L, 0, 0, 0);
             WatchingVideo.create("Ray", null, null, null);
             CreditCardAccount.create("Ray", 424, "cim2phat4u", "zhaamE_263", "379718849191002");
             
-            User.create("Katie", "secret", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+            User.create("Katie", "secret", null, null, null, null, null);
             Balance.create("Katie", 10000L);
             CommittedBalance.create("Katie", 10000L);
             ConsumerProfile.create("Katie", 0L, 0L, 0L, 0, 0, 0);
@@ -48,6 +50,7 @@ public class Global extends GlobalSettings {
     
     public static class ConsumerProfileUpdater implements Runnable {
         public void run() {
+            System.out.println("YOHO:" + Occupation.find.all().size());
             //while(applicationIsLive) {
             	DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
                 for (User user : User.find.all()) {

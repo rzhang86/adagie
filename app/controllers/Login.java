@@ -34,7 +34,7 @@ public class Login extends Controller {
             }
         }
         catch (Exception e) {flash("failure", "Invalid username/password");}
-        return ok(login.render());
+        return redirect(routes.Login.login());
     }
 
     public static Result logout() {
@@ -52,6 +52,17 @@ public class Login extends Controller {
         public String username;
         public String password;
         public String passwordRepeat;
+        public String email;
+        public String gender;
+        public Integer birthyear;
+        public String zip;
+        public Integer occupation1;
+        public Integer occupation2;
+        public Integer interest1;
+        public Integer interest2;
+        public Integer interest3;
+        public Integer interest4;
+        public Integer interest5;
     }
 
     @Transactional public static Result readSignupForm() {
@@ -61,14 +72,24 @@ public class Login extends Controller {
             String username = signupForm.get().username;
             String password = signupForm.get().password;
             String passwordRepeat = signupForm.get().passwordRepeat;
+            String email = signupForm.get().email;
+            String gender = signupForm.get().gender;
+            Integer birthyear = signupForm.get().birthyear;
+            String zip = signupForm.get().zip;
+            
             if (username.length() < 0) flash("failure", "Username must be at least 1 character");
             else if (username.length() > 31) flash("failure", "Max 31 characters in username");
             else if (User.find.where().eq("username", username).findRowCount() > 0) flash("failure", "Username already taken");
             else if (password.length() < 6) flash("failure", "Password must be at least 6 characters");
             else if (password.length() > 31) flash("failure", "Max 31 characters in password");
             else if (!password.equals(passwordRepeat)) flash("failure", "Passwords do not match");
+            else if (email.length() > 63) flash("failure", "Max 63 characters in email");
             else {
-                User.create(username, password, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+                User.create(username, password, null, null, null, null, null);
+                Balance.create(username, 0L);
+                CommittedBalance.create(username, 0L);
+                ConsumerProfile.create(username, 0L, 0L, 0L, 0, 0, 0);
+                WatchingVideo.create(username, null, null, null);
                 session("username", username);
                 flash("success", "You have signed up");
                 return redirect(routes.Application.index());

@@ -60,37 +60,26 @@ create table occupation (
 create table user (
   username                  varchar(255) not null,
   password                  varchar(255),
-  first_name                varchar(255),
-  middle_name               varchar(255),
-  last_name                 varchar(255),
-  birthday                  timestamp,
+  email                     varchar(255),
   gender                    varchar(255),
-  address1street1           varchar(255),
-  address1street2           varchar(255),
-  address1city              varchar(255),
-  address1state             varchar(255),
-  address1zip               varchar(255),
-  address1latitude          double,
-  address1longitude         double,
-  address2street1           varchar(255),
-  address2street2           varchar(255),
-  address2city              varchar(255),
-  address2state             varchar(255),
-  address2zip               varchar(255),
-  address2latitude          double,
-  address2longitude         double,
-  email1                    varchar(255),
-  email2                    varchar(255),
-  phone1                    varchar(255),
-  phone2                    varchar(255),
-  occupation1               integer,
-  occupation2               integer,
-  interest1                 integer,
-  interest2                 integer,
-  interest3                 integer,
-  interest4                 integer,
-  interest5                 integer,
+  birthyear                 integer,
+  latitude                  double,
+  longitude                 double,
   constraint pk_user primary key (username))
+;
+
+create table user_interest (
+  id                        bigint not null,
+  user_username             varchar(255),
+  interest_id               integer,
+  constraint pk_user_interest primary key (id))
+;
+
+create table user_occupation (
+  id                        bigint not null,
+  user_username             varchar(255),
+  occupation_id             integer,
+  constraint pk_user_occupation primary key (id))
 ;
 
 create table video (
@@ -135,6 +124,10 @@ create sequence occupation_seq;
 
 create sequence user_seq;
 
+create sequence user_interest_seq;
+
+create sequence user_occupation_seq;
+
 create sequence video_seq;
 
 create sequence watched_video_seq;
@@ -164,6 +157,10 @@ drop table if exists occupation;
 
 drop table if exists user;
 
+drop table if exists user_interest;
+
+drop table if exists user_occupation;
+
 drop table if exists video;
 
 drop table if exists watched_video;
@@ -187,6 +184,10 @@ drop sequence if exists interest_seq;
 drop sequence if exists occupation_seq;
 
 drop sequence if exists user_seq;
+
+drop sequence if exists user_interest_seq;
+
+drop sequence if exists user_occupation_seq;
 
 drop sequence if exists video_seq;
 

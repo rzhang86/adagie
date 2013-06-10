@@ -1,15 +1,23 @@
 @()
 
 @main(null, "login") {
-    <div class="jumbotron">
-        <div class="container">
-            <div class="span1"></div>
-            <div class="well span8">
-                <h2>Welcome!</h2>
-                <p class="lead">This is Rays cool site</p>
-                <a class="btn btn-large btn-info" href="@routes.Login.signup()">Sign up today</a>
-            </div>
-            <div class="span3"></div>
-        </div>
+    <div class="row-fluid col-wrap">            
+	    <div class="span4 col well">
+            <h4>Log in:</h4>
+            <form action="@routes.Login.readLoginForm()" method="post">
+                <p><input type="text" name="username" placeholder="Username" maxlength=31></p>
+                <p><input type="password" name="password" placeholder="Password" maxlength=31></p>
+                <p><button type="submit" class="btn btn-info">Log in</button></p>
+            </form>
+	    </div>
+	    <div class="span8 col well">
+	        <h2>Welcome!</h2>
+	        <p class="lead">This is Rays cool site</p>
+	        <a class="btn btn-warning" href="@routes.Login.signup()">Sign up</a>
+	    </div>
+    </div>
+    <div class="row-fluid base col-wrap">
+	    <div class="span4 col-base well"></div>
+	    <div class="span8 col-base well"></div>
     </div>
 }

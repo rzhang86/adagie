@@ -1,19 +1,57 @@
 @(form: Form[Login.SignupForm])
 
 @main(null, "signup") {
-    <div class="jumbotron">
-        <div class="container">
-            <div class="span1"></div>
-            <div class="well span8">
-                <h2>Sign up</h2>
-                <form action="@routes.Login.readSignupForm()" method="post">
-                    <p><input type="text" class="span2" name="username" placeholder="Username" value="@form("username").value" maxlength=31></p>
-                    <p><input type="password" class="span2" name="password" placeholder="Password" maxlength=31></p>
-                    <p><input type="password" class="span2" name="passwordRepeat" placeholder="Repeat Password" maxlength=31></p>
-                    <p><button type="submit" class="btn btn-info">Sign up</button></p>
-                </form>
-            </div>
-            <div class="span3"></div>
+    <div class="row-fluid col-wrap">            
+        <div class="span4 col well">
+            <h4>Log in:</h4>
+            <form action="@routes.Login.readLoginForm()" method="post">
+                <p><input type="text" name="username" placeholder="Username" maxlength=31></p>
+                <p><input type="password" name="password" placeholder="Password" maxlength=31></p>
+                <p><button type="submit" class="btn btn-info">Log in</button></p>
+            </form>
         </div>
+        <div class="span8 col well">
+            <h4>Sign up:</h4>
+            <form action="@routes.Login.readSignupForm()" method="post">
+	            <div class="span12">
+	             <h5>Required fields:</h5>
+	             <div class="span12">
+	                 <p><input type="text" name="username" placeholder="Username" value="@form("username").value" maxlength=31></p>
+	                 <p><input type="password" name="password" placeholder="Password" maxlength="31"> <input type="password" name="passwordRepeat" placeholder="Repeat Password" maxlength="31"></p>
+	                 <p><input type="email" name="email" placeholder = "Email" maxlength="63"></p>
+	                 <br>
+	             </div>
+	             <h5>Optional fields to help profile you:</h5>
+	             <div class="span12">
+	                 <p><input type="radio" name="gender" value="M">Male <input type="radio" name="gender" value="F">Female</p>
+	                 <p><input type="number" name="birthyear" placeholder="Birthyear (YYYY)" maxlength="4" min="0" max="9999"><p>
+	                 <p><input type="number" name="zip" placeholder="Zip code (ZZZZZ)" maxlength="5" min="0" max="99999"></p>
+	                 <br>
+	                 <p>Occupations:</p>
+	                 <div class="span12">
+	                     @defining(Occupation.find.all()) { occupations =>
+	                         <p><select name="occupation1">@occupations.map {occupation => <option value="@occupation.getId()">@occupation.getName()</option>}</select></p>
+	                         <p><select name="occupation2">@occupations.map {occupation => <option value="@occupation.getId()">@occupation.getName()</option>}</select></p>
+	                     }
+	                 </div>
+	                 <p>Interests:</p>
+	                 <div class="span12">
+	                     @defining(Interest.find.all()) { interests =>
+	                         <p><select name="interest1">@interests.map {interest => <option value="@interest.getId()">@interest.getName()</option>}</select></p>
+	                         <p><select name="interest2">@interests.map {interest => <option value="@interest.getId()">@interest.getName()</option>}</select></p>
+	                         <p><select name="interest3">@interests.map {interest => <option value="@interest.getId()">@interest.getName()</option>}</select></p>
+	                         <p><select name="interest4">@interests.map {interest => <option value="@interest.getId()">@interest.getName()</option>}</select></p>
+	                         <p><select name="interest5">@interests.map {interest => <option value="@interest.getId()">@interest.getName()</option>}</select></p>
+	                     }
+	                 </div>
+	             </div>
+	            </div>
+		                <p><button type="submit" class="btn btn-warning">Sign up</button></p>
+            </form>
+        </div>
+    </div>
+    <div class="row-fluid base col-wrap">
+        <div class="span4 col-base well"></div>
+        <div class="span8 col-base well"></div>
     </div>
 }
