@@ -24,7 +24,7 @@ import views.html.*;
         ConsumerProfile consumerProfile = ConsumerProfile.find.ref(user.getUsername());
         List<Long> watchedVideoIds = new ArrayList<Long>();
         for (WatchedVideo watchedVideo : user.findWatchedVideos()) if (watchedVideo.getEndTime() != null) watchedVideoIds.add(watchedVideo.findVideo().getId());
-        List<Video> unwatchedVideos = Video.find.where().ne("user", user).not(Expr.in("id", watchedVideoIds)).findList();
+        List<Video> unwatchedVideos = Video.find.where().ne("userUsername", user.getUsername()).not(Expr.in("id", watchedVideoIds)).findList();
         if (unwatchedVideos.size() > 0) {
 	        List<VideoPayoutRate> videoPayoutRates = new ArrayList<VideoPayoutRate>();
 	        for (Video video : unwatchedVideos) {
@@ -41,7 +41,7 @@ import views.html.*;
         		// todo: dont send video by form like this? may not be safe someone could change source to different video id
 	            WatchingVideo watchingVideo = user.findWatchingVideo()
                     .setStartTime(Calendar.getInstance())
-                    .setVideo(videoPayoutRate.video)
+                    .setVideoId(videoPayoutRate.video.getId())
                     .setPayout(videoPayoutRate.payout)
                     .saveGet();
         		return ok(index.render(user, watchingVideo, form(VideoEndedForm.class)));
@@ -75,26 +75,20 @@ import views.html.*;
             User user = User.find.ref(request().username());
             WatchingVideo watchingVideo = user.findWatchingVideo();
             Video video = Video.find.ref(Long.parseLong(videoEndedForm.get().videoId));
-            if (!watchingVideo.getVideo().equals(video)) flash("failure", "Video was not tracked");
+            if (!watchingVideo.getVideoId().equals(video)) flash("failure", "Video was not tracked");
             else {
                 Calendar currentTime = Calendar.getInstance();
                 Calendar endTime = watchingVideo.getStartTime();
-                endTime.add(Calendar.SECOND, watchingVideo.getVideo().getDuration());
+                endTime.add(Calendar.SECOND, watchingVideo.findVideo().getDuration());
                 if (currentTime.before(endTime)) flash("failure", "Video ended prematurely");
-                else if (user.getWatchedVideos().contains(video)) flash("failure", "You have already been paid for watching this video recently");
+                else if (user.findWatchedVideos().contains(video)) flash("failure", "You have already been paid for watching this video recently");
                 else {
-                    WatchedVideo watchedVideo = WatchedVideo.create(user, video)
-                        .setStartTime(watchingVideo.getStartTime())
-                        .setEndTime(currentTime)
-                        .setPayout(watchingVideo.getPayout())
-                        .saveGet();
-                    Long payout = watchedVideo.getPayout();
-                    CommittedBalance committedBalance = video.getUser().findCommittedBalance();
-                    committedBalance.setAmount(committedBalance.getAmount() - payout).save();
-    	        	Balance balancePayee = user.findBalance();
-    	        	balancePayee.setAmount(balancePayee.getAmount() + payout).save();
-    	        	watchingVideo.setStartTime(null).setVideo(null).setPayout(0L).save();
-                    flash("Success", "You earned " + Video.centsToDollars(payout));
+                    Long payout = watchingVideo.getPayout();
+                    WatchedVideo watchedVideo = WatchedVideo.create(user.getUsername(), video.getId(), watchingVideo.getStartTime(), currentTime, payout);
+                    video.findUser().findCommittedBalance().addAmount(-payout);
+                    user.findBalance().addAmount(payout); // are these transactions safe? require table lock?
+    	        	watchingVideo.setStartTime(null).setVideoId(null).setPayout(0L).save();
+                    flash("Success", "You earned " + centsToDollars(payout));
                     return redirect(routes.Application.index());
                 }
             }
@@ -118,7 +112,7 @@ import views.html.*;
     // todo: adjust ffmpeg resolution
     //todo: verify payformula parses with jep
     public static Result readUploadVideoForm() {
-        Video video = Video.create(User.find.ref(request().username()));
+        Video video = Video.create(request().username(), null, null, null, null);
         Form<UploadVideoForm> uploadVideoForm = form(UploadVideoForm.class).bindFromRequest();
         MultipartFormData formData = request().body().asMultipartFormData();
         File file = new File("public/uploads/" + video.getId() + "-temp.mp4");
@@ -186,7 +180,7 @@ import views.html.*;
     
     public static Result deleteVideo(Long videoId) {
         Video video = Video.find.ref(videoId);
-        if (video.getUser().getUsername().equals(request().username())) {
+        if (video.findUser().getUsername().equals(request().username())) {
         	(new File("public/uploads/" + video.id + ".mp4")).delete();
         	(new File("public/uploads/" + video.id + ".webm")).delete();
         	video.delete();
@@ -223,7 +217,7 @@ import views.html.*;
             else if (ofxPassword.length() > 31) flash("failure", "Max 31 characters in password");
             else if (!ofxPassword.equals(ofxPasswordRepeat)) flash("failure", "Passwords do not match");
             else {
-                CreditCardAccount.create(User.find.ref(request().username())).setOfxUser(ofxUser).setOfxPassword(ofxPassword).save();
+                CreditCardAccount.create(request().username(), null, ofxUser, ofxPassword, null);
                 flash("success", "Credit card credentials saved");
                 return redirect(routes.Application.myProfile());
             }

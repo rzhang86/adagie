@@ -20,45 +20,19 @@ public class Global extends GlobalSettings {
         if (User.find.findRowCount() == 0) {
             Ebean.save((List) Yaml.load("data-FinancialInstitution.yml"));
             
-            User userRay = User.create("Ray", "secret");
-            userRay.save();
-            userRay.findBalance().setAmount(10000L).save();
-            userRay.findCommittedBalance().setAmount(10000L).save();
-            /*
-            CreditCardAccount creditCardAccountRay = CreditCardAccount.create(userRay)
-                .setOfxUser("cim2phat4u")
-                .setOfxPassword("zhaamE_263")
-                .setFiUrl("https://online.americanexpress.com/myca/ofxdl/desktop/desktopDownload.do?request_type=nl_ofxdownload")
-                .setFiOrganizationName("AMEX")
-                .setFiId("3101")
-                .saveGet();
-            */
-            CreditCardAccount creditCardAccountRay = CreditCardAccount.create(userRay)
-                    .setOfxUser("cim2phat4u")
-                    .setOfxPassword("zhaamE_263")
-                    .setFinancialInstitution(FinancialInstitution.find.ref(424L))
-                    .setCcNumber("379718849191002")
-                    .saveGet();
+            User.create("Ray", "secret", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+            Balance.create("Ray", 10000L);
+            CommittedBalance.create("Ray", 10000L);
+            ConsumerProfile.create("Ray", 0L, 0L, 0L, 0, 0, 0);
+            WatchingVideo.create("Ray", null, null, null);
+            CreditCardAccount.create("Ray", 424, "cim2phat4u", "zhaamE_263", "379718849191002");
             
-            User userKatie = User.create("Katie", "secret");
-            userKatie.save();
-            userKatie.findBalance().setAmount(10000L).save();
-            userKatie.findCommittedBalance().setAmount(10000L).save();
-            /*
-            CreditCardAccount creditCardAccountKatie = CreditCardAccount.create(userKatie)
-                .setOfxUser("kwang318")
-                .setOfxPassword("651Anthony3083")
-                .setFiUrl("https://www.accountonline.com/cards/svc/CitiOfxManager.do")
-                .setFiOrganizationName("Citigroup")
-                .setFiId("24909")
-                .saveGet();
-            */
-            CreditCardAccount creditCardAccountKatie = CreditCardAccount.create(userKatie)
-                    .setOfxUser("kwang318")
-                    .setOfxPassword("651Anthony3083")
-                    .setFinancialInstitution(FinancialInstitution.find.ref(427L))
-                    .setCcNumber("4128003460359667")
-                    .saveGet();
+            User.create("Katie", "secret", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+            Balance.create("Katie", 10000L);
+            CommittedBalance.create("Katie", 10000L);
+            ConsumerProfile.create("Katie", 0L, 0L, 0L, 0, 0, 0);
+            WatchingVideo.create("Katie", null, null, null);
+            CreditCardAccount.create("Katie", 427, "kwang318", "651Anthony3083", "4128003460359667");
         }
 
         // start looping maintenance threads
@@ -78,7 +52,7 @@ public class Global extends GlobalSettings {
             	DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
                 for (User user : User.find.all()) {
                 	ConsumerProfile consumerProfile = user.findConsumerProfile();
-                    for (CreditCardAccount creditCardAccount : user.getCreditCardAccounts()) {
+                    for (CreditCardAccount creditCardAccount : user.findCreditCardAccounts()) {
                     	try {
                     	    /*
                             List<String> properties = new ArrayList<String>();
@@ -96,8 +70,7 @@ public class Global extends GlobalSettings {
                             properties.add("OFXUser");
                             properties.add("OFXVersion");
                             */
-                    	    
-                    		/*
+                    		FinancialInstitution financialInstitution = creditCardAccount.findFinancialInstitution();
                     		Connection connection = DriverManager.getConnection(
                     				"jdbc:ofx:" +
             						"OFXVersion=102;" +
@@ -105,21 +78,9 @@ public class Global extends GlobalSettings {
             						"ApplicationId=QWIN;" +
             						"OFXUser=" + creditCardAccount.getOfxUser() + ";" +
             						"OFXPassword=" + creditCardAccount.getOfxPassword() + ";" +
-            						"FIUrl=" + creditCardAccount.getFiUrl() + ";" +
-            						"FIOrganizationName=" + creditCardAccount.getFiOrganizationName() + ";" +
-            						"FIId=" + creditCardAccount.getFiId() + ";" );
-            				*/
-                    		
-                    		Connection connection = DriverManager.getConnection(
-                    				"jdbc:ofx:" +
-            						"OFXVersion=102;" +
-            						"ApplicationVersion=1401;" +
-            						"ApplicationId=QWIN;" +
-            						"OFXUser=" + creditCardAccount.getOfxUser() + ";" +
-            						"OFXPassword=" + creditCardAccount.getOfxPassword() + ";" +
-            						"FIUrl=" + creditCardAccount.getFinancialInstitution().getUrl() + ";" +
-            						"FIOrganizationName=" + creditCardAccount.getFinancialInstitution().getOrg() + ";" +
-            						"FIId=" + creditCardAccount.getFinancialInstitution().getFid() + ";" +
+            						"FIUrl=" + financialInstitution.getUrl() + ";" +
+            						"FIOrganizationName=" + financialInstitution.getOrg() + ";" +
+            						"FIId=" + financialInstitution.getFid() + ";" +
             						"CCNumber=" + creditCardAccount.getCcNumber() + ";");
                     		Statement statement = connection.createStatement();
                     		ResultSet resultSet;

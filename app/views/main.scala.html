@@ -95,7 +95,7 @@
                 }
             </ul>
             <ul class="nav pull-right">
-                @if(user!=null) {<li>balance: @Video.centsToDollars(user.findBalance().getAmount()), committed: @Video.centsToDollars(user.findCommittedBalance().getAmount())</li>}
+                @if(user!=null) {<li>balance: @Application.centsToDollars(user.findBalance().getAmount()), committed: @Application.centsToDollars(user.findCommittedBalance().getAmount())</li>}
             </ul>
         </div>
         <script type="text/javascript" src="@routes.Assets.at("js/jquery-1.9.0.min.js")"></script>

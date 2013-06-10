@@ -68,7 +68,7 @@ public class Login extends Controller {
             else if (password.length() > 31) flash("failure", "Max 31 characters in password");
             else if (!password.equals(passwordRepeat)) flash("failure", "Passwords do not match");
             else {
-                User.create(username, password);
+                User.create(username, password, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
                 session("username", username);
                 flash("success", "You have signed up");
                 return redirect(routes.Application.index());

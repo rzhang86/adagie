@@ -15,4 +15,9 @@ import play.db.ebean.*;
     }
     public Balance saveGet() {this.save(); return this;}
     public static Finder<String, Balance> find = new Finder<String, Balance>(String.class, Balance.class);
+    
+    public Balance addAmount(Long delta) {
+        this.amount += delta;
+        return this.saveGet();
+    }
 }

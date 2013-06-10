@@ -6,17 +6,19 @@
             <div class="span1"></div>
             <div class="well span8">
                 @if(watchingVideo!=null) {
-                    <video id="myVideo" autoplay controls preload="auto" width="320" height="240">
-                        <source src="assets/uploads/@(watchingVideo.getVideo().getId()).webm" type='video/webm'>
-                        <source src="assets/uploads/@(watchingVideo.getVideo().getId()).mp4" type='video/mp4'>
-                        Your browser does not support the HTML5 video.
-                    </video>
-                    <h4>@watchingVideo.getVideo().getTitle()</h4>
-                    <p>@watchingVideo.getVideo().getDescription()</p>
-                    <form action="@routes.Application.readVideoEndedForm()" method="post" id="videoEndedForm">
-                        <input type="hidden" name="videoId" value="@(watchingVideo.getVideo().getId())">
-                        <button type="submit" id="videoEndedButton" class="btn btn-success" disabled>Next (Earn @(Video.centsToDollars(watchingVideo.getPayout()))) <i class="icon-play icon-white"></i></button>
-                    </form>
+                    @defining(watchingVideo.findVideo()) { video =>
+	                    <video id="myVideo" autoplay controls preload="auto" width="320" height="240">
+	                        <source src="assets/uploads/@(video.getId()).webm" type='video/webm'>
+	                        <source src="assets/uploads/@(video.getId()).mp4" type='video/mp4'>
+	                        Your browser does not support the HTML5 video.
+	                    </video>
+	                    <h4>@video.getTitle()</h4>
+	                    <p>@video.getDescription()</p>
+	                    <form action="@routes.Application.readVideoEndedForm()" method="post" id="videoEndedForm">
+	                        <input type="hidden" name="videoId" value="@(video.getId())">
+	                        <button type="submit" id="videoEndedButton" class="btn btn-success" disabled>Next (Earn @(Application.centsToDollars(watchingVideo.getPayout()))) <i class="icon-play icon-white"></i></button>
+	                    </form>
+                    }
                 } else {
                     You have already watched all paying videos
                 }

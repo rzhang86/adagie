@@ -15,4 +15,9 @@ import play.db.ebean.*;
     }
     public CommittedBalance saveGet() {this.save(); return this;}
     public static Finder<String, CommittedBalance> find = new Finder<String, CommittedBalance>(String.class, CommittedBalance.class);
+    
+    public CommittedBalance addAmount(Long delta) {
+        this.amount += delta;
+        return this.saveGet();
+    }
 }
