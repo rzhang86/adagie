@@ -21,6 +21,7 @@ public class Global extends GlobalSettings {
             Ebean.save((List) Yaml.load("data-FinancialInstitution.yml"));
             Ebean.save((List) Yaml.load("data-Occupation.yml"));
             Ebean.save((List) Yaml.load("data-Interest.yml"));
+            Ebean.save((List) Yaml.load("data-Zip.yml"));
             
             User.create("Ray", "secret", null, null, null, null, null);
             Balance.create("Ray", 10000L);
@@ -50,7 +51,6 @@ public class Global extends GlobalSettings {
     
     public static class ConsumerProfileUpdater implements Runnable {
         public void run() {
-            System.out.println("YOHO:" + Occupation.find.all().size());
             //while(applicationIsLive) {
             	DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
                 for (User user : User.find.all()) {

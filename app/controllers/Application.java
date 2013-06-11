@@ -18,6 +18,7 @@ import views.html.*;
 //todo: crack jep
 @Security.Authenticated(Secured.class) public class Application extends Controller {
     public static Result index() {
+    	System.out.println("YOGO: " + Zip.find.all().size());
         User user = User.find.ref(request().username());
         Balance balance = Balance.find.ref(user.getUsername());
         CommittedBalance committedBalance = CommittedBalance.find.ref(user.getUsername());

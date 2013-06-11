@@ -1,6 +1,7 @@
 package models;
 
 import java.util.*;
+
 import javax.persistence.*;
 import play.db.ebean.*;
 
@@ -20,4 +21,6 @@ import play.db.ebean.*;
     }
     public FinancialInstitution saveGet() {this.save(); return this;}
     public static Finder<Integer, FinancialInstitution> find = new Finder<Integer, FinancialInstitution>(Integer.class, FinancialInstitution.class);
+    
+    public static List<FinancialInstitution> findAll() {return find.all();}
 }

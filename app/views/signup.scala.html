@@ -29,14 +29,14 @@
 	                 <br>
 	                 <p>Occupations:</p>
 	                 <div class="span12">
-	                     @defining(Occupation.find.all()) { occupations =>
+	                     @defining(Occupation.findAll()) { occupations =>
 	                         <p><select name="occupation1">@occupations.map {occupation => <option value="@occupation.getId()">@occupation.getName()</option>}</select></p>
 	                         <p><select name="occupation2">@occupations.map {occupation => <option value="@occupation.getId()">@occupation.getName()</option>}</select></p>
 	                     }
 	                 </div>
 	                 <p>Interests:</p>
 	                 <div class="span12">
-	                     @defining(Interest.find.all()) { interests =>
+	                     @defining(Interest.findAll()) { interests =>
 	                         <p><select name="interest1">@interests.map {interest => <option value="@interest.getId()">@interest.getName()</option>}</select></p>
 	                         <p><select name="interest2">@interests.map {interest => <option value="@interest.getId()">@interest.getName()</option>}</select></p>
 	                         <p><select name="interest3">@interests.map {interest => <option value="@interest.getId()">@interest.getName()</option>}</select></p>

@@ -8,8 +8,8 @@
     </video>
     <h4>@video.getTitle()</h4>
     <p>@video.getDescription()</p>
-    <p>Earn @Video.centsToDollars(video.getPayout(user)) for watching</p>
-    @if(video.getUser().equals(user)) {
+    <p>Earn @Application.centsToDollars(video.getPayout(user)) for watching</p>
+    @if(video.findUser().equals(user)) {
         (<a href="@routes.Application.deleteVideo(video.getId())">Delete</a>)
     }
 </div>

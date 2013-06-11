@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.*;
 import play.mvc.*;
 import play.data.*;
 import play.db.ebean.*;
@@ -76,6 +77,13 @@ public class Login extends Controller {
             String gender = signupForm.get().gender;
             Integer birthyear = signupForm.get().birthyear;
             String zip = signupForm.get().zip;
+            Integer occupation1 = signupForm.get().occupation1;
+            Integer occupation2 = signupForm.get().occupation2;
+            Integer interest1 = signupForm.get().interest1;
+            Integer interest2 = signupForm.get().interest2;
+            Integer interest3 = signupForm.get().interest3;
+            Integer interest4 = signupForm.get().interest4;
+            Integer interest5 = signupForm.get().interest5;
             
             if (username.length() < 0) flash("failure", "Username must be at least 1 character");
             else if (username.length() > 31) flash("failure", "Max 31 characters in username");
@@ -85,11 +93,23 @@ public class Login extends Controller {
             else if (!password.equals(passwordRepeat)) flash("failure", "Passwords do not match");
             else if (email.length() > 63) flash("failure", "Max 63 characters in email");
             else {
-                User.create(username, password, null, null, null, null, null);
+                User.create(username, password, email, gender, birthyear, null, null);
                 Balance.create(username, 0L);
                 CommittedBalance.create(username, 0L);
                 ConsumerProfile.create(username, 0L, 0L, 0L, 0, 0, 0);
                 WatchingVideo.create(username, null, null, null);
+                List<Integer> uniqueValues;
+                uniqueValues = new ArrayList<Integer>();
+                if (occupation1 != 1 && !uniqueValues.contains(occupation1)) uniqueValues.add(occupation1);
+                if (occupation2 != 1 && !uniqueValues.contains(occupation2)) uniqueValues.add(occupation2);
+                for (Integer uniqueValue : uniqueValues) UserOccupation.create(username, uniqueValue);
+                uniqueValues = new ArrayList<Integer>();
+                if (interest1 != 1 && !uniqueValues.contains(interest1)) uniqueValues.add(interest1);
+                if (interest2 != 1 && !uniqueValues.contains(interest2)) uniqueValues.add(interest2);
+                if (interest3 != 1 && !uniqueValues.contains(interest3)) uniqueValues.add(interest3);
+                if (interest4 != 1 && !uniqueValues.contains(interest4)) uniqueValues.add(interest4);
+                if (interest5 != 1 && !uniqueValues.contains(interest5)) uniqueValues.add(interest5);
+                for (Integer uniqueValue : uniqueValues) UserInterest.create(username, uniqueValue);
                 session("username", username);
                 flash("success", "You have signed up");
                 return redirect(routes.Application.index());

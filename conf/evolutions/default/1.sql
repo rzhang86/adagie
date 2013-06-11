@@ -108,6 +108,22 @@ create table watching_video (
   constraint pk_watching_video primary key (user_username))
 ;
 
+create table zip (
+  zip_code                  varchar(255) not null,
+  zip_code_type             varchar(255),
+  city                      varchar(255),
+  state                     varchar(255),
+  location_type             varchar(255),
+  latitude                  varchar(255),
+  longitude                 varchar(255),
+  location                  varchar(255),
+  decommisioned             varchar(255),
+  tax_returns_filed         varchar(255),
+  estimated_population      varchar(255),
+  total_wages               varchar(255),
+  constraint pk_zip primary key (zip_code))
+;
+
 create sequence balance_seq;
 
 create sequence committed_balance_seq;
@@ -133,6 +149,8 @@ create sequence video_seq;
 create sequence watched_video_seq;
 
 create sequence watching_video_seq;
+
+create sequence zip_seq;
 
 
 
@@ -167,6 +185,8 @@ drop table if exists watched_video;
 
 drop table if exists watching_video;
 
+drop table if exists zip;
+
 SET REFERENTIAL_INTEGRITY TRUE;
 
 drop sequence if exists balance_seq;
@@ -194,4 +214,6 @@ drop sequence if exists video_seq;
 drop sequence if exists watched_video_seq;
 
 drop sequence if exists watching_video_seq;
+
+drop sequence if exists zip_seq;
 
