@@ -1,9 +1,16 @@
+import java.io.File;
 import java.sql.*;
 import java.text.*;
 import java.util.*;
 import java.util.Date;
 
 import com.avaje.ebean.*;
+
+import com.intuit.ipp.aggcat.core.Context;
+import com.intuit.ipp.aggcat.core.OAuthAuthorizer;
+import com.intuit.ipp.aggcat.data.Institutions;
+import com.intuit.ipp.aggcat.exception.AggCatException;
+import com.intuit.ipp.aggcat.service.AggCatService;
 
 import play.*;
 import play.libs.*;
@@ -41,6 +48,34 @@ public class Global extends GlobalSettings {
         // start looping maintenance threads
         applicationIsLive = true;
         consumerProfileUpdaterThread.start();
+        
+        
+        
+
+        
+        
+        
+        /* intuit stuff*/
+        // i think userId = rzhang86 
+    	String OAUTH_CONSUMER_KEY = "qyprdNIHBI0Ym9iddckwTR8Fzq9Mmj";
+    	String OAUTH_CONSUMER_SECRET = "86MmKfrvrDheNMQdvYNgrkc9HEFvoczwmIRqFaMj";
+    	String SAML_PROVIDER_ID = "adder.161321.cc.dev-intuit.ipp.prod";
+    	String userId = "rzhang86";
+    	AggCatService service = null;
+    	try {
+    		OAuthAuthorizer oauthAuthorizer = new OAuthAuthorizer(OAUTH_CONSUMER_KEY, OAUTH_CONSUMER_SECRET, SAML_PROVIDER_ID, userId);
+    		Context context = new Context(oauthAuthorizer);
+    		service = new AggCatService(context);
+    		List<List<String>> institutionList = new ArrayList<List<String>>();
+			List<String> item = new ArrayList<String>();
+			Institutions institutions = service.getInstitutions();
+			System.out.println("Fetched " + institutions.getInstitutions().size() + " institutions");
+    	} catch (AggCatException e) {
+    		//"Exception while generating OAuth tokens. Please check whether the configured keys and cert files are valid."
+    		e.printStackTrace();
+    	}
+        
+        /* end intuit stuff */
     }
     
     @Override public void onStop(Application app) {
