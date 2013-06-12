@@ -1,4 +1,3 @@
-import java.io.File;
 import java.sql.*;
 import java.text.*;
 import java.util.*;
@@ -6,11 +5,12 @@ import java.util.Date;
 
 import com.avaje.ebean.*;
 
-import com.intuit.ipp.aggcat.core.Context;
-import com.intuit.ipp.aggcat.core.OAuthAuthorizer;
-import com.intuit.ipp.aggcat.data.Institutions;
-import com.intuit.ipp.aggcat.exception.AggCatException;
-import com.intuit.ipp.aggcat.service.AggCatService;
+import com.intuit.ipp.aggcat.core.*;
+import com.intuit.ipp.aggcat.data.*;
+import com.intuit.ipp.aggcat.data.Challenges.Challenge.Choice;
+import com.intuit.ipp.aggcat.data.Challenges.*;
+import com.intuit.ipp.aggcat.exception.*;
+import com.intuit.ipp.aggcat.service.*;
 
 import play.*;
 import play.libs.*;
@@ -19,71 +19,183 @@ import models.*;
 
 //todo: delete videos after not having paid out or watched in X time
 public class Global extends GlobalSettings {
-    public Thread consumerProfileUpdaterThread = new Thread(new ConsumerProfileUpdater());
     public static boolean applicationIsLive = false;
+    public static Thread aggCatServiceThread = new Thread(new AggCatServiceThread());
+    //public static Thread consumerProfileUpdaterThread = new Thread(new ConsumerProfileUpdater());
     
     @Override public void onStart(Application app) {
         // Check if the database is empty
         if (User.find.findRowCount() == 0) {
-            Ebean.save((List) Yaml.load("data-FinancialInstitution.yml"));
-            Ebean.save((List) Yaml.load("data-Occupation.yml"));
-            Ebean.save((List) Yaml.load("data-Interest.yml"));
-            Ebean.save((List) Yaml.load("data-Zip.yml"));
+            //Ebean.save((List) Yaml.load("seed/data-FinancialInstitution.yml"));
+            Ebean.save((List) Yaml.load("seed/data-Occupation.yml"));
+            Ebean.save((List) Yaml.load("seed/data-Interest.yml"));
+            Ebean.save((List) Yaml.load("seed/data-Zip.yml"));
             
             User.create("Ray", "secret", null, null, null, null, null);
             Balance.create("Ray", 10000L);
             CommittedBalance.create("Ray", 10000L);
             ConsumerProfile.create("Ray", 0L, 0L, 0L, 0, 0, 0);
             WatchingVideo.create("Ray", null, null, null);
-            CreditCardAccount.create("Ray", 424, "cim2phat4u", "zhaamE_263", "379718849191002");
+            //CreditCardAccount.create("Ray", 424L, "cim2phat4u", "zhaamE_263", "379718849191002");
+            CreditCardAccount.create("Ray", 100000L, "direct", "anyvalue", "");
             
             User.create("Katie", "secret", null, null, null, null, null);
             Balance.create("Katie", 10000L);
             CommittedBalance.create("Katie", 10000L);
             ConsumerProfile.create("Katie", 0L, 0L, 0L, 0, 0, 0);
             WatchingVideo.create("Katie", null, null, null);
-            CreditCardAccount.create("Katie", 427, "kwang318", "651Anthony3083", "4128003460359667");
+            //CreditCardAccount.create("Katie", 427L, "kwang318", "651Anthony3083", "4128003460359667");
         }
-
+        
         // start looping maintenance threads
         applicationIsLive = true;
-        consumerProfileUpdaterThread.start();
-        
-        
-        
-
-        
-        
-        
-        /* intuit stuff*/
-        // i think userId = rzhang86 
-    	String OAUTH_CONSUMER_KEY = "qyprdNIHBI0Ym9iddckwTR8Fzq9Mmj";
-    	String OAUTH_CONSUMER_SECRET = "86MmKfrvrDheNMQdvYNgrkc9HEFvoczwmIRqFaMj";
-    	String SAML_PROVIDER_ID = "adder.161321.cc.dev-intuit.ipp.prod";
-    	String userId = "rzhang86";
-    	AggCatService service = null;
-    	try {
-    		OAuthAuthorizer oauthAuthorizer = new OAuthAuthorizer(OAUTH_CONSUMER_KEY, OAUTH_CONSUMER_SECRET, SAML_PROVIDER_ID, userId);
-    		Context context = new Context(oauthAuthorizer);
-    		service = new AggCatService(context);
-    		List<List<String>> institutionList = new ArrayList<List<String>>();
-			List<String> item = new ArrayList<String>();
-			Institutions institutions = service.getInstitutions();
-			System.out.println("Fetched " + institutions.getInstitutions().size() + " institutions");
-    	} catch (AggCatException e) {
-    		//"Exception while generating OAuth tokens. Please check whether the configured keys and cert files are valid."
-    		e.printStackTrace();
-    	}
-        
-        /* end intuit stuff */
+        aggCatServiceThread.start();
+        //consumerProfileUpdaterThread.start();
     }
     
     @Override public void onStop(Application app) {
         // signal maintenance threads to stop
         applicationIsLive = false;
-        try {consumerProfileUpdaterThread.join();} catch (Exception e) {}
+        try {aggCatServiceThread.join();} catch (Exception e) {}
+        //try {consumerProfileUpdaterThread.join();} catch (Exception e) {}
     }
-    
+
+    /* intuit stuff*/
+    public static class AggCatServiceThread implements Runnable {
+        String OAUTH_CONSUMER_KEY = "qyprdNIHBI0Ym9iddckwTR8Fzq9Mmj";
+        String OAUTH_CONSUMER_SECRET = "86MmKfrvrDheNMQdvYNgrkc9HEFvoczwmIRqFaMj";
+        String SAML_PROVIDER_ID = "adder.161321.cc.dev-intuit.ipp.prod";
+        String userId = "rzhang86"; // i think userId = rzhang86 
+        public void run() {
+            while (applicationIsLive) {
+                try {
+                    System.out.println("Authorizing with Intuit...");
+                    OAuthAuthorizer oauthAuthorizer = new OAuthAuthorizer(OAUTH_CONSUMER_KEY, OAUTH_CONSUMER_SECRET, SAML_PROVIDER_ID, userId);
+                    Context context = new Context(oauthAuthorizer);
+                    AggCatService service = new AggCatService(context);
+                    System.out.println("Intuit says ok");
+                    service.deleteCustomer(); // todo: in production, make sure extra unnecessary customers are not created each time i connect, building up charges
+                    //Institutions institutions = service.getInstitutions();
+                    //for (Institution institution : service.getInstitutions().getInstitutions()) {
+                        if (!applicationIsLive) break;
+                        else {
+                            //InstitutionDetail institutionDetail = service.getInstitutionDetails(institution.getInstitutionId());
+                            InstitutionDetail institutionDetail = service.getInstitutionDetails(100000L);
+                            Long id = institutionDetail.getInstitutionId();
+                            String name = institutionDetail.getInstitutionName();
+                            String url = institutionDetail.getHomeUrl();
+                            String phone = institutionDetail.getPhoneNumber();
+                            String address1 = institutionDetail.getAddress().getAddress1();
+                            String address2 = institutionDetail.getAddress().getAddress2();
+                            String address3 = institutionDetail.getAddress().getAddress3();
+                            String city = institutionDetail.getAddress().getCity();
+                            String state = institutionDetail.getAddress().getState();
+                            String postalCode = institutionDetail.getAddress().getPostalCode();
+                            String country = institutionDetail.getAddress().getCountry();
+                            String currencyCode = institutionDetail.getCurrencyCode().toString();
+                            String usernameKey;
+                            String passwordKey;
+                            if (!(institutionDetail.getKeys().getKeies().get(0).isMask())) {
+                                usernameKey = institutionDetail.getKeys().getKeies().get(0).getName();
+                                passwordKey = institutionDetail.getKeys().getKeies().get(1).getName();
+                            }
+                            else {
+                                usernameKey = institutionDetail.getKeys().getKeies().get(1).getName();
+                                passwordKey = institutionDetail.getKeys().getKeies().get(0).getName();
+                            }
+                            if (FinancialInstitution.find.where().eq("id", id).findRowCount() == 0) FinancialInstitution.create(id, name, url, phone, address1, address2, address3, city, state, postalCode, country, currencyCode, usernameKey, passwordKey);
+                            else FinancialInstitution.find.ref(id).setName(name).setUrl(url).setPhone(phone).setAddress1(address1).setAddress2(address2).setAddress3(address3).setCity(city).setState(state).setPostalCode(postalCode).setCountry(country).setCurrencyCode(currencyCode).setUsernameKey(usernameKey).setPasswordKey(passwordKey).save();
+                        }
+                    //}
+                    System.out.println("AAA");
+                    for (User user : User.find.all()) {
+                        if (!applicationIsLive) break;
+                        else {
+                            //ConsumerProfile consumerProfile = user.findConsumerProfile();
+                            System.out.println("BBB");
+                            for (CreditCardAccount creditCardAccount : user.findCreditCardAccounts()) {
+                                FinancialInstitution financialInstution = FinancialInstitution.find.ref(creditCardAccount.getFinancialInstitutionId());
+                                Credential usernameCredential = new Credential();
+                                usernameCredential.setName(financialInstution.getUsernameKey());
+                                usernameCredential.setValue(creditCardAccount.getOfxUser());
+                                Credential passwordCredential = new Credential();
+                                passwordCredential.setName(financialInstution.getPasswordKey());
+                                passwordCredential.setValue(creditCardAccount.getOfxPassword());
+                                List<Credential> credentialList = new ArrayList<Credential>();
+                                credentialList.add(usernameCredential);
+                                credentialList.add(passwordCredential);
+                                Credentials credentials = new Credentials();
+                                credentials.setCredentials(credentialList);
+                                InstitutionLogin institutionLogin = new InstitutionLogin();
+                                institutionLogin.setCredentials(credentials);
+                                
+                                System.out.println("CCC");
+                                DiscoverAndAddAccountsResponse response = service.discoverAndAddAccounts(financialInstution.getId(), institutionLogin);
+                                if (response.getChallenges() != null && response.getAccountList() == null) {
+                                    System.out.println("DDD");
+                                    List<String> challengeList = new ArrayList<String>();
+                                    List<Challenge> challenges = response.getChallenges().getChallenges();
+                                    // Intuit says only Text is handled right now.
+                                    for (Challenge challenge : challenges) {
+                                        for (int i = 0; i < challenge.getTextsAndImagesAndChoices().size(); i++) {
+                                            if (!(challenge.getTextsAndImagesAndChoices().get(i) instanceof byte[]) && (!(challenge.getTextsAndImagesAndChoices().get(i) instanceof Choice))) {
+                                                challengeList.add(challenge.getTextsAndImagesAndChoices().get(i).toString());
+                                            }
+                                        }
+                                    }
+                                    ChallengeSession challengeSession = response.getChallengeSession();
+                                    //todo: ask user to answer chalenges
+                                }
+                                else {
+                                    System.out.println("EEE");
+                                    List<List<String>> accountList = new ArrayList<List<String>>();
+                                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                                    for (Account account : response.getAccountList().getBankingAccountsAndCreditAccountsAndLoanAccounts()) {
+                                        List<String> item = new ArrayList<String>();
+                                        item.add(Long.toString(account.getAccountId()));
+                                        item.add(Long.toString(account.getInstitutionId()));
+                                        if (null != account.getAggrSuccessDate()) item.add(formatter.format(account.getAggrSuccessDate().getTime()));
+                                        else item.add("");
+                                        if (null != account.getBalanceAmount()) item.add(account.getBalanceAmount().toString());
+                                        else item.add("");
+                                        if (null != account.getDescription()) item.add(account.getDescription());
+                                        else item.add("");
+                                        if (null != account.getCurrencyCode()) item.add(account.getCurrencyCode().toString());
+                                        else item.add("");
+                                        accountList.add(item);
+                                    }
+                                    //todo: handle what to do with accountList
+                                    System.out.println(creditCardAccount.getUserUsername());
+                                    System.out.println("  ---  cc fid: " + creditCardAccount.getFinancialInstitutionId());
+                                    for (List<String> subList : accountList) {
+                                        System.out.print("  ------  ");
+                                        for (String s : subList) System.out.print(s  + " ");
+                                        System.out.println();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (AggCatException e) {
+                    //"Exception while generating OAuth tokens. Please check whether the configured keys and cert files are valid."
+                    System.out.println("aggcatexception: " + e.getMessage());
+                    e.printStackTrace();
+                }
+                catch (Exception e) {
+                    System.out.println("exception: " + e.getMessage());
+                    e.printStackTrace();
+                }
+                System.out.println("pause...");
+                for (int sec = 0; sec < 60 * 60 * 24; sec++) {
+                    if (!applicationIsLive) break;
+                    else try {Thread.sleep(1000);} catch (Exception e) {}
+                }
+                System.out.println("unpause...");
+            }
+        }
+    }
+    /*
     public static class ConsumerProfileUpdater implements Runnable {
         public void run() {
             //while(applicationIsLive) {
@@ -92,7 +204,7 @@ public class Global extends GlobalSettings {
                 	ConsumerProfile consumerProfile = user.findConsumerProfile();
                     for (CreditCardAccount creditCardAccount : user.findCreditCardAccounts()) {
                     	try {
-                    	    /*
+                    	    
                             List<String> properties = new ArrayList<String>();
                             properties.add("AccountId");
                             properties.add("AccountType");
@@ -107,7 +219,7 @@ public class Global extends GlobalSettings {
                             properties.add("OFXPassword");
                             properties.add("OFXUser");
                             properties.add("OFXVersion");
-                            */
+                            
                     		FinancialInstitution financialInstitution = creditCardAccount.findFinancialInstitution();
                     		Connection connection = DriverManager.getConnection(
                     				"jdbc:ofx:" +
@@ -164,7 +276,7 @@ public class Global extends GlobalSettings {
             //}
         }
     }
-    
+    */
     /*
     @Override public Result onError(RequestHeader request, Throwable t) {
     	return internalServerError("error");

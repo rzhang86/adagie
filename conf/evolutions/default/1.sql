@@ -29,7 +29,7 @@ create table consumer_profile (
 create table credit_card_account (
   id                        bigint not null,
   user_username             varchar(255),
-  financial_institution_id  integer,
+  financial_institution_id  bigint,
   ofx_user                  varchar(255),
   ofx_password              varchar(255),
   cc_number                 varchar(255),
@@ -37,11 +37,20 @@ create table credit_card_account (
 ;
 
 create table financial_institution (
-  id                        integer not null,
+  id                        bigint not null,
   name                      varchar(255),
   url                       varchar(255),
-  org                       varchar(255),
-  fid                       varchar(255),
+  phone                     varchar(255),
+  address1                  varchar(255),
+  address2                  varchar(255),
+  address3                  varchar(255),
+  city                      varchar(255),
+  state                     varchar(255),
+  postal_code               varchar(255),
+  country                   varchar(255),
+  currency_code             varchar(255),
+  username_key              varchar(255),
+  password_key              varchar(255),
   constraint pk_financial_institution primary key (id))
 ;
 

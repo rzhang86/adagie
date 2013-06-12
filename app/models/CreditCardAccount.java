@@ -12,14 +12,14 @@ import play.db.ebean.*;
     public User findUser() {return User.find.ref(userUsername);}
     
     // has one FinancialInstitution 
-    public Integer financialInstitutionId; public Integer getFinancialInstitutionId() {return this.financialInstitutionId;} public CreditCardAccount setFinancialInstitutionId(Integer financialInstitutionId) {this.financialInstitutionId = financialInstitutionId; return this;}
+    public Long financialInstitutionId; public Long getFinancialInstitutionId() {return this.financialInstitutionId;} public CreditCardAccount setFinancialInstitutionId(Long financialInstitutionId) {this.financialInstitutionId = financialInstitutionId; return this;}
     public FinancialInstitution findFinancialInstitution() {return FinancialInstitution.find.ref(financialInstitutionId);}
     
     public String ofxUser; public String getOfxUser() {return this.ofxUser;} public CreditCardAccount setOfxUser(String ofxUser) {this.ofxUser = ofxUser; return this;}
     public String ofxPassword; public String getOfxPassword() {return this.ofxPassword;} public CreditCardAccount setOfxPassword(String ofxPassword) {this.ofxPassword = ofxPassword; return this;}
     public String ccNumber; public String getCcNumber() {return this.ccNumber;} public CreditCardAccount setCcNumber(String ccNumber) {this.ccNumber = ccNumber; return this;}
     
-    public static CreditCardAccount create(String userUsername, Integer financialInstitutionId, String ofxUser, String ofxPassword, String ccNumber) {
+    public static CreditCardAccount create(String userUsername, Long financialInstitutionId, String ofxUser, String ofxPassword, String ccNumber) {
         return (new CreditCardAccount()).setUserUsername(userUsername).setFinancialInstitutionId(financialInstitutionId).setOfxUser(ofxUser).setOfxPassword(ofxPassword).setCcNumber(ccNumber).saveGet();
     }
     public CreditCardAccount saveGet() {this.save(); return this;}

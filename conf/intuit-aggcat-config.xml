@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <intuit-config>
 	<saml>
-		<keystoreFile>C:/Users/Ray/Dropbox/intuit_security/keystore/keystore.jks</keystoreFile>
+		<keystoreFile>conf/keystore/keystore.jks</keystoreFile>
 		<keystorePassword>S1_jeec87</keystorePassword>
 		<keyPassword>S1_jeec87</keyPassword>
 		<certAlias>myapp</certAlias>
