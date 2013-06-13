@@ -69,165 +69,194 @@ public class Global extends GlobalSettings {
         String userId = "rzhang86"; // i think userId = rzhang86 
         public void run() {
             while (applicationIsLive) {
-                try {
-                    System.out.println("Authorizing with Intuit...");
-                    OAuthAuthorizer oauthAuthorizer = new OAuthAuthorizer(OAUTH_CONSUMER_KEY, OAUTH_CONSUMER_SECRET, SAML_PROVIDER_ID, userId);
-                    Context context = new Context(oauthAuthorizer);
-                    AggCatService service = new AggCatService(context);
-                    System.out.println("Intuit says ok");
-                    service.deleteCustomer(); // todo: in production, make sure extra unnecessary customers are not created each time i connect, building up charges
+            	AggCatService service = getService();
+            	/*
+                Institutions institutions = null;
+                boolean institutionsReceived = false;
+                while (!institutionsReceived) {
+                    try {institutions = service.getInstitutions();}
+                    catch (AggCatException e) {System.out.println("aggcatexception: " + e.getMessage()); e.printStackTrace();}
+                    catch (Exception e) {System.out.println("exception: " + e.getMessage()); e.printStackTrace();}
+                    if (institutions != null) institutionsReceived = true;
+                    else try {Thread.sleep(60000); service = getService();} catch (Exception e) {}
+                }*/
+                //for (Institution institution : institutions.getInstitutions()) {
+                    if (!applicationIsLive) break;
+                    else {
+                    	/*InstitutionDetail institutionDetail = null;
+                        boolean institutionDetailReceived = false;
+                        while (!institutionDetailReceived) {
+                            try {institutionDetail = service.getInstitutionDetails(institution.getInstitutionId());}
+                            catch (AggCatException e) {System.out.println("aggcatexception: " + e.getMessage()); e.printStackTrace();}
+                            catch (Exception e) {System.out.println("exception: " + e.getMessage()); e.printStackTrace();}
+                            if (institutionDetail != null) institutionDetailReceived = true;
+                            else try {Thread.sleep(60000); service = getService();} catch (Exception e) {}
+                        }*/
+                    	InstitutionDetail institutionDetail = null;
+                        boolean institutionDetailReceived = false;
+                        while (!institutionDetailReceived) {
+                            try {institutionDetail = service.getInstitutionDetails(100000L);}
+                            catch (AggCatException e) {System.out.println("aggcatexception: " + e.getMessage()); e.printStackTrace();}
+                            catch (Exception e) {System.out.println("exception: " + e.getMessage()); e.printStackTrace();}
+                            if (institutionDetail != null) institutionDetailReceived = true;
+                            else try {Thread.sleep(60000); service = getService();} catch (Exception e) {}
+                        }
+                        Long id = institutionDetail.getInstitutionId();
+                        String name = institutionDetail.getInstitutionName();
+                        String url = institutionDetail.getHomeUrl();
+                        String phone = institutionDetail.getPhoneNumber();
+                        String address1 = institutionDetail.getAddress().getAddress1();
+                        String address2 = institutionDetail.getAddress().getAddress2();
+                        String address3 = institutionDetail.getAddress().getAddress3();
+                        String city = institutionDetail.getAddress().getCity();
+                        String state = institutionDetail.getAddress().getState();
+                        String postalCode = institutionDetail.getAddress().getPostalCode();
+                        String country = institutionDetail.getAddress().getCountry();
+                        String currencyCode = institutionDetail.getCurrencyCode().toString();
+                        String usernameKey;
+                        String passwordKey;
+                        if (!(institutionDetail.getKeys().getKeies().get(0).isMask())) {
+                            usernameKey = institutionDetail.getKeys().getKeies().get(0).getName();
+                            passwordKey = institutionDetail.getKeys().getKeies().get(1).getName();
+                        }
+                        else {
+                            usernameKey = institutionDetail.getKeys().getKeies().get(1).getName();
+                            passwordKey = institutionDetail.getKeys().getKeies().get(0).getName();
+                        }
+                        if (FinancialInstitution.find.where().eq("id", id).findRowCount() == 0) FinancialInstitution.create(id, name, url, phone, address1, address2, address3, city, state, postalCode, country, currencyCode, usernameKey, passwordKey);
+                        else FinancialInstitution.find.ref(id).setName(name).setUrl(url).setPhone(phone).setAddress1(address1).setAddress2(address2).setAddress3(address3).setCity(city).setState(state).setPostalCode(postalCode).setCountry(country).setCurrencyCode(currencyCode).setUsernameKey(usernameKey).setPasswordKey(passwordKey).save();
+                    }
+                //}
                 
-	                //Institutions institutions = service.getInstitutions();
-	                
-	                //for (Institution institution : service.getInstitutions().getInstitutions()) {
-	                    if (!applicationIsLive) break;
-	                    else {
-	                        //InstitutionDetail institutionDetail = service.getInstitutionDetails(institution.getInstitutionId());
-	                        InstitutionDetail institutionDetail = service.getInstitutionDetails(100000L);
-	                        Long id = institutionDetail.getInstitutionId();
-	                        String name = institutionDetail.getInstitutionName();
-	                        String url = institutionDetail.getHomeUrl();
-	                        String phone = institutionDetail.getPhoneNumber();
-	                        String address1 = institutionDetail.getAddress().getAddress1();
-	                        String address2 = institutionDetail.getAddress().getAddress2();
-	                        String address3 = institutionDetail.getAddress().getAddress3();
-	                        String city = institutionDetail.getAddress().getCity();
-	                        String state = institutionDetail.getAddress().getState();
-	                        String postalCode = institutionDetail.getAddress().getPostalCode();
-	                        String country = institutionDetail.getAddress().getCountry();
-	                        String currencyCode = institutionDetail.getCurrencyCode().toString();
-	                        String usernameKey;
-	                        String passwordKey;
-	                        if (!(institutionDetail.getKeys().getKeies().get(0).isMask())) {
-	                            usernameKey = institutionDetail.getKeys().getKeies().get(0).getName();
-	                            passwordKey = institutionDetail.getKeys().getKeies().get(1).getName();
-	                        }
-	                        else {
-	                            usernameKey = institutionDetail.getKeys().getKeies().get(1).getName();
-	                            passwordKey = institutionDetail.getKeys().getKeies().get(0).getName();
-	                        }
-	                        if (FinancialInstitution.find.where().eq("id", id).findRowCount() == 0) FinancialInstitution.create(id, name, url, phone, address1, address2, address3, city, state, postalCode, country, currencyCode, usernameKey, passwordKey);
-	                        else FinancialInstitution.find.ref(id).setName(name).setUrl(url).setPhone(phone).setAddress1(address1).setAddress2(address2).setAddress3(address3).setCity(city).setState(state).setPostalCode(postalCode).setCountry(country).setCurrencyCode(currencyCode).setUsernameKey(usernameKey).setPasswordKey(passwordKey).save();
-	                    }
-	                //}
-	                
-	                for (User user : User.find.all()) {
-	                    if (!applicationIsLive) break;
-	                    else {
-	                        //ConsumerProfile consumerProfile = user.findConsumerProfile();
-	                        for (FinancialInstitutionLogin financialInstitutionLogin : user.findFinancialInstitutionLogins()) {
-	                        	try {
-	                                FinancialInstitution financialInstution = financialInstitutionLogin.findFinancialInstitution();
-	                                Credential usernameCredential = new Credential();
-	                                usernameCredential.setName(financialInstution.getUsernameKey());
-	                                usernameCredential.setValue(financialInstitutionLogin.getUsername());
-	                                Credential passwordCredential = new Credential();
-	                                passwordCredential.setName(financialInstution.getPasswordKey());
-	                                passwordCredential.setValue(financialInstitutionLogin.getPassword());
-	                                List<Credential> credentialList = new ArrayList<Credential>();
-	                                credentialList.add(usernameCredential);
-	                                credentialList.add(passwordCredential);
-	                                Credentials credentials = new Credentials();
-	                                credentials.setCredentials(credentialList);
-	                                InstitutionLogin institutionLogin = new InstitutionLogin();
-	                                institutionLogin.setCredentials(credentials);
-	                                
-	                                DiscoverAndAddAccountsResponse response = service.discoverAndAddAccounts(financialInstution.getId(), institutionLogin);
-	                                AccountList accountList = new AccountList();
-	                                if (response.getChallenges() != null && response.getAccountList() == null) {
-	                                    List<String> questionList = new ArrayList<String>();
-	                                    // Intuit says only Text is handled right now.
-	                                    for (Challenge challenge : response.getChallenges().getChallenges()) {
-	                                        for (int i = 0; i < challenge.getTextsAndImagesAndChoices().size(); i++) {
-	                                            if (!(challenge.getTextsAndImagesAndChoices().get(i) instanceof byte[]) && (!(challenge.getTextsAndImagesAndChoices().get(i) instanceof Choice))) {
-	                                                questionList.add(challenge.getTextsAndImagesAndChoices().get(i).toString());
-	                                            }
-	                                        }
-	                                    }
-	                                    ChallengeSession challengeSession = response.getChallengeSession();
-	                                    //todo: ask user to answer chalenges
-	                                    int questionsLeft = questionList.size();
-	                                    for (FinancialInstitutionLoginChallenge financialInstitutionLoginChallenge : FinancialInstitutionLoginChallenge.find.where().eq("financialInstitutionLoginId", financialInstitutionLogin.getId()).findList()) {
-	                                    	String question = financialInstitutionLoginChallenge.getQuestion();
-	                                    	String answer = financialInstitutionLoginChallenge.getAnswer();
-	                                    	while (questionList.contains(question)) {
-	                                    		questionList.set(questionList.indexOf(question), answer);
-	                                    		questionsLeft--;
-	                                    	}
-	                                    }
-	                                    if (questionsLeft <= 0) {
-	                                    	ChallengeResponses challengeResponses = new ChallengeResponses();
-	                                    	challengeResponses.setResponses(questionList);
-	                                    	accountList = service.discoverAndAddAccounts(challengeResponses, challengeSession).getAccountList();
-	                                    }
-	                                }
-	                                else accountList = response.getAccountList();
-	                                
-                                    List<List<String>> accounts = new ArrayList<List<String>>();
-                                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                                    for (Account account : accountList.getBankingAccountsAndCreditAccountsAndLoanAccounts()) {
-                                        /*List<String> item = new ArrayList<String>();
-                                        item.add(Long.toString(account.getAccountId()));
-                                        item.add(Long.toString(account.getInstitutionId()));
-                                        if (null != account.getAggrSuccessDate()) item.add(formatter.format(account.getAggrSuccessDate().getTime())); else item.add("");
-                                        if (null != account.getBalanceAmount()) item.add(account.getBalanceAmount().toString()); else item.add("");
-                                        if (null != account.getDescription()) item.add(account.getDescription()); else item.add("");
-                                        if (null != account.getCurrencyCode()) item.add(account.getCurrencyCode().toString()); else item.add("");
-                                        accounts.add(item);*/
-                                    	String startDate = "2013-01-01";
-                                    	String endDate = "2013-06-12";
-                                    	for (com.intuit.ipp.aggcat.data.Transaction transaction : service.getAccountTransactions(account.getAccountId(), startDate, endDate).getLoanTransactions()) {
-                                    		try {System.out.print("\ntrans--------- ");} catch (Exception e) {System.out.print(", NILYO");}
-                                    		try {System.out.print(", " + transaction.getPayeeName());} catch (Exception e) {System.out.print(", NILYO");}
-                                    		try {System.out.print(", " + transaction.getType());} catch (Exception e) {System.out.print(", NILYO");}
-                                    		try {System.out.print(", " + transaction.getAvailableDate().getTime().toString());} catch (Exception e) {System.out.print(", NILYO");}
-                                    		try {System.out.print(", " + transaction.getAmount());} catch (Exception e) {System.out.print(", NILYO");}
-                                    		try {System.out.print(", " + transaction.getRunningBalanceAmount());} catch (Exception e) {System.out.print(", NILYO");}
-                                    		try {System.out.print(", " + transaction.getCurrencyType());} catch (Exception e) {System.out.print(", NILYO");}
-                                    		try {System.out.print(", " + transaction.getMemo());} catch (Exception e) {System.out.print(", NILYO");}
-                                    		try {System.out.print("\ncat common---- ");} catch (Exception e) {System.out.print(", NILYO");}
-                                    		try {System.out.print(", " + transaction.getCategorization().getCommon().getMerchant());} catch (Exception e) {System.out.print(", NILYO");}
-                                    		try {System.out.print(", " + transaction.getCategorization().getCommon().getNormalizedPayeeName());} catch (Exception e) {System.out.print(", NILYO");}
-                                    		try {System.out.print(", " + transaction.getCategorization().getCommon().getSic());} catch (Exception e) {System.out.print(", NILYO");}
-                                    		try {System.out.print("\ncat context--- ");} catch (Exception e) {System.out.print(", NILYO");}
-                                    		try {System.out.print(", " + transaction.getCategorization().getContexts().get(0).getCategoryName());} catch (Exception e) {System.out.print(", NILYO");}
-                                    		try {System.out.print(", " + transaction.getCategorization().getContexts().get(0).getContextType());} catch (Exception e) {System.out.print(", NILYO");}
-                                    		try {System.out.print(", " + transaction.getCategorization().getContexts().get(0).getScheduleC());} catch (Exception e) {System.out.print(", NILYO");}
-                                    		try {System.out.print(", " + transaction.getCategorization().getContexts().get(0).getSource().getDeclaringClass().getName());} catch (Exception e) {System.out.print(", NILYO");}
+                for (User user : User.find.all()) {
+                    if (!applicationIsLive) break;
+                    else {
+                        //ConsumerProfile consumerProfile = user.findConsumerProfile();
+                        for (FinancialInstitutionLogin financialInstitutionLogin : user.findFinancialInstitutionLogins()) {
+                        	try {
+                                FinancialInstitution financialInstution = financialInstitutionLogin.findFinancialInstitution();
+                                Credential usernameCredential = new Credential();
+                                usernameCredential.setName(financialInstution.getUsernameKey());
+                                usernameCredential.setValue(financialInstitutionLogin.getUsername());
+                                Credential passwordCredential = new Credential();
+                                passwordCredential.setName(financialInstution.getPasswordKey());
+                                passwordCredential.setValue(financialInstitutionLogin.getPassword());
+                                List<Credential> credentialList = new ArrayList<Credential>();
+                                credentialList.add(usernameCredential);
+                                credentialList.add(passwordCredential);
+                                Credentials credentials = new Credentials();
+                                credentials.setCredentials(credentialList);
+                                InstitutionLogin institutionLogin = new InstitutionLogin();
+                                institutionLogin.setCredentials(credentials);
+                                
+                                DiscoverAndAddAccountsResponse response = null;
+                                boolean responseReceived = false;
+                                while (!responseReceived) {
+                                    try {response = service.discoverAndAddAccounts(financialInstution.getId(), institutionLogin);}
+                                    catch (AggCatException e) {System.out.println("aggcatexception: " + e.getMessage()); e.printStackTrace();}
+                                    catch (Exception e) {System.out.println("exception: " + e.getMessage()); e.printStackTrace();}
+                                    if (response != null) responseReceived = true;
+                                    else try {Thread.sleep(60000); service = getService();} catch (Exception e) {}
+                                }
+                                AccountList accountList = new AccountList();
+                                if (response.getChallenges() != null && response.getAccountList() == null) {
+                                    List<String> questionList = new ArrayList<String>();
+                                    // Intuit says only Text is handled right now.
+                                    for (Challenge challenge : response.getChallenges().getChallenges()) {
+                                        for (int i = 0; i < challenge.getTextsAndImagesAndChoices().size(); i++) {
+                                            if (!(challenge.getTextsAndImagesAndChoices().get(i) instanceof byte[]) && (!(challenge.getTextsAndImagesAndChoices().get(i) instanceof Choice))) {
+                                                questionList.add(challenge.getTextsAndImagesAndChoices().get(i).toString());
+                                            }
+                                        }
+                                    }
+                                    ChallengeSession challengeSession = response.getChallengeSession();
+                                    //todo: ask user to answer chalenges
+                                    int questionsLeft = questionList.size();
+                                    for (FinancialInstitutionLoginChallenge financialInstitutionLoginChallenge : FinancialInstitutionLoginChallenge.find.where().eq("financialInstitutionLoginId", financialInstitutionLogin.getId()).findList()) {
+                                    	String question = financialInstitutionLoginChallenge.getQuestion();
+                                    	String answer = financialInstitutionLoginChallenge.getAnswer();
+                                    	while (questionList.contains(question)) {
+                                    		questionList.set(questionList.indexOf(question), answer);
+                                    		questionsLeft--;
                                     	}
                                     }
-                                    //todo: handle what to do with accountList
-                                    /*System.out.println(financialInstitutionLogin.getUserUsername());
-                                    System.out.println("  ---  cc fid: " + financialInstitutionLogin.getFinancialInstitutionId());
-                                    for (List<String> subList : accountList) {
-                                        System.out.print("  ------  ");
-                                        for (String s : subList) System.out.print(s  + " ");
-                                        System.out.println();
-                                    }*/
-	                        	}
-	                        	catch (AggCatException e) {
-	                    			//String errorCode = e.getErrorCode();
-	                        		//If the error code is 401 then oAuth credentials are not valid or expired
-	            	                System.out.println("aggcatexception: " + e.getMessage());
-	            	                e.printStackTrace();
-	                    		}
-	            	            catch (Exception e) {
-	            	                System.out.println("exception: " + e.getMessage());
-	            	                e.printStackTrace();
-	            	            }
-	                        }
-	                    }
-	                }
+                                    if (questionsLeft <= 0) {
+                                    	ChallengeResponses challengeResponses = new ChallengeResponses();
+                                    	challengeResponses.setResponses(questionList);
+                                    	
+                                    	DiscoverAndAddAccountsResponse response2 = null;
+    	                                boolean response2Received = false;
+    	                                while (!response2Received) {
+    	                                    try {response2 = service.discoverAndAddAccounts(challengeResponses, challengeSession);}
+    	                                    catch (AggCatException e) {System.out.println("aggcatexception: " + e.getMessage()); e.printStackTrace();}
+    	                                    catch (Exception e) {System.out.println("exception: " + e.getMessage()); e.printStackTrace();}
+    	                                    if (response2 != null) response2Received = true;
+    	                                    else try {Thread.sleep(60000); service = getService();} catch (Exception e) {}
+    	                                }
+                                    	accountList = response2.getAccountList();
+                                    }
+                                }
+                                else accountList = response.getAccountList();
+                                
+                                List<List<String>> accounts = new ArrayList<List<String>>();
+                                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                                for (Account account : accountList.getBankingAccountsAndCreditAccountsAndLoanAccounts()) {
+                                    /*List<String> item = new ArrayList<String>();
+                                    item.add(Long.toString(account.getAccountId()));
+                                    item.add(Long.toString(account.getInstitutionId()));
+                                    if (null != account.getAggrSuccessDate()) item.add(formatter.format(account.getAggrSuccessDate().getTime())); else item.add("");
+                                    if (null != account.getBalanceAmount()) item.add(account.getBalanceAmount().toString()); else item.add("");
+                                    if (null != account.getDescription()) item.add(account.getDescription()); else item.add("");
+                                    if (null != account.getCurrencyCode()) item.add(account.getCurrencyCode().toString()); else item.add("");
+                                    accounts.add(item);*/
+                                	String startDate = "2013-01-01";
+                                	String endDate = "2013-06-12";
+                                	
+                                	TransactionList transactions = null;
+                                    boolean transactionReceived = false;
+                                    while (!transactionReceived) {
+                                        try {transactions = service.getAccountTransactions(account.getAccountId(), startDate, endDate);}
+                                        catch (AggCatException e) {System.out.println("aggcatexception: " + e.getMessage()); e.printStackTrace();}
+                                        catch (Exception e) {System.out.println("exception: " + e.getMessage()); e.printStackTrace();}
+                                        if (transactions != null) transactionReceived = true;
+                                        else try {Thread.sleep(60000); service = getService();} catch (Exception e) {}
+                                    }
+                                	for (com.intuit.ipp.aggcat.data.Transaction transaction : transactions.getLoanTransactions()) {
+                                		try {System.out.print("\ntrans--------- ");} catch (Exception e) {System.out.print(", NILYO");}
+                                		try {System.out.print(", " + transaction.getPayeeName());} catch (Exception e) {System.out.print(", NILYO");}
+                                		try {System.out.print(", " + transaction.getType());} catch (Exception e) {System.out.print(", NILYO");}
+                                		try {System.out.print(", " + transaction.getAvailableDate().getTime().toString());} catch (Exception e) {System.out.print(", NILYO");}
+                                		try {System.out.print(", " + transaction.getAmount());} catch (Exception e) {System.out.print(", NILYO");}
+                                		try {System.out.print(", " + transaction.getRunningBalanceAmount());} catch (Exception e) {System.out.print(", NILYO");}
+                                		try {System.out.print(", " + transaction.getCurrencyType());} catch (Exception e) {System.out.print(", NILYO");}
+                                		try {System.out.print(", " + transaction.getMemo());} catch (Exception e) {System.out.print(", NILYO");}
+                                		try {System.out.print("\ncat common---- ");} catch (Exception e) {System.out.print(", NILYO");}
+                                		try {System.out.print(", " + transaction.getCategorization().getCommon().getMerchant());} catch (Exception e) {System.out.print(", NILYO");}
+                                		try {System.out.print(", " + transaction.getCategorization().getCommon().getNormalizedPayeeName());} catch (Exception e) {System.out.print(", NILYO");}
+                                		try {System.out.print(", " + transaction.getCategorization().getCommon().getSic());} catch (Exception e) {System.out.print(", NILYO");}
+                                		try {System.out.print("\ncat context--- ");} catch (Exception e) {System.out.print(", NILYO");}
+                                		try {System.out.print(", " + transaction.getCategorization().getContexts().get(0).getCategoryName());} catch (Exception e) {System.out.print(", NILYO");}
+                                		try {System.out.print(", " + transaction.getCategorization().getContexts().get(0).getContextType());} catch (Exception e) {System.out.print(", NILYO");}
+                                		try {System.out.print(", " + transaction.getCategorization().getContexts().get(0).getScheduleC());} catch (Exception e) {System.out.print(", NILYO");}
+                                		try {System.out.print(", " + transaction.getCategorization().getContexts().get(0).getSource().getDeclaringClass().getName());} catch (Exception e) {System.out.print(", NILYO");}
+                                	}
+                                }
+                                //todo: handle what to do with accountList
+                                /*System.out.println(financialInstitutionLogin.getUserUsername());
+                                System.out.println("  ---  cc fid: " + financialInstitutionLogin.getFinancialInstitutionId());
+                                for (List<String> subList : accountList) {
+                                    System.out.print("  ------  ");
+                                    for (String s : subList) System.out.print(s  + " ");
+                                    System.out.println();
+                                }*/
+                        	}
+            	            catch (Exception e) {
+            	                System.out.println("exception: " + e.getMessage());
+            	                e.printStackTrace();
+            	            }
+                        }
+                    }
                 }
-	            catch (AggCatException e) {
-	                //"Exception while generating OAuth tokens. Please check whether the configured keys and cert files are valid."
-	                System.out.println("aggcatexception: " + e.getMessage());
-	                e.printStackTrace();
-	            }
-	            catch (Exception e) {
-	                System.out.println("exception: " + e.getMessage());
-	                e.printStackTrace();
-	            }
                 
                 
                 System.out.println("pause...");
@@ -237,6 +266,30 @@ public class Global extends GlobalSettings {
                 }
                 System.out.println("unpause...");
             }
+        }
+        
+        public AggCatService getService() {
+            AggCatService service = null;
+            while (service == null) {
+                try {
+                    System.out.println("Authorizing with Intuit...");
+                    OAuthAuthorizer oauthAuthorizer = new OAuthAuthorizer(OAUTH_CONSUMER_KEY, OAUTH_CONSUMER_SECRET, SAML_PROVIDER_ID, userId);
+                    service = new AggCatService(new Context(oauthAuthorizer));
+                    service.deleteCustomer(); // todo: in production, make sure extra unnecessary customers are not created each time i connect, building up charges
+                    System.out.println("...Intuit says ok");
+                }
+                catch (AggCatException e) {
+                    //"Exception while generating OAuth tokens. Please check whether the configured keys and cert files are valid."
+                    System.out.println("aggcatexception: " + e.getMessage());
+                    e.printStackTrace();
+                }
+                catch (Exception e) {
+                    System.out.println("exception: " + e.getMessage());
+                    e.printStackTrace();
+                }
+                if (service == null) try {Thread.sleep(60000);} catch (Exception e) {}
+            }
+            return service;
         }
     }
     /*
