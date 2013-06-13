@@ -3,6 +3,7 @@ import java.sql.*;
 import java.text.*;
 import java.util.*;
 import java.util.Date;
+import java.util.concurrent.Callable;
 
 import com.avaje.ebean.*;
 
@@ -27,25 +28,50 @@ public class Global extends GlobalSettings {
     @Override public void onStart(Application app) {
         // Check if the database is empty
         if (User.find.findRowCount() == 0) {
-            //Ebean.save((List) Yaml.load("seed/data-FinancialInstitution.yml"));
             Ebean.save((List) Yaml.load("seed/data-Occupation.yml"));
             Ebean.save((List) Yaml.load("seed/data-Interest.yml"));
             Ebean.save((List) Yaml.load("seed/data-Zip.yml"));
+            Ebean.save((List) Yaml.load("seed/data-FinancialInstitution.yml"));
             
             User.create("Ray", "secret", null, null, null, null, null);
             Balance.create("Ray", 10000L);
             CommittedBalance.create("Ray", 10000L);
             ConsumerProfile.create("Ray", 0L, 0L, 0L, 0, 0, 0);
             WatchingVideo.create("Ray", null, null, null);
-            //FinancialInstitutionLogin.create("Ray", 424L, "cim2phat4u", "zhaamE_263", "379718849191002");
             FinancialInstitutionLogin.create("Ray", 100000L, "direct", "anyvalue");
+            FinancialInstitutionLogin.create("Ray", 100000L, "bad", "anyvalue");
+            FinancialInstitutionLogin.create("Ray", 100000L, "anyvalue", "bad");
+            FinancialInstitutionLogin.create("Ray", 100000L, "tfa_text", "anyvalue");
+            FinancialInstitutionLogin.create("Ray", 100000L, "tfa_text2", "anyvalue");
+            FinancialInstitutionLogin.create("Ray", 100000L, "tfa_choice", "anyvalue");
+            FinancialInstitutionLogin.create("Ray", 100000L, "tfa_image", "anyvalue");
+            FinancialInstitutionLogin.create("Ray", 100000L, "tfa_dynamic_image", "anyvalue");
+            FinancialInstitutionLogin.create("Ray", 100000L, "request_error", "anyvalue");
+            FinancialInstitutionLogin.create("Ray", 100000L, "error_code", "error number");
+            FinancialInstitutionLogin.create("Ray", 100000L, "error_later", "error number");
+            FinancialInstitutionLogin.create("Ray", 100000L, "MFA ANSWER", "<MFA answer field> loops");
+            FinancialInstitutionLogin.create("Ray", 100000L, "MFA ANSWER", "<MFA answer field> bad");
+            FinancialInstitutionLogin.create("Ray", 100000L, "wrong_zip", "anyvalue");
+            FinancialInstitutionLogin.create("Ray", 100000L, "wrong_state", "anyvalue");
+            FinancialInstitutionLogin.create("Ray", 100000L, "special_char", "anyvalue");
+            FinancialInstitutionLogin.create("Ray", 100000L, "wrong_date", "anyvalue");
+            FinancialInstitutionLogin.create("Ray", 100000L, "null_date", "anyvalue");
+            FinancialInstitutionLogin.create("Ray", 100000L, "null_amt", "anyvalue");
+            FinancialInstitutionLogin.create("Ray", 100000L, "null_acctno", "anyvalue");
+            FinancialInstitutionLogin.create("Ray", 100000L, "unmasked_acctno", "anyvalue");
+            FinancialInstitutionLogin.create("Ray", 100000L, "Opayee_0dd", "anyvalue");
+            FinancialInstitutionLogin.create("Ray", 100000L, "Opayee_dd", "anyvalue");
+            FinancialInstitutionLogin.create("Ray", 100000L, "payee_0dd", "anyvalue");
+            FinancialInstitutionLogin.create("Ray", 100000L, "payee_dd", "anyvalue");
+            FinancialInstitutionLogin.create("Ray", 100000L, "SomeInfoReqd_0dd", "anyvalue");
+            FinancialInstitutionLogin.create("Ray", 100000L, "SomeInfoReqd_dd", "anyvalue");
+            FinancialInstitutionLogin.create("Ray", 100000L, "AllInfoReqd_dd", "anyvalue");
             
             User.create("Katie", "secret", null, null, null, null, null);
             Balance.create("Katie", 10000L);
             CommittedBalance.create("Katie", 10000L);
             ConsumerProfile.create("Katie", 0L, 0L, 0L, 0, 0, 0);
             WatchingVideo.create("Katie", null, null, null);
-            //FinancialInstitutionLogin.create("Katie", 427L, "kwang318", "651Anthony3083", "4128003460359667");
         }
         
         // start looping maintenance threads
@@ -66,10 +92,12 @@ public class Global extends GlobalSettings {
         String OAUTH_CONSUMER_KEY = "qyprdNIHBI0Ym9iddckwTR8Fzq9Mmj";
         String OAUTH_CONSUMER_SECRET = "86MmKfrvrDheNMQdvYNgrkc9HEFvoczwmIRqFaMj";
         String SAML_PROVIDER_ID = "adder.161321.cc.dev-intuit.ipp.prod";
-        String userId = "rzhang86"; // i think userId = rzhang86 
+        String userId = "rzhang86"; // i think userId = rzhang86
+        AggCatService service;
+        
         public void run() {
             while (applicationIsLive) {
-            	AggCatService service = getService();
+            	service = getService();
             	/*
                 Institutions institutions = null;
                 boolean institutionsReceived = false;
@@ -79,23 +107,14 @@ public class Global extends GlobalSettings {
                     catch (Exception e) {System.out.println("exception: " + e.getMessage()); e.printStackTrace();}
                     if (institutions != null) institutionsReceived = true;
                     else try {Thread.sleep(60000); service = getService();} catch (Exception e) {}
-                }*/
-                //for (Institution institution : institutions.getInstitutions()) {
+                }
+                for (Institution institution : institutions.getInstitutions()) {
                     if (!applicationIsLive) break;
                     else {
-                    	/*InstitutionDetail institutionDetail = null;
-                        boolean institutionDetailReceived = false;
-                        while (!institutionDetailReceived) {
-                            try {institutionDetail = service.getInstitutionDetails(institution.getInstitutionId());}
-                            catch (AggCatException e) {System.out.println("aggcatexception: " + e.getMessage()); e.printStackTrace();}
-                            catch (Exception e) {System.out.println("exception: " + e.getMessage()); e.printStackTrace();}
-                            if (institutionDetail != null) institutionDetailReceived = true;
-                            else try {Thread.sleep(60000); service = getService();} catch (Exception e) {}
-                        }*/
                     	InstitutionDetail institutionDetail = null;
                         boolean institutionDetailReceived = false;
                         while (!institutionDetailReceived) {
-                            try {institutionDetail = service.getInstitutionDetails(100000L);}
+                            try {institutionDetail = service.getInstitutionDetails(institution.getInstitutionId());}
                             catch (AggCatException e) {System.out.println("aggcatexception: " + e.getMessage()); e.printStackTrace();}
                             catch (Exception e) {System.out.println("exception: " + e.getMessage()); e.printStackTrace();}
                             if (institutionDetail != null) institutionDetailReceived = true;
@@ -126,8 +145,9 @@ public class Global extends GlobalSettings {
                         if (FinancialInstitution.find.where().eq("id", id).findRowCount() == 0) FinancialInstitution.create(id, name, url, phone, address1, address2, address3, city, state, postalCode, country, currencyCode, usernameKey, passwordKey);
                         else FinancialInstitution.find.ref(id).setName(name).setUrl(url).setPhone(phone).setAddress1(address1).setAddress2(address2).setAddress3(address3).setCity(city).setState(state).setPostalCode(postalCode).setCountry(country).setCurrencyCode(currencyCode).setUsernameKey(usernameKey).setPasswordKey(passwordKey).save();
                     }
-                //}
-                
+                }
+                */
+            	
                 for (User user : User.find.all()) {
                     if (!applicationIsLive) break;
                     else {
@@ -149,15 +169,9 @@ public class Global extends GlobalSettings {
                                 InstitutionLogin institutionLogin = new InstitutionLogin();
                                 institutionLogin.setCredentials(credentials);
                                 
-                                DiscoverAndAddAccountsResponse response = null;
-                                boolean responseReceived = false;
-                                while (!responseReceived) {
-                                    try {response = service.discoverAndAddAccounts(financialInstution.getId(), institutionLogin);}
-                                    catch (AggCatException e) {System.out.println("aggcatexception: " + e.getMessage()); e.printStackTrace();}
-                                    catch (Exception e) {System.out.println("exception: " + e.getMessage()); e.printStackTrace();}
-                                    if (response != null) responseReceived = true;
-                                    else try {Thread.sleep(60000); service = getService();} catch (Exception e) {}
-                                }
+                                System.out.println("\n" + usernameCredential.getValue() + "/" + passwordCredential.getValue());
+                                //todo: handle error 503 errors
+                                DiscoverAndAddAccountsResponse response = service.discoverAndAddAccounts(financialInstution.getId(), institutionLogin);
                                 AccountList accountList = new AccountList();
                                 if (response.getChallenges() != null && response.getAccountList() == null) {
                                     List<String> questionList = new ArrayList<String>();
@@ -169,6 +183,7 @@ public class Global extends GlobalSettings {
                                             }
                                         }
                                     }
+                                    for (String q : questionList) System.out.println("    " + q);
                                     ChallengeSession challengeSession = response.getChallengeSession();
                                     //todo: ask user to answer chalenges
                                     int questionsLeft = questionList.size();
@@ -180,21 +195,14 @@ public class Global extends GlobalSettings {
                                     		questionsLeft--;
                                     	}
                                     }
-                                    if (questionsLeft <= 0) {
+                                    //if (questionsLeft <= 0) {
                                     	ChallengeResponses challengeResponses = new ChallengeResponses();
                                     	challengeResponses.setResponses(questionList);
                                     	
-                                    	DiscoverAndAddAccountsResponse response2 = null;
-    	                                boolean response2Received = false;
-    	                                while (!response2Received) {
-    	                                    try {response2 = service.discoverAndAddAccounts(challengeResponses, challengeSession);}
-    	                                    catch (AggCatException e) {System.out.println("aggcatexception: " + e.getMessage()); e.printStackTrace();}
-    	                                    catch (Exception e) {System.out.println("exception: " + e.getMessage()); e.printStackTrace();}
-    	                                    if (response2 != null) response2Received = true;
-    	                                    else try {Thread.sleep(60000); service = getService();} catch (Exception e) {}
-    	                                }
+                                    	System.out.println("        answering");
+                                    	DiscoverAndAddAccountsResponse response2 = service.discoverAndAddAccounts(challengeResponses, challengeSession);
                                     	accountList = response2.getAccountList();
-                                    }
+                                    //}
                                 }
                                 else accountList = response.getAccountList();
                                 
@@ -212,15 +220,8 @@ public class Global extends GlobalSettings {
                                 	String startDate = "2013-01-01";
                                 	String endDate = "2013-06-12";
                                 	
-                                	TransactionList transactions = null;
-                                    boolean transactionReceived = false;
-                                    while (!transactionReceived) {
-                                        try {transactions = service.getAccountTransactions(account.getAccountId(), startDate, endDate);}
-                                        catch (AggCatException e) {System.out.println("aggcatexception: " + e.getMessage()); e.printStackTrace();}
-                                        catch (Exception e) {System.out.println("exception: " + e.getMessage()); e.printStackTrace();}
-                                        if (transactions != null) transactionReceived = true;
-                                        else try {Thread.sleep(60000); service = getService();} catch (Exception e) {}
-                                    }
+                                	TransactionList transactions = service.getAccountTransactions(account.getAccountId(), startDate, endDate);
+                                    /*
                                 	for (com.intuit.ipp.aggcat.data.Transaction transaction : transactions.getLoanTransactions()) {
                                 		try {System.out.print("\ntrans--------- ");} catch (Exception e) {System.out.print(", NILYO");}
                                 		try {System.out.print(", " + transaction.getPayeeName());} catch (Exception e) {System.out.print(", NILYO");}
@@ -240,7 +241,9 @@ public class Global extends GlobalSettings {
                                 		try {System.out.print(", " + transaction.getCategorization().getContexts().get(0).getScheduleC());} catch (Exception e) {System.out.print(", NILYO");}
                                 		try {System.out.print(", " + transaction.getCategorization().getContexts().get(0).getSource().getDeclaringClass().getName());} catch (Exception e) {System.out.print(", NILYO");}
                                 	}
+                                	*/
                                 }
+                                System.out.println("    ok");
                                 //todo: handle what to do with accountList
                                 /*System.out.println(financialInstitutionLogin.getUserUsername());
                                 System.out.println("  ---  cc fid: " + financialInstitutionLogin.getFinancialInstitutionId());
@@ -252,7 +255,7 @@ public class Global extends GlobalSettings {
                         	}
             	            catch (Exception e) {
             	                System.out.println("exception: " + e.getMessage());
-            	                e.printStackTrace();
+            	                //e.printStackTrace();
             	            }
                         }
                     }
