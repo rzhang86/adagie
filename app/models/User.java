@@ -16,8 +16,8 @@ import play.db.ebean.*;
     // has many WatchedVideo
     public List<WatchedVideo> findWatchedVideos() {return WatchedVideo.find.where().eq("userUsername", username).findList();}
     
-    // has many CreditCardAccount
-    public List<CreditCardAccount> findCreditCardAccounts() {return CreditCardAccount.find.where().eq("userUsername", username).findList();}
+    // has many FinancialInstitutionLogin
+    public List<FinancialInstitutionLogin> findFinancialInstitutionLogins() {return FinancialInstitutionLogin.find.where().eq("userUsername", username).findList();}
     
     // has one Balance
     public Balance findBalance() {return Balance.find.ref(getUsername());}

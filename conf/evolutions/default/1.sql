@@ -26,16 +26,6 @@ create table consumer_profile (
   constraint pk_consumer_profile primary key (user_username))
 ;
 
-create table credit_card_account (
-  id                        bigint not null,
-  user_username             varchar(255),
-  financial_institution_id  bigint,
-  ofx_user                  varchar(255),
-  ofx_password              varchar(255),
-  cc_number                 varchar(255),
-  constraint pk_credit_card_account primary key (id))
-;
-
 create table financial_institution (
   id                        bigint not null,
   name                      varchar(255),
@@ -54,6 +44,23 @@ create table financial_institution (
   constraint pk_financial_institution primary key (id))
 ;
 
+create table financial_institution_login (
+  id                        bigint not null,
+  user_username             varchar(255),
+  financial_institution_id  bigint,
+  username                  varchar(255),
+  password                  varchar(255),
+  constraint pk_financial_institution_login primary key (id))
+;
+
+create table financial_institution_login_challenge (
+  id                        bigint not null,
+  financial_institution_login_id bigint,
+  question                  varchar(255),
+  answer                    varchar(255),
+  constraint pk_financial_institution_login_c primary key (id))
+;
+
 create table interest (
   id                        integer not null,
   name                      varchar(255),
@@ -64,6 +71,16 @@ create table occupation (
   id                        integer not null,
   name                      varchar(255),
   constraint pk_occupation primary key (id))
+;
+
+create table security_question (
+  id                        bigint not null,
+  user_username             varchar(255),
+  financial_institution_id  bigint,
+  ofx_user                  varchar(255),
+  ofx_password              varchar(255),
+  cc_number                 varchar(255),
+  constraint pk_security_question primary key (id))
 ;
 
 create table user (
@@ -139,13 +156,17 @@ create sequence committed_balance_seq;
 
 create sequence consumer_profile_seq;
 
-create sequence credit_card_account_seq;
-
 create sequence financial_institution_seq;
+
+create sequence financial_institution_login_seq;
+
+create sequence financial_institution_login_challenge_seq;
 
 create sequence interest_seq;
 
 create sequence occupation_seq;
+
+create sequence security_question_seq;
 
 create sequence user_seq;
 
@@ -174,13 +195,17 @@ drop table if exists committed_balance;
 
 drop table if exists consumer_profile;
 
-drop table if exists credit_card_account;
-
 drop table if exists financial_institution;
+
+drop table if exists financial_institution_login;
+
+drop table if exists financial_institution_login_challenge;
 
 drop table if exists interest;
 
 drop table if exists occupation;
+
+drop table if exists security_question;
 
 drop table if exists user;
 
@@ -204,13 +229,17 @@ drop sequence if exists committed_balance_seq;
 
 drop sequence if exists consumer_profile_seq;
 
-drop sequence if exists credit_card_account_seq;
-
 drop sequence if exists financial_institution_seq;
+
+drop sequence if exists financial_institution_login_seq;
+
+drop sequence if exists financial_institution_login_challenge_seq;
 
 drop sequence if exists interest_seq;
 
 drop sequence if exists occupation_seq;
+
+drop sequence if exists security_question_seq;
 
 drop sequence if exists user_seq;
 

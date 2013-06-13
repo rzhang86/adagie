@@ -217,7 +217,7 @@ import views.html.*;
             else if (ofxPassword.length() > 31) flash("failure", "Max 31 characters in password");
             else if (!ofxPassword.equals(ofxPasswordRepeat)) flash("failure", "Passwords do not match");
             else {
-                CreditCardAccount.create(request().username(), null, ofxUser, ofxPassword, null);
+                FinancialInstitutionLogin.create(request().username(), null, ofxUser, ofxPassword);
                 flash("success", "Credit card credentials saved");
                 return redirect(routes.Application.myProfile());
             }
