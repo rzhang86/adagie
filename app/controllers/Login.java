@@ -66,6 +66,7 @@ public class Login extends Controller {
         public Integer interest5;
     }
 
+    //todo: validate username and password can only contain alphanumerics, no escape characters
     @Transactional public static Result readSignupForm() {
         session().clear();
         Form<SignupForm> signupForm = form(SignupForm.class).bindFromRequest();

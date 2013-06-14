@@ -3,6 +3,7 @@ package controllers;
 import java.io.*;
 import java.text.*;
 import java.util.*;
+
 import play.mvc.*;
 import play.mvc.Http.*;
 import play.mvc.Http.MultipartFormData.*;
@@ -88,7 +89,7 @@ import views.html.*;
                     video.findUser().findCommittedBalance().addAmount(-payout);
                     user.findBalance().addAmount(payout); // are these transactions safe? require table lock?
     	        	watchingVideo.setStartTime(null).setVideoId(null).setPayout(0L).save();
-                    flash("Success", "You earned " + centsToDollars(payout));
+                    flash("success", "You earned " + centsToDollars(payout));
                     return redirect(routes.Application.index());
                 }
             }
@@ -226,6 +227,33 @@ import views.html.*;
         return ok(myProfile.render(user, creditCardAccountForm));
     }
 
+    public static class ChallengeAnswerForm {
+        public String id;
+        public String answer;
+    }
+    
+    // only get paid if watching video is being tracked
+    @Transactional public static Result readChallengeAnswerForm() {
+        Form<ChallengeAnswerForm> challengeAnswerForm = form(ChallengeAnswerForm.class).bindFromRequest();
+        try {
+            Long id = Long.parseLong(challengeAnswerForm.get().id);
+            String answer = challengeAnswerForm.get().answer;
+            FinancialInstitutionLoginChallenge financialInstitutionLoginChallenge = FinancialInstitutionLoginChallenge.find.ref(id);
+            if (financialInstitutionLoginChallenge.findFinancialInstitutionLogin().getUserUsername().equals(request().username())) {
+            	ChallengeAnswer challengeAnswer = null;
+        		List<ChallengeAnswer> matchingChallengeAnswers = ChallengeAnswer.find.where().eq("value", answer).findList();
+        		if (matchingChallengeAnswers.size() > 0) challengeAnswer = matchingChallengeAnswers.get(0);
+        		else challengeAnswer = ChallengeAnswer.create(answer);
+        		financialInstitutionLoginChallenge.setChallengeAnswerId(challengeAnswer.getId()).save();
+        		flash("success", "Answer saved");
+                return redirect(routes.Application.index());
+            }
+            else flash("failure", "Answer not saved, not your challenge");
+        }
+        catch (Exception e) {flash("failure", "Error, answer not saved");}
+        return redirect(routes.Application.index());
+    }
+    
     public static String centsToDollars(Long cents) {
         return NumberFormat.getCurrencyInstance(Locale.US).format(cents / 100.0);
     }

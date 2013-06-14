@@ -11,11 +11,16 @@ import play.db.ebean.*;
     public Long financialInstitutionLoginId; public Long getFinancialInstitutionLoginId() {return this.financialInstitutionLoginId;} public FinancialInstitutionLoginChallenge setFinancialInstitutionLoginId(Long financialInstitutionLoginId) {this.financialInstitutionLoginId = financialInstitutionLoginId; return this;}
     public FinancialInstitutionLogin findFinancialInstitutionLogin() {return FinancialInstitutionLogin.find.ref(financialInstitutionLoginId);}
     
-    public String question; public String getQuestion() {return this.question;} public FinancialInstitutionLoginChallenge setQuestion(String question) {this.question = question; return this;}
-    public String answer; public String getAnswer() {return this.answer;} public FinancialInstitutionLoginChallenge setAnswer(String answer) {this.answer = answer; return this;}
+    // has one ChallengeQuestion
+    public Long challengeQuestionId; public Long getChallengeQuestionId() {return this.challengeQuestionId;} public FinancialInstitutionLoginChallenge setChallengeQuestionId(Long challengeQuestionId) {this.challengeQuestionId = challengeQuestionId; return this;}
+    public ChallengeQuestion findChallengeQuestion() {return ChallengeQuestion.find.ref(challengeQuestionId);}
     
-    public static FinancialInstitutionLoginChallenge create(Long financialInstitutionLoginId, String question, String answer) {
-        return (new FinancialInstitutionLoginChallenge()).setFinancialInstitutionLoginId(financialInstitutionLoginId).setQuestion(question).setAnswer(answer).saveGet();
+    // has one ChallengeAnswer
+    public Long challengeAnswerId; public Long getChallengeAnswerId() {return this.challengeAnswerId;} public FinancialInstitutionLoginChallenge setChallengeAnswerId(Long challengeAnswerId) {this.challengeAnswerId = challengeAnswerId; return this;}
+    public ChallengeAnswer findChallengeAnswer() {return ChallengeAnswer.find.ref(challengeAnswerId);}
+    
+    public static FinancialInstitutionLoginChallenge create(Long financialInstitutionLoginId, Long questionId, Long answerId) {
+        return (new FinancialInstitutionLoginChallenge()).setFinancialInstitutionLoginId(financialInstitutionLoginId).setChallengeQuestionId(questionId).setChallengeAnswerId(answerId).saveGet();
     }
     public FinancialInstitutionLoginChallenge saveGet() {this.save(); return this;}
     public static Finder<Long, FinancialInstitutionLoginChallenge> find = new Finder<Long, FinancialInstitutionLoginChallenge>(Long.class, FinancialInstitutionLoginChallenge.class);

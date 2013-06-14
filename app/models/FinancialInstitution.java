@@ -8,8 +8,8 @@ import play.db.ebean.*;
 @Entity public class FinancialInstitution extends Model {
 	@Id public Long id; public Long getId() {return this.id;} public FinancialInstitution setId(Long id) {this.id = id; return this;}
     
-	// has many CreditCardAccount
-	public List<FinancialInstitutionLogin> findCreditCardAccounts() {return FinancialInstitutionLogin.find.where().eq("financialInstutionId", id).findList();}
+	// has many FinancialInstitutionLogin
+	public List<FinancialInstitutionLogin> findFinancialInstitutionLogins() {return FinancialInstitutionLogin.find.where().eq("financialInstutionId", id).findList();}
     
     public String name;  public String getName() {return this.name;} public FinancialInstitution setName(String name) {this.name = name; return this;}
     public String url; public String getUrl() {return this.url;} public FinancialInstitution setUrl(String url) {this.url = url; return this;}

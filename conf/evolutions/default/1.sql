@@ -9,6 +9,18 @@ create table balance (
   constraint pk_balance primary key (user_username))
 ;
 
+create table challenge_answer (
+  id                        bigint not null,
+  value                     varchar(255),
+  constraint pk_challenge_answer primary key (id))
+;
+
+create table challenge_question (
+  id                        bigint not null,
+  value                     varchar(255),
+  constraint pk_challenge_question primary key (id))
+;
+
 create table committed_balance (
   user_username             varchar(255) not null,
   amount                    bigint,
@@ -56,8 +68,8 @@ create table financial_institution_login (
 create table financial_institution_login_challenge (
   id                        bigint not null,
   financial_institution_login_id bigint,
-  question                  varchar(255),
-  answer                    varchar(255),
+  challenge_question_id     bigint,
+  challenge_answer_id       bigint,
   constraint pk_financial_institution_login_c primary key (id))
 ;
 
@@ -152,6 +164,10 @@ create table zip (
 
 create sequence balance_seq;
 
+create sequence challenge_answer_seq;
+
+create sequence challenge_question_seq;
+
 create sequence committed_balance_seq;
 
 create sequence consumer_profile_seq;
@@ -191,6 +207,10 @@ SET REFERENTIAL_INTEGRITY FALSE;
 
 drop table if exists balance;
 
+drop table if exists challenge_answer;
+
+drop table if exists challenge_question;
+
 drop table if exists committed_balance;
 
 drop table if exists consumer_profile;
@@ -224,6 +244,10 @@ drop table if exists zip;
 SET REFERENTIAL_INTEGRITY TRUE;
 
 drop sequence if exists balance_seq;
+
+drop sequence if exists challenge_answer_seq;
+
+drop sequence if exists challenge_question_seq;
 
 drop sequence if exists committed_balance_seq;
 

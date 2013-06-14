@@ -5,6 +5,7 @@
 # Home page
 GET     /                           controllers.Application.index()
 POST    /                           controllers.Application.readVideoEndedForm()
+POST    /answer                     controllers.Application.readChallengeAnswerForm()
 GET     /profile                    controllers.Application.myProfile()
 POST    /profile                    controllers.Application.readCreditCardAccountForm()
 GET     /videos                     controllers.Application.myVideos()

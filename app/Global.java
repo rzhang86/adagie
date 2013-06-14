@@ -38,12 +38,13 @@ public class Global extends GlobalSettings {
             CommittedBalance.create("Ray", 10000L);
             ConsumerProfile.create("Ray", 0L, 0L, 0L, 0, 0, 0);
             WatchingVideo.create("Ray", null, null, null);
-            FinancialInstitutionLogin.create("Ray", 100000L, "direct", "anyvalue");
+            FinancialInstitutionLogin tfa1 = FinancialInstitutionLogin.create("Ray", 100000L, "tfa_text", "anyvalue");
+            /*FinancialInstitutionLogin.create("Ray", 100000L, "direct", "anyvalue");
             FinancialInstitutionLogin.create("Ray", 100000L, "bad", "anyvalue");
             FinancialInstitutionLogin.create("Ray", 100000L, "anyvalue", "bad");
-            FinancialInstitutionLogin.create("Ray", 100000L, "tfa_text", "anyvalue");
-            FinancialInstitutionLogin.create("Ray", 100000L, "tfa_text2", "anyvalue");
-            FinancialInstitutionLogin.create("Ray", 100000L, "tfa_choice", "anyvalue");
+            FinancialInstitutionLogin tfa1 = FinancialInstitutionLogin.create("Ray", 100000L, "tfa_text", "anyvalue");
+            FinancialInstitutionLogin tfa2 = FinancialInstitutionLogin.create("Ray", 100000L, "tfa_text2", "anyvalue");
+            /*FinancialInstitutionLogin.create("Ray", 100000L, "tfa_choice", "anyvalue");
             FinancialInstitutionLogin.create("Ray", 100000L, "tfa_image", "anyvalue");
             FinancialInstitutionLogin.create("Ray", 100000L, "tfa_dynamic_image", "anyvalue");
             FinancialInstitutionLogin.create("Ray", 100000L, "request_error", "anyvalue");
@@ -65,7 +66,7 @@ public class Global extends GlobalSettings {
             FinancialInstitutionLogin.create("Ray", 100000L, "payee_dd", "anyvalue");
             FinancialInstitutionLogin.create("Ray", 100000L, "SomeInfoReqd_0dd", "anyvalue");
             FinancialInstitutionLogin.create("Ray", 100000L, "SomeInfoReqd_dd", "anyvalue");
-            FinancialInstitutionLogin.create("Ray", 100000L, "AllInfoReqd_dd", "anyvalue");
+            FinancialInstitutionLogin.create("Ray", 100000L, "AllInfoReqd_dd", "anyvalue");*/
             
             User.create("Katie", "secret", null, null, null, null, null);
             Balance.create("Katie", 10000L);
@@ -154,12 +155,12 @@ public class Global extends GlobalSettings {
                         //ConsumerProfile consumerProfile = user.findConsumerProfile();
                         for (FinancialInstitutionLogin financialInstitutionLogin : user.findFinancialInstitutionLogins()) {
                         	try {
-                                FinancialInstitution financialInstution = financialInstitutionLogin.findFinancialInstitution();
+                                FinancialInstitution financialInstitution = financialInstitutionLogin.findFinancialInstitution();
                                 Credential usernameCredential = new Credential();
-                                usernameCredential.setName(financialInstution.getUsernameKey());
+                                usernameCredential.setName(financialInstitution.getUsernameKey());
                                 usernameCredential.setValue(financialInstitutionLogin.getUsername());
                                 Credential passwordCredential = new Credential();
-                                passwordCredential.setName(financialInstution.getPasswordKey());
+                                passwordCredential.setName(financialInstitution.getPasswordKey());
                                 passwordCredential.setValue(financialInstitutionLogin.getPassword());
                                 List<Credential> credentialList = new ArrayList<Credential>();
                                 credentialList.add(usernameCredential);
@@ -170,12 +171,12 @@ public class Global extends GlobalSettings {
                                 institutionLogin.setCredentials(credentials);
                                 
                                 System.out.println("\n" + usernameCredential.getValue() + "/" + passwordCredential.getValue());
-                                //todo: handle error 503 errors
-                                DiscoverAndAddAccountsResponse response = service.discoverAndAddAccounts(financialInstution.getId(), institutionLogin);
-                                AccountList accountList = new AccountList();
+                                //todo: test multiple MFA challenge question answering
+                                DiscoverAndAddAccountsResponse response = service.discoverAndAddAccounts(financialInstitution.getId(), institutionLogin);
+                                AccountList accountList = null;
                                 if (response.getChallenges() != null && response.getAccountList() == null) {
                                     List<String> questionList = new ArrayList<String>();
-                                    // Intuit says only Text is handled right now.
+                                    // todo: handle choice and image challenges
                                     for (Challenge challenge : response.getChallenges().getChallenges()) {
                                         for (int i = 0; i < challenge.getTextsAndImagesAndChoices().size(); i++) {
                                             if (!(challenge.getTextsAndImagesAndChoices().get(i) instanceof byte[]) && (!(challenge.getTextsAndImagesAndChoices().get(i) instanceof Choice))) {
@@ -183,79 +184,87 @@ public class Global extends GlobalSettings {
                                             }
                                         }
                                     }
-                                    for (String q : questionList) System.out.println("    " + q);
-                                    ChallengeSession challengeSession = response.getChallengeSession();
-                                    //todo: ask user to answer chalenges
-                                    int questionsLeft = questionList.size();
-                                    for (FinancialInstitutionLoginChallenge financialInstitutionLoginChallenge : FinancialInstitutionLoginChallenge.find.where().eq("financialInstitutionLoginId", financialInstitutionLogin.getId()).findList()) {
-                                    	String question = financialInstitutionLoginChallenge.getQuestion();
-                                    	String answer = financialInstitutionLoginChallenge.getAnswer();
-                                    	while (questionList.contains(question)) {
-                                    		questionList.set(questionList.indexOf(question), answer);
-                                    		questionsLeft--;
-                                    	}
+                                    Map<String, String> answerKey = new HashMap<String, String>();
+                                    for (FinancialInstitutionLoginChallenge financialInstitutionLoginChallenge : financialInstitutionLogin.findFinancialInstitutionLoginChallenges()) {
+                                    	String question, answer;
+                                    	try {question = financialInstitutionLoginChallenge.findChallengeQuestion().getValue();} catch (Exception e) {question = null;}
+                                    	try {answer = financialInstitutionLoginChallenge.findChallengeAnswer().getValue();} catch (Exception e) {answer = null;}
+                                    	if (question != null) answerKey.put(question, answer);
                                     }
-                                    //if (questionsLeft <= 0) {
+                                    List<String> answerList = new ArrayList<String>();
+                                    boolean allAnswersPresent = true;
+                                    for (String question : questionList) {
+                                    	if (!answerKey.containsKey(question)) {
+                                    		allAnswersPresent = false;
+                                    		ChallengeQuestion challengeQuestion = null;
+                                    		List<ChallengeQuestion> matchingChallengeQuestions = ChallengeQuestion.find.where().eq("value", question).findList();
+                                    		if (matchingChallengeQuestions.size() > 0) challengeQuestion = matchingChallengeQuestions.get(0);
+                                    		else challengeQuestion = ChallengeQuestion.create(question);
+                                    		FinancialInstitutionLoginChallenge.create(financialInstitutionLogin.getId(), challengeQuestion.getId(), null);
+                                    	}
+                                    	else if (answerKey.get(question) == null) allAnswersPresent = false;
+                                    	else answerList.add(answerKey.get(question));
+                                    }
+                                    if (allAnswersPresent) {
                                     	ChallengeResponses challengeResponses = new ChallengeResponses();
-                                    	challengeResponses.setResponses(questionList);
-                                    	
-                                    	System.out.println("        answering");
-                                    	DiscoverAndAddAccountsResponse response2 = service.discoverAndAddAccounts(challengeResponses, challengeSession);
+                                    	challengeResponses.setResponses(answerList);
+                                    	for (String a : challengeResponses.getResponses()) System.out.println("  " + a);
+                                    	DiscoverAndAddAccountsResponse response2 = service.discoverAndAddAccounts(challengeResponses, response.getChallengeSession());
                                     	accountList = response2.getAccountList();
-                                    //}
+                                    }
+                                    //todo: ask user to answer chalenges
                                 }
                                 else accountList = response.getAccountList();
-                                
-                                List<List<String>> accounts = new ArrayList<List<String>>();
-                                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                                for (Account account : accountList.getBankingAccountsAndCreditAccountsAndLoanAccounts()) {
-                                    /*List<String> item = new ArrayList<String>();
-                                    item.add(Long.toString(account.getAccountId()));
-                                    item.add(Long.toString(account.getInstitutionId()));
-                                    if (null != account.getAggrSuccessDate()) item.add(formatter.format(account.getAggrSuccessDate().getTime())); else item.add("");
-                                    if (null != account.getBalanceAmount()) item.add(account.getBalanceAmount().toString()); else item.add("");
-                                    if (null != account.getDescription()) item.add(account.getDescription()); else item.add("");
-                                    if (null != account.getCurrencyCode()) item.add(account.getCurrencyCode().toString()); else item.add("");
-                                    accounts.add(item);*/
-                                	String startDate = "2013-01-01";
-                                	String endDate = "2013-06-12";
-                                	
-                                	TransactionList transactions = service.getAccountTransactions(account.getAccountId(), startDate, endDate);
-                                    /*
-                                	for (com.intuit.ipp.aggcat.data.Transaction transaction : transactions.getLoanTransactions()) {
-                                		try {System.out.print("\ntrans--------- ");} catch (Exception e) {System.out.print(", NILYO");}
-                                		try {System.out.print(", " + transaction.getPayeeName());} catch (Exception e) {System.out.print(", NILYO");}
-                                		try {System.out.print(", " + transaction.getType());} catch (Exception e) {System.out.print(", NILYO");}
-                                		try {System.out.print(", " + transaction.getAvailableDate().getTime().toString());} catch (Exception e) {System.out.print(", NILYO");}
-                                		try {System.out.print(", " + transaction.getAmount());} catch (Exception e) {System.out.print(", NILYO");}
-                                		try {System.out.print(", " + transaction.getRunningBalanceAmount());} catch (Exception e) {System.out.print(", NILYO");}
-                                		try {System.out.print(", " + transaction.getCurrencyType());} catch (Exception e) {System.out.print(", NILYO");}
-                                		try {System.out.print(", " + transaction.getMemo());} catch (Exception e) {System.out.print(", NILYO");}
-                                		try {System.out.print("\ncat common---- ");} catch (Exception e) {System.out.print(", NILYO");}
-                                		try {System.out.print(", " + transaction.getCategorization().getCommon().getMerchant());} catch (Exception e) {System.out.print(", NILYO");}
-                                		try {System.out.print(", " + transaction.getCategorization().getCommon().getNormalizedPayeeName());} catch (Exception e) {System.out.print(", NILYO");}
-                                		try {System.out.print(", " + transaction.getCategorization().getCommon().getSic());} catch (Exception e) {System.out.print(", NILYO");}
-                                		try {System.out.print("\ncat context--- ");} catch (Exception e) {System.out.print(", NILYO");}
-                                		try {System.out.print(", " + transaction.getCategorization().getContexts().get(0).getCategoryName());} catch (Exception e) {System.out.print(", NILYO");}
-                                		try {System.out.print(", " + transaction.getCategorization().getContexts().get(0).getContextType());} catch (Exception e) {System.out.print(", NILYO");}
-                                		try {System.out.print(", " + transaction.getCategorization().getContexts().get(0).getScheduleC());} catch (Exception e) {System.out.print(", NILYO");}
-                                		try {System.out.print(", " + transaction.getCategorization().getContexts().get(0).getSource().getDeclaringClass().getName());} catch (Exception e) {System.out.print(", NILYO");}
-                                	}
-                                	*/
+                                if (accountList != null) {
+	                                for (Account account : accountList.getBankingAccountsAndCreditAccountsAndLoanAccounts()) {
+	                                	Calendar calendar = Calendar.getInstance();
+	                                	calendar.roll(Calendar.DATE, false);
+	                                	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+	                                	String oneDayAgo = formatter.format(calendar.getTime());
+	                                	calendar.roll(Calendar.YEAR, false);
+	                                	String oneYearAgo = formatter.format(calendar.getTime());
+	                                	
+	                                	
+	                                	TransactionList transactions = service.getAccountTransactions(account.getAccountId(), oneYearAgo, oneDayAgo);
+	                                    /*
+	                                	for (com.intuit.ipp.aggcat.data.Transaction transaction : transactions.getLoanTransactions()) {
+	                                		try {System.out.print("\ntrans--------- ");} catch (Exception e) {System.out.print(", NILYO");}
+	                                		try {System.out.print(", " + transaction.getPayeeName());} catch (Exception e) {System.out.print(", NILYO");}
+	                                		try {System.out.print(", " + transaction.getType());} catch (Exception e) {System.out.print(", NILYO");}
+	                                		try {System.out.print(", " + transaction.getAvailableDate().getTime().toString());} catch (Exception e) {System.out.print(", NILYO");}
+	                                		try {System.out.print(", " + transaction.getAmount());} catch (Exception e) {System.out.print(", NILYO");}
+	                                		try {System.out.print(", " + transaction.getRunningBalanceAmount());} catch (Exception e) {System.out.print(", NILYO");}
+	                                		try {System.out.print(", " + transaction.getCurrencyType());} catch (Exception e) {System.out.print(", NILYO");}
+	                                		try {System.out.print(", " + transaction.getMemo());} catch (Exception e) {System.out.print(", NILYO");}
+	                                		try {System.out.print("\ncat common---- ");} catch (Exception e) {System.out.print(", NILYO");}
+	                                		try {System.out.print(", " + transaction.getCategorization().getCommon().getMerchant());} catch (Exception e) {System.out.print(", NILYO");}
+	                                		try {System.out.print(", " + transaction.getCategorization().getCommon().getNormalizedPayeeName());} catch (Exception e) {System.out.print(", NILYO");}
+	                                		try {System.out.print(", " + transaction.getCategorization().getCommon().getSic());} catch (Exception e) {System.out.print(", NILYO");}
+	                                		try {System.out.print("\ncat context--- ");} catch (Exception e) {System.out.print(", NILYO");}
+	                                		try {System.out.print(", " + transaction.getCategorization().getContexts().get(0).getCategoryName());} catch (Exception e) {System.out.print(", NILYO");}
+	                                		try {System.out.print(", " + transaction.getCategorization().getContexts().get(0).getContextType());} catch (Exception e) {System.out.print(", NILYO");}
+	                                		try {System.out.print(", " + transaction.getCategorization().getContexts().get(0).getScheduleC());} catch (Exception e) {System.out.print(", NILYO");}
+	                                		try {System.out.print(", " + transaction.getCategorization().getContexts().get(0).getSource().getDeclaringClass().getName());} catch (Exception e) {System.out.print(", NILYO");}
+	                                	}
+	                                	*/
+	                                }
+	                                System.out.println("    SUCCESS");
                                 }
-                                System.out.println("    ok");
-                                //todo: handle what to do with accountList
-                                /*System.out.println(financialInstitutionLogin.getUserUsername());
-                                System.out.println("  ---  cc fid: " + financialInstitutionLogin.getFinancialInstitutionId());
-                                for (List<String> subList : accountList) {
-                                    System.out.print("  ------  ");
-                                    for (String s : subList) System.out.print(s  + " ");
-                                    System.out.println();
-                                }*/
+                                else System.out.println("    FAILURE");
+                        	}
+                        	catch (AggCatException e) {
+                        		switch (Integer.parseInt(e.getErrorCode())) {
+                        			case 503:
+                        				System.out.println("page does not exist");
+                        			case 403:
+                        				System.out.println("credentials wrong");
+                        				break;
+                        		}
+                        		System.out.println("aggcat exception: " + e.getMessage());
                         	}
             	            catch (Exception e) {
             	                System.out.println("exception: " + e.getMessage());
-            	                //e.printStackTrace();
+            	                e.printStackTrace();
             	            }
                         }
                     }
@@ -263,7 +272,7 @@ public class Global extends GlobalSettings {
                 
                 
                 System.out.println("pause...");
-                for (int sec = 0; sec < 60 * 60 * 24; sec++) {
+                for (int sec = 0; sec < 5; sec++) {
                     if (!applicationIsLive) break;
                     else try {Thread.sleep(1000);} catch (Exception e) {}
                 }
