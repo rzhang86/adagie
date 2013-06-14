@@ -32,13 +32,16 @@ public class Global extends GlobalSettings {
             Ebean.save((List) Yaml.load("seed/data-Interest.yml"));
             Ebean.save((List) Yaml.load("seed/data-Zip.yml"));
             Ebean.save((List) Yaml.load("seed/data-FinancialInstitution.yml"));
+            Ebean.save((List) Yaml.load("seed/data-ExpenseCategory.yml"));
+            Ebean.save((List) Yaml.load("seed/data-ExpenseSubcategory.yml"));
             
             User.create("Ray", "secret", null, null, null, null, null);
             Balance.create("Ray", 10000L);
             CommittedBalance.create("Ray", 10000L);
             ConsumerProfile.create("Ray", 0L, 0L, 0L, 0, 0, 0);
             WatchingVideo.create("Ray", null, null, null);
-            FinancialInstitutionLogin tfa1 = FinancialInstitutionLogin.create("Ray", 100000L, "tfa_text", "anyvalue");
+            FinancialInstitutionLogin.create("Ray", 100000L, "AllInfoReqd_dd", "anyvalue");
+            //FinancialInstitutionLogin tfa1 = FinancialInstitutionLogin.create("Ray", 100000L, "tfa_text", "anyvalue");
             /*FinancialInstitutionLogin.create("Ray", 100000L, "direct", "anyvalue");
             FinancialInstitutionLogin.create("Ray", 100000L, "bad", "anyvalue");
             FinancialInstitutionLogin.create("Ray", 100000L, "anyvalue", "bad");
@@ -148,11 +151,16 @@ public class Global extends GlobalSettings {
                     }
                 }
                 */
-            	
+
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                 for (User user : User.find.all()) {
                     if (!applicationIsLive) break;
                     else {
-                        //ConsumerProfile consumerProfile = user.findConsumerProfile();
+                        Map<String[], Long[]> transactionMap = new HashMap<String[], Long[]>();
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.roll(Calendar.YEAR, false);
+                        Date oneYearAgo = calendar.getTime();
+                        for (UserVariable userVariable : UserVariable.find.where().lt("datePosted", formatter.format(oneYearAgo)).findList()) userVariable.delete();
                         for (FinancialInstitutionLogin financialInstitutionLogin : user.findFinancialInstitutionLogins()) {
                         	try {
                                 FinancialInstitution financialInstitution = financialInstitutionLogin.findFinancialInstitution();
@@ -217,36 +225,45 @@ public class Global extends GlobalSettings {
                                 else accountList = response.getAccountList();
                                 if (accountList != null) {
 	                                for (Account account : accountList.getBankingAccountsAndCreditAccountsAndLoanAccounts()) {
-	                                	Calendar calendar = Calendar.getInstance();
-	                                	calendar.roll(Calendar.DATE, false);
-	                                	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-	                                	String oneDayAgo = formatter.format(calendar.getTime());
-	                                	calendar.roll(Calendar.YEAR, false);
-	                                	String oneYearAgo = formatter.format(calendar.getTime());
-	                                	
-	                                	
-	                                	TransactionList transactions = service.getAccountTransactions(account.getAccountId(), oneYearAgo, oneDayAgo);
-	                                    /*
+	                                    TransactionList transactions = service.getAccountTransactions(account.getAccountId(), formatter.format(oneYearAgo), formatter.format(Calendar.getInstance().getTime()));
 	                                	for (com.intuit.ipp.aggcat.data.Transaction transaction : transactions.getLoanTransactions()) {
-	                                		try {System.out.print("\ntrans--------- ");} catch (Exception e) {System.out.print(", NILYO");}
-	                                		try {System.out.print(", " + transaction.getPayeeName());} catch (Exception e) {System.out.print(", NILYO");}
-	                                		try {System.out.print(", " + transaction.getType());} catch (Exception e) {System.out.print(", NILYO");}
-	                                		try {System.out.print(", " + transaction.getAvailableDate().getTime().toString());} catch (Exception e) {System.out.print(", NILYO");}
-	                                		try {System.out.print(", " + transaction.getAmount());} catch (Exception e) {System.out.print(", NILYO");}
-	                                		try {System.out.print(", " + transaction.getRunningBalanceAmount());} catch (Exception e) {System.out.print(", NILYO");}
-	                                		try {System.out.print(", " + transaction.getCurrencyType());} catch (Exception e) {System.out.print(", NILYO");}
-	                                		try {System.out.print(", " + transaction.getMemo());} catch (Exception e) {System.out.print(", NILYO");}
-	                                		try {System.out.print("\ncat common---- ");} catch (Exception e) {System.out.print(", NILYO");}
-	                                		try {System.out.print(", " + transaction.getCategorization().getCommon().getMerchant());} catch (Exception e) {System.out.print(", NILYO");}
-	                                		try {System.out.print(", " + transaction.getCategorization().getCommon().getNormalizedPayeeName());} catch (Exception e) {System.out.print(", NILYO");}
-	                                		try {System.out.print(", " + transaction.getCategorization().getCommon().getSic());} catch (Exception e) {System.out.print(", NILYO");}
-	                                		try {System.out.print("\ncat context--- ");} catch (Exception e) {System.out.print(", NILYO");}
-	                                		try {System.out.print(", " + transaction.getCategorization().getContexts().get(0).getCategoryName());} catch (Exception e) {System.out.print(", NILYO");}
-	                                		try {System.out.print(", " + transaction.getCategorization().getContexts().get(0).getContextType());} catch (Exception e) {System.out.print(", NILYO");}
-	                                		try {System.out.print(", " + transaction.getCategorization().getContexts().get(0).getScheduleC());} catch (Exception e) {System.out.print(", NILYO");}
-	                                		try {System.out.print(", " + transaction.getCategorization().getContexts().get(0).getSource().getDeclaringClass().getName());} catch (Exception e) {System.out.print(", NILYO");}
+	                                	    String[] keys = {null, null}; // txn date, category name
+	                                	    Long[] values = {0L, 0L}; //amount, frequency
+	                                	    
+	                                	    try {keys[0] = formatter.format(transaction.getUserDate().getTime());} catch (Exception e) {}
+	                                	    try {keys[1] = transaction.getCategorization().getContexts().get(0).getCategoryName();} catch (Exception e) {}
+	                                	    try {
+	                                	        Long amount = transaction.getAmount().movePointRight(2).longValue();
+	                                	        if (amount < 0) {
+	                                	            if (!transactionMap.containsKey(keys)) {
+	                                	                values[0] = -1L * amount;
+	                                	                values[1] = 1L;
+    	                                	        }
+	                                	            else {
+	                                	                values[0] = (-1L * amount) + transactionMap.get(keys)[0];
+	                                	                values[1] = 1L + transactionMap.get(keys)[1];
+	                                	            }
+	                                	            transactionMap.put(keys, values);
+	                                	        }
+	                                	    }
+	                                	    catch (Exception e) {}
+	                                		/*System.out.print("\n");
+	                                		try {System.out.print(" "); System.out.print(formatter.format(transaction.getPostedDate().getTime()));} catch (Exception e) {System.out.print("na");}
+	                                		try {System.out.print(" "); System.out.print(formatter.format(transaction.getAvailableDate().getTime()));} catch (Exception e) {System.out.print("na");}
+	                                		try {System.out.print(" "); System.out.print(formatter.format(transaction.getUserDate().getTime()));} catch (Exception e) {System.out.print("na");}
+	                                		try {System.out.print(" [A]"); System.out.print(transaction.getPayeeName());} catch (Exception e) {System.out.print("na");}
+                                            try {System.out.print(" [B]"); System.out.print(transaction.getAmount());} catch (Exception e) {System.out.print("na");}
+                                            try {System.out.print(" [C]"); System.out.print(transaction.getCurrencyType());} catch (Exception e) {System.out.print("na");}
+	                                		try {System.out.print(" [D]"); System.out.print(transaction.getType());} catch (Exception e) {System.out.print("na");}
+	                                		try {System.out.print(" [E]"); System.out.print(transaction.getMemo());} catch (Exception e) {System.out.print("na");}
+	                                		try {System.out.print(" [F]"); System.out.print(transaction.getCategorization().getCommon().getNormalizedPayeeName());} catch (Exception e) {System.out.print("na");}
+	                                		try {System.out.print(" [G]"); System.out.print(transaction.getCategorization().getCommon().getMerchant());} catch (Exception e) {System.out.print("na");}
+	                                		try {System.out.print(" [H]"); System.out.print(transaction.getCategorization().getCommon().getSic());} catch (Exception e) {System.out.print("na");}
+	                                		try {System.out.print(" [I]"); System.out.print(transaction.getCategorization().getContexts().get(0).getCategoryName());} catch (Exception e) {System.out.print("na");}
+	                                		try {System.out.print(" [J]"); System.out.print(transaction.getCategorization().getContexts().get(0).getContextType());} catch (Exception e) {System.out.print("na");}
+	                                		try {System.out.print(" [K]"); System.out.print(transaction.getCategorization().getContexts().get(0).getScheduleC());} catch (Exception e) {System.out.print("na");}
+	                                		try {System.out.print(" [L]"); System.out.print(transaction.getCategorization().getContexts().get(0).getSource().value());} catch (Exception e) {System.out.print("na");}*/
 	                                	}
-	                                	*/
 	                                }
 	                                System.out.println("    SUCCESS");
                                 }
@@ -267,12 +284,27 @@ public class Global extends GlobalSettings {
             	                e.printStackTrace();
             	            }
                         }
+                        for (String[] key : transactionMap.keySet()) {
+                            ExpenseSubcategory expenseSubcategory = null;
+                            try {expenseSubcategory = ExpenseSubcategory.find.where().eq("name", key[1]).findList().get(0);} catch (Exception e) {}
+                            if (expenseSubcategory != null) {
+                                UserVariable userVariable = null;
+                                if (UserVariable.find.where().eq("userUsername", user.getUsername()).eq("datePosted", key[0]).eq("subcategoryCode", expenseSubcategory.getCode()).findRowCount() > 0) {
+                                    userVariable = UserVariable.find.where().eq("userUsername", user.getUsername()).eq("datePosted", key[0]).eq("subcategoryCode", expenseSubcategory.getCode()).findList().get(0);
+                                    userVariable.setAmount(transactionMap.get(key)[0]).setFrequency(transactionMap.get(key)[1].intValue()).save();
+                                }
+                                else userVariable = UserVariable.create(user.getUsername(), new Date(Date.parse(key[0])), expenseSubcategory.getCode(), transactionMap.get(key)[0], transactionMap.get(key)[1].intValue());
+                            }
+                        }
+                        
+                        for (UserVariable userVariable : user.findUserVariables()) {
+                            System.out.println(userVariable.getDatePosted() + ", " + userVariable.getSubcategoryCode() + ", " + userVariable.getAmount() + ", " + userVariable.getFrequency());
+                        }
                     }
                 }
                 
-                
                 System.out.println("pause...");
-                for (int sec = 0; sec < 5; sec++) {
+                for (int sec = 0; sec < 60; sec++) {
                     if (!applicationIsLive) break;
                     else try {Thread.sleep(1000);} catch (Exception e) {}
                 }
@@ -304,88 +336,6 @@ public class Global extends GlobalSettings {
             return service;
         }
     }
-    /*
-    public static class ConsumerProfileUpdater implements Runnable {
-        public void run() {
-            //while(applicationIsLive) {
-            	DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-                for (User user : User.find.all()) {
-                	ConsumerProfile consumerProfile = user.findConsumerProfile();
-                    for (FinancialInstitutionLogin financialInstitutionLogin : user.findFinancialInstitutionLogins()) {
-                    	try {
-                    	    
-                            List<String> properties = new ArrayList<String>();
-                            properties.add("AccountId");
-                            properties.add("AccountType");
-                            properties.add("ApplicationId");
-                            properties.add("ApplicationVersion");
-                            properties.add("BankId");
-                            properties.add("BrokerId");
-                            properties.add("CCNumber");
-                            properties.add("FIId");
-                            properties.add("FIOrganizationName");
-                            properties.add("FIUrl");
-                            properties.add("OFXPassword");
-                            properties.add("OFXUser");
-                            properties.add("OFXVersion");
-                            
-                    		FinancialInstitution financialInstitution = financialInstitutionLogin.findFinancialInstitution();
-                    		Connection connection = DriverManager.getConnection(
-                    				"jdbc:ofx:" +
-            						"OFXVersion=102;" +
-            						"ApplicationVersion=1401;" +
-            						"ApplicationId=QWIN;" +
-            						"OFXUser=" + financialInstitutionLogin.getOfxUser() + ";" +
-            						"OFXPassword=" + financialInstitutionLogin.getOfxPassword() + ";" +
-            						"FIUrl=" + financialInstitution.getUrl() + ";" +
-            						"FIOrganizationName=" + financialInstitution.getOrg() + ";" +
-            						"FIId=" + financialInstitution.getFid() + ";" +
-            						"CCNumber=" + financialInstitutionLogin.getCcNumber() + ";");
-                    		Statement statement = connection.createStatement();
-                    		ResultSet resultSet;
-                    		//ResultSetMetaData metaData;
-                        	Calendar today = Calendar.getInstance();
-                    		Calendar daysAgo7 = Calendar.getInstance(); daysAgo7.add(Calendar.DAY_OF_YEAR, -7);
-                    		Calendar daysAgo30 = Calendar.getInstance(); daysAgo30.add(Calendar.DAY_OF_YEAR, -30);
-                    		Calendar daysAgo365 = Calendar.getInstance(); daysAgo365.add(Calendar.DAY_OF_YEAR, -365);
-                			statement.executeQuery("select DatePosted, Amount from CCTransactions " +
-                    				"where DatePosted < '" + dateFormat.format(today.getTime()) + "' " +
-                    				"and DatePosted > '" + dateFormat.format(daysAgo365.getTime()) + "'"); // todo: paginate
-                    		resultSet = statement.getResultSet();
-                    		//metaData = resultSet.getMetaData();
-                    		consumerProfile.setA7(0L).setA30(0L).setA365(0L).setF7(0).setF30(0).setF365(0);
-                    		while (resultSet.next()) {
-                    			Date datePosted = dateFormat.parse(resultSet.getString(1));
-                    			int amount = Integer.parseInt(resultSet.getString(2).replaceAll(",", "").replaceAll("\\.", ""));
-            					if (amount < 0) {
-            						amount *= -1;
-            						if (datePosted.after(daysAgo365.getTime())) { 
-            							consumerProfile
-            							    .setA365(consumerProfile.getA365() + (long) amount)
-            							    .setF365(consumerProfile.getF365() + 1);
-            						}
-            						if (datePosted.after(daysAgo30.getTime())) {
-            							consumerProfile
-            							    .setA30(consumerProfile.getA30() + (long) amount)
-            							    .setF30(consumerProfile.getF30() + 1);
-            						}
-            						if (datePosted.after(daysAgo7.getTime())) {
-            							consumerProfile
-            							    .setA7(consumerProfile.getA7() + (long) amount)
-            							    .setF7(consumerProfile.getF7() + 1);
-            						}
-            					}
-                    		}
-                    	}
-                    	catch (Exception e) {e.printStackTrace();}
-                    }
-            		consumerProfile.save();
-                }
-                //try {Thread.sleep(5000);} catch (Exception e) {}
-            //}
-        }
-    }
-    */
     /*
     @Override public Result onError(RequestHeader request, Throwable t) {
     	return internalServerError("error");

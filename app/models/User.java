@@ -19,6 +19,9 @@ import play.db.ebean.*;
     // has many FinancialInstitutionLogin
     public List<FinancialInstitutionLogin> findFinancialInstitutionLogins() {return FinancialInstitutionLogin.find.where().eq("userUsername", username).findList();}
     
+    // has many UserVariable
+    public List<UserVariable> findUserVariables() {return UserVariable.find.where().eq("userUsername", username).findList();}
+    
     // has one Balance
     public Balance findBalance() {return Balance.find.ref(getUsername());}
     

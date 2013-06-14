@@ -38,6 +38,18 @@ create table consumer_profile (
   constraint pk_consumer_profile primary key (user_username))
 ;
 
+create table expense_category (
+  code                      varchar(255) not null,
+  name                      varchar(255),
+  constraint pk_expense_category primary key (code))
+;
+
+create table expense_subcategory (
+  code                      varchar(255) not null,
+  name                      varchar(255),
+  constraint pk_expense_subcategory primary key (code))
+;
+
 create table financial_institution (
   id                        bigint not null,
   name                      varchar(255),
@@ -120,6 +132,16 @@ create table user_occupation (
   constraint pk_user_occupation primary key (id))
 ;
 
+create table user_variable (
+  id                        bigint not null,
+  user_username             varchar(255),
+  date_posted               timestamp,
+  subcategory_code          varchar(255),
+  amount                    bigint,
+  frequency                 integer,
+  constraint pk_user_variable primary key (id))
+;
+
 create table video (
   id                        bigint not null,
   user_username             varchar(255) not null,
@@ -172,6 +194,10 @@ create sequence committed_balance_seq;
 
 create sequence consumer_profile_seq;
 
+create sequence expense_category_seq;
+
+create sequence expense_subcategory_seq;
+
 create sequence financial_institution_seq;
 
 create sequence financial_institution_login_seq;
@@ -189,6 +215,8 @@ create sequence user_seq;
 create sequence user_interest_seq;
 
 create sequence user_occupation_seq;
+
+create sequence user_variable_seq;
 
 create sequence video_seq;
 
@@ -215,6 +243,10 @@ drop table if exists committed_balance;
 
 drop table if exists consumer_profile;
 
+drop table if exists expense_category;
+
+drop table if exists expense_subcategory;
+
 drop table if exists financial_institution;
 
 drop table if exists financial_institution_login;
@@ -232,6 +264,8 @@ drop table if exists user;
 drop table if exists user_interest;
 
 drop table if exists user_occupation;
+
+drop table if exists user_variable;
 
 drop table if exists video;
 
@@ -253,6 +287,10 @@ drop sequence if exists committed_balance_seq;
 
 drop sequence if exists consumer_profile_seq;
 
+drop sequence if exists expense_category_seq;
+
+drop sequence if exists expense_subcategory_seq;
+
 drop sequence if exists financial_institution_seq;
 
 drop sequence if exists financial_institution_login_seq;
@@ -270,6 +308,8 @@ drop sequence if exists user_seq;
 drop sequence if exists user_interest_seq;
 
 drop sequence if exists user_occupation_seq;
+
+drop sequence if exists user_variable_seq;
 
 drop sequence if exists video_seq;
 

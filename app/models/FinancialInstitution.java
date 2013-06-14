@@ -33,5 +33,20 @@ import play.db.ebean.*;
     public FinancialInstitution saveGet() {this.save(); return this;}
     public static Finder<Long, FinancialInstitution> find = new Finder<Long, FinancialInstitution>(Long.class, FinancialInstitution.class);
     
-    public static List<FinancialInstitution> findAll() {return find.all();}
+    public static String getNameIdMapJS() {
+        List<String> names = new ArrayList<String>();
+        List<String> ids = new ArrayList<String>();
+        for (FinancialInstitution financialInstitution : find.orderBy("name").findList()) {
+            names.add('"' + escape(financialInstitution.getName()) + '"');
+            ids.add('"' + escape(financialInstitution.getId().toString()) + '"');
+        }
+        String s = "{" + names.get(0) + ":" + ids.get(0) + "";
+        for (int i = 1; i < names.size(); i++) s += "," + names.get(i) + ":" + ids.get(i);
+        s += "}";
+        return s;
+    }
+    
+    public static String escape(String input) {
+        return input.replace("\\", "\\\\").replace("@", "@@");
+    }
 }

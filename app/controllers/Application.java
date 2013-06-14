@@ -196,35 +196,39 @@ import views.html.*;
     }
     
     public static Result myProfile() {
-    	return ok(myProfile.render(User.find.ref(request().username()), form(CreditCardAccountForm.class)));
+    	return ok(myProfile.render(User.find.ref(request().username()), form(FinancialInstitutionLoginForm.class)));
     }
     
-    public static class CreditCardAccountForm {
-        public String ofxUser;
-        public String ofxPassword;
-        public String ofxPasswordRepeat;
+    public static class FinancialInstitutionLoginForm {
+        public String id;
+        public String username;
+        public String password;
+        public String passwordRepeat;
     }
 
-    @Transactional public static Result readCreditCardAccountForm() {
+    @Transactional public static Result readFinancialInstitutionLoginForm() {
     	User user = User.find.ref(request().username());
-        Form<CreditCardAccountForm> creditCardAccountForm = form(CreditCardAccountForm.class).bindFromRequest();
+        Form<FinancialInstitutionLoginForm> financialInstitutionLoginForm = form(FinancialInstitutionLoginForm.class).bindFromRequest();
         try {
-            String ofxUser = creditCardAccountForm.get().ofxUser;
-            String ofxPassword = creditCardAccountForm.get().ofxPassword;
-            String ofxPasswordRepeat = creditCardAccountForm.get().ofxPasswordRepeat;
-            if (ofxUser.length() < 0) flash("failure", "Username must be at least 1 character");
-            else if (ofxUser.length() > 31) flash("failure", "Max 31 characters in username");
-            else if (ofxPassword.length() < 1) flash("failure", "Password must be at least 1 character");
-            else if (ofxPassword.length() > 31) flash("failure", "Max 31 characters in password");
-            else if (!ofxPassword.equals(ofxPasswordRepeat)) flash("failure", "Passwords do not match");
+            Long id = Long.parseLong(financialInstitutionLoginForm.get().id);
+            String username = financialInstitutionLoginForm.get().username;
+            String password = financialInstitutionLoginForm.get().password;
+            String passwordRepeat = financialInstitutionLoginForm.get().passwordRepeat;
+            Long financialInstitutionId = FinancialInstitution.find.ref(id).getId();
+            if (username.length() < 0) flash("failure", "Username must be at least 1 character");
+            else if (username.length() > 31) flash("failure", "Max 31 characters in username");
+            else if (password.length() < 1) flash("failure", "Password must be at least 1 character");
+            else if (password.length() > 31) flash("failure", "Max 31 characters in password");
+            else if (!password.equals(passwordRepeat)) flash("failure", "Passwords do not match");
+            else if (financialInstitutionId == null) flash("failure", "Malformed entry, try again");
             else {
-                FinancialInstitutionLogin.create(request().username(), null, ofxUser, ofxPassword);
-                flash("success", "Credit card credentials saved");
+                FinancialInstitutionLogin.create(request().username(), financialInstitutionId, username, password);
+                flash("success", "Financial institution login saved");
                 return redirect(routes.Application.myProfile());
             }
         }
         catch (Exception e) {flash("failure", "Submission failed");}
-        return ok(myProfile.render(user, creditCardAccountForm));
+        return ok(myProfile.render(user, financialInstitutionLoginForm));
     }
 
     public static class ChallengeAnswerForm {

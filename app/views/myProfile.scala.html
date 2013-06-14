@@ -1,18 +1,22 @@
-@(user: User, form: Form[Application.CreditCardAccountForm])
+@(user: User, form: Form[Application.FinancialInstitutionLoginForm])
 
 @main(user, "myProfile") {
     <div class="row-fluid col-wrap">            
         <div class="span4 col well">
-            <header><h4>Add credit card credentials</h4></header>
-            <form action="@routes.Application.readCreditCardAccountForm()" method="post">
-                <p><input type="text" name="ofxUser" placeholder="Username" value="@form("ofxUser").value" maxlength=31></p>
-                <p><input type="password" name="ofxPassword" placeholder="Password" maxlength=31></p>
-                <p><input type="password" name="ofxPasswordRepeat" placeholder="Repeat password" maxlength=31></p>
+            <h4>Add institution login</h4>
+            <form action="@routes.Application.readFinancialInstitutionLoginForm()" method="post">
+                <p>
+                    <input type="text" id="name" name="name" placeholder="Institution" value="@form("name").value" autocomplete="off">
+                    <input type="hidden" id="id" name="id" value="@form("id").value" autocomplete="off">
+                </p>
+                <p><input type="text" name="username" placeholder="Username" value="@form("username").value" maxlength=31></p>
+                <p><input type="password" name="password" placeholder="Password" maxlength=31></p>
+                <p><input type="password" name="passwordRepeat" placeholder="Repeat password" maxlength=31></p>
                 <p><button type="submit" class="btn btn-primary">Save</button></p>
             </form>
         </div>
         <div class="span8 col well">
-            <h4>Your combined credit card profile:</h4>
+            <h4>Your combined profile:</h4>
             @defining(user.findConsumerProfile()) { consumerProfile =>
                 <table class="table">
                     <thead>
@@ -47,4 +51,25 @@
         <div class="span4 col-base well"></div>
         <div class="span8 col-base well"></div>
     </div>
+    <script type="text/javascript">
+	    var map = @Html(FinancialInstitution.getNameIdMapJS());
+	    var keys = [];
+	    for (var key in map) if (map.hasOwnProperty(key)) keys.push(key);
+	    $('#name')
+		    .typeahead({
+	            source: keys,
+	            items: 64
+	        })
+	        .blur(function() {
+	            var key = $(this).val();
+	            if(!map.hasOwnProperty(key)) {
+	                $('#name').val('');
+	                $('#id').val('');
+	            }
+	            else {
+	                $('#name').val(key);
+	                $('#id').val(map[key]);
+	            }
+	        });
+    </script>
 }
