@@ -135,7 +135,7 @@ create table user_occupation (
 create table user_variable (
   id                        bigint not null,
   user_username             varchar(255),
-  date_posted               timestamp,
+  days_ago                  integer,
   subcategory_code          varchar(255),
   amount                    bigint,
   frequency                 integer,

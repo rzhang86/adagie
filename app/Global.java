@@ -2,8 +2,7 @@ import java.io.*;
 import java.sql.*;
 import java.text.*;
 import java.util.*;
-import java.util.Date;
-import java.util.concurrent.Callable;
+import org.apache.commons.lang.time.*;
 
 import com.avaje.ebean.*;
 
@@ -40,7 +39,7 @@ public class Global extends GlobalSettings {
             CommittedBalance.create("Ray", 10000L);
             ConsumerProfile.create("Ray", 0L, 0L, 0L, 0, 0, 0);
             WatchingVideo.create("Ray", null, null, null);
-            FinancialInstitutionLogin.create("Ray", 100000L, "AllInfoReqd_dd", "anyvalue");
+            FinancialInstitutionLogin.create("Ray", 100000L, "direct", "anyvalue");
             //FinancialInstitutionLogin tfa1 = FinancialInstitutionLogin.create("Ray", 100000L, "tfa_text", "anyvalue");
             /*FinancialInstitutionLogin.create("Ray", 100000L, "direct", "anyvalue");
             FinancialInstitutionLogin.create("Ray", 100000L, "bad", "anyvalue");
@@ -153,14 +152,18 @@ public class Global extends GlobalSettings {
                 */
 
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                for (User user : User.find.all()) {
+            	for (User user : User.find.all()) {
                     if (!applicationIsLive) break;
                     else {
-                        Map<String[], Long[]> transactionMap = new HashMap<String[], Long[]>();
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.roll(Calendar.YEAR, false);
-                        Date oneYearAgo = calendar.getTime();
-                        for (UserVariable userVariable : UserVariable.find.where().lt("datePosted", formatter.format(oneYearAgo)).findList()) userVariable.delete();
+                    	int[] timepointDays = {360, 270, 180, 150, 120, 90, 75, 60, 45, 30, 15, 10, 5, 4, 3, 2, 1};
+                    	Calendar[] timepointCalendars = new Calendar[timepointDays.length];
+                    	for (int i = 0; i < timepointDays.length; i++) {
+                    		timepointCalendars[i] = Calendar.getInstance();
+                    		timepointCalendars[i].add(Calendar.DATE, -timepointDays[i]);
+                    	}
+                    	Map<String, Map<Integer, Long>> amountMap = new HashMap<String, Map<Integer, Long>>(); //<categoryname, <daysago, amount>>
+                    	Map<String, Map<Integer, Integer>> frequencyMap = new HashMap<String, Map<Integer, Integer>>();
+                        for (UserVariable userVariable : user.findUserVariables()) userVariable.delete(); //todo: handle what if intuit offline? still delete?
                         for (FinancialInstitutionLogin financialInstitutionLogin : user.findFinancialInstitutionLogins()) {
                         	try {
                                 FinancialInstitution financialInstitution = financialInstitutionLogin.findFinancialInstitution();
@@ -225,32 +228,44 @@ public class Global extends GlobalSettings {
                                 else accountList = response.getAccountList();
                                 if (accountList != null) {
 	                                for (Account account : accountList.getBankingAccountsAndCreditAccountsAndLoanAccounts()) {
-	                                    TransactionList transactions = service.getAccountTransactions(account.getAccountId(), formatter.format(oneYearAgo), formatter.format(Calendar.getInstance().getTime()));
-	                                	for (com.intuit.ipp.aggcat.data.Transaction transaction : transactions.getLoanTransactions()) {
-	                                	    String[] keys = {null, null}; // txn date, category name
-	                                	    Long[] values = {0L, 0L}; //amount, frequency
-	                                	    
-	                                	    try {keys[0] = formatter.format(transaction.getUserDate().getTime());} catch (Exception e) {}
-	                                	    try {keys[1] = transaction.getCategorization().getContexts().get(0).getCategoryName();} catch (Exception e) {}
+	                                    TransactionList transactions = service.getAccountTransactions(account.getAccountId(), formatter.format(timepointCalendars[0].getTime()), formatter.format(Calendar.getInstance().getTime()));
+	                                	for (com.intuit.ipp.aggcat.data.Transaction transaction : transactions.getCreditCardTransactions()) {
+	                                	    Calendar transactionTime = null;
+	                                	    String transactionCategory = null;
+	                                	    Long transactionAmount = null;
 	                                	    try {
-	                                	        Long amount = transaction.getAmount().movePointRight(2).longValue();
-	                                	        if (amount < 0) {
-	                                	            if (!transactionMap.containsKey(keys)) {
-	                                	                values[0] = -1L * amount;
-	                                	                values[1] = 1L;
-    	                                	        }
-	                                	            else {
-	                                	                values[0] = (-1L * amount) + transactionMap.get(keys)[0];
-	                                	                values[1] = 1L + transactionMap.get(keys)[1];
-	                                	            }
-	                                	            transactionMap.put(keys, values);
-	                                	        }
+	                                	    	transactionTime = transaction.getUserDate();
+	                                	    	transactionCategory = transaction.getCategorization().getContexts().get(0).getCategoryName();
+	                                	    	transactionAmount = transaction.getAmount().movePointRight(2).longValue() * -1L;
 	                                	    }
 	                                	    catch (Exception e) {}
-	                                		/*System.out.print("\n");
-	                                		try {System.out.print(" "); System.out.print(formatter.format(transaction.getPostedDate().getTime()));} catch (Exception e) {System.out.print("na");}
-	                                		try {System.out.print(" "); System.out.print(formatter.format(transaction.getAvailableDate().getTime()));} catch (Exception e) {System.out.print("na");}
-	                                		try {System.out.print(" "); System.out.print(formatter.format(transaction.getUserDate().getTime()));} catch (Exception e) {System.out.print("na");}
+	                                	    if (transactionTime != null && transactionCategory != null && transactionAmount != null && transactionAmount > 0L) {
+	                                	    	for (int i = 0; i < timepointDays.length; i++) {
+		                                	    	if ((timepointCalendars[i].before(transactionTime) || timepointCalendars[i].equals(transactionTime)) && transactionTime.before(i < timepointDays.length - 1 ? timepointCalendars[i + 1] : Calendar.getInstance())) {
+		                                	    		Map<Integer, Long> amountSubmap;
+		                                	    		Map<Integer, Integer> frequencySubmap;
+		                                	    		if (amountMap.containsKey(transactionCategory)) {
+			                                	    		amountSubmap = amountMap.get(transactionCategory);
+			                                	    		frequencySubmap = frequencyMap.get(transactionCategory);
+			                                	    		amountSubmap.put(timepointDays[i], amountSubmap.containsKey(timepointDays[i]) ? amountSubmap.get(timepointDays[i]) + transactionAmount : transactionAmount);
+			                                	    		frequencySubmap.put(timepointDays[i], frequencySubmap.containsKey(timepointDays[i]) ? frequencySubmap.get(timepointDays[i]) + 1 : 1);
+			                                	    	}
+		                                	    		else {
+			                                	    		amountSubmap = new HashMap<Integer, Long>();
+			                                	    		frequencySubmap = new HashMap<Integer, Integer>();
+			                                	    		amountSubmap.put(timepointDays[i], transactionAmount);
+			                                	    		frequencySubmap.put(timepointDays[i], 1);
+		                                	    		}
+		                                	    		amountMap.put(transactionCategory, amountSubmap);
+		                                	    		frequencyMap.put(transactionCategory, frequencySubmap);
+		                                	    	}
+		                                	    }
+	                                	    }
+	                                		/*
+	                                		System.out.print("\n");
+	                                		try {System.out.print(" "); System.out.print(transaction.getPostedDate().getTime().toString());} catch (Exception e) {System.out.print("na");}
+	                                		try {System.out.print(" | "); System.out.print(transaction.getAvailableDate().getTime().toString());} catch (Exception e) {System.out.print("na");}
+	                                		try {System.out.print(" | "); System.out.print(transaction.getUserDate().getTime().toString());} catch (Exception e) {System.out.print("na");}
 	                                		try {System.out.print(" [A]"); System.out.print(transaction.getPayeeName());} catch (Exception e) {System.out.print("na");}
                                             try {System.out.print(" [B]"); System.out.print(transaction.getAmount());} catch (Exception e) {System.out.print("na");}
                                             try {System.out.print(" [C]"); System.out.print(transaction.getCurrencyType());} catch (Exception e) {System.out.print("na");}
@@ -262,7 +277,8 @@ public class Global extends GlobalSettings {
 	                                		try {System.out.print(" [I]"); System.out.print(transaction.getCategorization().getContexts().get(0).getCategoryName());} catch (Exception e) {System.out.print("na");}
 	                                		try {System.out.print(" [J]"); System.out.print(transaction.getCategorization().getContexts().get(0).getContextType());} catch (Exception e) {System.out.print("na");}
 	                                		try {System.out.print(" [K]"); System.out.print(transaction.getCategorization().getContexts().get(0).getScheduleC());} catch (Exception e) {System.out.print("na");}
-	                                		try {System.out.print(" [L]"); System.out.print(transaction.getCategorization().getContexts().get(0).getSource().value());} catch (Exception e) {System.out.print("na");}*/
+	                                		try {System.out.print(" [L]"); System.out.print(transaction.getCategorization().getContexts().get(0).getSource().value());} catch (Exception e) {System.out.print("na");}
+	                                		*/
 	                                	}
 	                                }
 	                                System.out.println("    SUCCESS");
@@ -270,13 +286,14 @@ public class Global extends GlobalSettings {
                                 else System.out.println("    FAILURE");
                         	}
                         	catch (AggCatException e) {
-                        		switch (Integer.parseInt(e.getErrorCode())) {
+                        		/*switch (Integer.parseInt(e.getErrorCode())) {
                         			case 503:
                         				System.out.println("page does not exist");
+                        				break;
                         			case 403:
                         				System.out.println("credentials wrong");
                         				break;
-                        		}
+                        		}*/
                         		System.out.println("aggcat exception: " + e.getMessage());
                         	}
             	            catch (Exception e) {
@@ -284,21 +301,15 @@ public class Global extends GlobalSettings {
             	                e.printStackTrace();
             	            }
                         }
-                        for (String[] key : transactionMap.keySet()) {
-                            ExpenseSubcategory expenseSubcategory = null;
-                            try {expenseSubcategory = ExpenseSubcategory.find.where().eq("name", key[1]).findList().get(0);} catch (Exception e) {}
-                            if (expenseSubcategory != null) {
-                                UserVariable userVariable = null;
-                                if (UserVariable.find.where().eq("userUsername", user.getUsername()).eq("datePosted", key[0]).eq("subcategoryCode", expenseSubcategory.getCode()).findRowCount() > 0) {
-                                    userVariable = UserVariable.find.where().eq("userUsername", user.getUsername()).eq("datePosted", key[0]).eq("subcategoryCode", expenseSubcategory.getCode()).findList().get(0);
-                                    userVariable.setAmount(transactionMap.get(key)[0]).setFrequency(transactionMap.get(key)[1].intValue()).save();
-                                }
-                                else userVariable = UserVariable.create(user.getUsername(), new Date(Date.parse(key[0])), expenseSubcategory.getCode(), transactionMap.get(key)[0], transactionMap.get(key)[1].intValue());
+                        for (String name : amountMap.keySet()) {
+                        	String code = null;
+                            try {code = ExpenseSubcategory.find.where().eq("name", name).findList().get(0).getCode();} catch (Exception e) {}
+                            if (code == null) try {code = ExpenseCategory.find.where().eq("name", name).findList().get(0).getCode();} catch (Exception e) {}
+                            if (code != null) {	
+                            	Map<Integer, Long> amountSubmap = amountMap.get(name);
+                            	Map<Integer, Integer> frequencySubmap = frequencyMap.get(name);
+                            	for (Integer daysAgo : amountSubmap.keySet()) UserVariable.create(user.getUsername(), daysAgo, code, amountSubmap.get(daysAgo), frequencySubmap.get(daysAgo));
                             }
-                        }
-                        
-                        for (UserVariable userVariable : user.findUserVariables()) {
-                            System.out.println(userVariable.getDatePosted() + ", " + userVariable.getSubcategoryCode() + ", " + userVariable.getAmount() + ", " + userVariable.getFrequency());
                         }
                     }
                 }
