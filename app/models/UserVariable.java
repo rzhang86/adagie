@@ -14,13 +14,14 @@ import play.db.ebean.*;
 	public String userUsername; public String getUserUsername() {return this.userUsername;} public UserVariable setUserUsername(String userUsername) {this.userUsername = userUsername; return this;}
     public User findUser() {return User.find.ref(userUsername);}
     
-    public Integer daysAgo; public Integer getDaysAgo() {return daysAgo;} public UserVariable setDaysAgo(Integer daysAgo) {this.daysAgo = daysAgo; return this;}
     public String subcategoryCode; public String getSubcategoryCode() {return subcategoryCode;} public UserVariable setSubcategoryCode(String subcategoryCode) {this.subcategoryCode = subcategoryCode; return this;}
+    public Integer daysAgo; public Integer getDaysAgo() {return daysAgo;} public UserVariable setDaysAgo(Integer daysAgo) {this.daysAgo = daysAgo; return this;}
+    public Boolean isDebit; public Boolean getIsDebit() {return isDebit;} public UserVariable setIsDebit(Boolean isDebit) {this.isDebit = isDebit; return this;}
     public Long amount; public Long getAmount() {return amount;} public UserVariable setAmount(Long amount) {this.amount = amount; return this;}
     public Integer frequency; public Integer getFrequency() {return frequency;} public UserVariable setFrequency(Integer frequency) {this.frequency = frequency; return this;}
 
-    public static UserVariable create(String userUsername, Integer daysAgo, String subcategoryCode, Long amount, Integer frequency) {
-    	return (new UserVariable()).setUserUsername(userUsername).setDaysAgo(daysAgo).setSubcategoryCode(subcategoryCode).setAmount(amount).setFrequency(frequency).saveGet();
+    public static UserVariable create(String userUsername, String subcategoryCode, Integer daysAgo, Boolean isDebit, Long amount, Integer frequency) {
+    	return (new UserVariable()).setUserUsername(userUsername).setSubcategoryCode(subcategoryCode).setDaysAgo(daysAgo).setIsDebit(isDebit).setAmount(amount).setFrequency(frequency).saveGet();
     }
     public UserVariable saveGet() {this.save(); return this;}
     public static Finder<Long, UserVariable> find = new Finder<Long, UserVariable>(Long.class, UserVariable.class);

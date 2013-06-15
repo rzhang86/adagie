@@ -200,7 +200,7 @@ import views.html.*;
     }
     
     public static class FinancialInstitutionLoginForm {
-        public String id;
+        public String name;
         public String username;
         public String password;
         public String passwordRepeat;
@@ -210,11 +210,11 @@ import views.html.*;
     	User user = User.find.ref(request().username());
         Form<FinancialInstitutionLoginForm> financialInstitutionLoginForm = form(FinancialInstitutionLoginForm.class).bindFromRequest();
         try {
-            Long id = Long.parseLong(financialInstitutionLoginForm.get().id);
+            String name = financialInstitutionLoginForm.get().name;
             String username = financialInstitutionLoginForm.get().username;
             String password = financialInstitutionLoginForm.get().password;
             String passwordRepeat = financialInstitutionLoginForm.get().passwordRepeat;
-            Long financialInstitutionId = FinancialInstitution.find.ref(id).getId();
+            Long financialInstitutionId = FinancialInstitution.find.where().eq("name", name).findUnique().getId();
             if (username.length() < 0) flash("failure", "Username must be at least 1 character");
             else if (username.length() > 31) flash("failure", "Max 31 characters in username");
             else if (password.length() < 1) flash("failure", "Password must be at least 1 character");

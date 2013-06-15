@@ -4,8 +4,9 @@ import java.text.*;
 import java.util.*;
 import javax.persistence.*;
 import play.db.ebean.*;
-import com.singularsys.jep.Jep;
-import com.singularsys.jep.standard.StandardVariableTable;
+
+import org.nfunk.jep.*;
+
 
 // todo: limit duration to 1 minute? infinite duration will prevent payment
 // todo: may not upload videos if committed balance is negative
@@ -22,12 +23,15 @@ import com.singularsys.jep.standard.StandardVariableTable;
     public List<WatchingVideo> findWatchingVideos() {return WatchingVideo.find.where().eq("videoId", id).findList();}
     
     // has many WatchedVideo
-    public List<WatchedVideo> findCreditCardAccounts() {return WatchedVideo.find.where().eq("videoId", id).findList();}
+    public List<WatchedVideo> findWatchedVideos() {return WatchedVideo.find.where().eq("videoId", id).findList();}
+
+    // has many VideoPayFormula
+    public List<VideoPayFormula> findVideoPayFormulas() {return VideoPayFormula.find.where().eq("videoId", id).findList();}
     
     public String title = "Untitled"; public String getTitle() {return this.title;} public Video setTitle(String title) {this.title = title; return this;}
     public String description = "No description"; public String getDescription() {return this.description;} public Video setDescription(String description) {this.description = description; return this;}
     public Integer duration = 0; public Integer getDuration() {return this.duration;} public Video setDuration(Integer duration) {this.duration = duration; return this;}
-    public String payFormula = ""; public String getPayFormula() {return this.payFormula;} public Video setPayFormula(String payFormula) {this.payFormula = payFormula; return this;}
+    //public String payFormula = ""; public String getPayFormula() {return this.payFormula;} public Video setPayFormula(String payFormula) {this.payFormula = payFormula; return this;}
     
     public static Video create(String userUsername, String title, String description, Integer duration, String payFormula) {
         return (new Video()).setUserUsername(userUsername).setTitle(title).setDescription(description).setDuration(duration).setPayFormula(payFormula).saveGet();
@@ -37,19 +41,75 @@ import com.singularsys.jep.standard.StandardVariableTable;
     
     public Long getPayout(User user) {
         try {
-        	ConsumerProfile consumerProfile = ConsumerProfile.find.ref(user.getUsername());
-            Jep jep = new Jep();
-            jep.setComponent(new StandardVariableTable(jep.getVariableFactory()));
-            jep.addVariable("a7", (double) (consumerProfile.getA7() / 100L));
-            jep.addVariable("a30", (double) (consumerProfile.getA30() / 100L));
-            jep.addVariable("a365", (double) (consumerProfile.getA365() / 100L));
-            jep.addVariable("f7", (double) consumerProfile.getF7());
-            jep.addVariable("f30", (double) consumerProfile.getF30());
-            jep.addVariable("f365", (double) consumerProfile.getF365());
-            jep.parse(payFormula); // todo: catch invalid parse, and check pay formula at time of video creation
-            return (long) Math.ceil(Double.parseDouble(jep.evaluate().toString()) * 100.0);
+        	JEP jep = new JEP();
+            jep.setAllowUndeclared(false);
+            jep.setAllowAssignment(false);
+            jep.setImplicitMul(false);
+            jep.setTraverse(false);
+            
+            List<Integer> timepointDays = new ArrayList<Integer>(Arrays.asList(360, 270, 180, 150, 120, 90, 75, 60, 45, 30, 25, 20, 15, 10, 5, 4, 3, 2, 1));
+            //todo: categories do not need to be queried each time, store them somewhow
+            List<String> categoryCodes = new ArrayList<String>();
+            List<String> subcategoryCodes = new ArrayList<String>();
+            for (ExpenseCategory expenseCategory : ExpenseCategory.find.all()) categoryCodes.add(expenseCategory.getCode());
+            for (ExpenseSubcategory expenseSubcategory : ExpenseSubcategory.find.all()) subcategoryCodes.add(expenseSubcategory.getCode());
+            Long[][][][] categorySpending = new Long[categoryCodes.size()][timepointDays.size()][2][2]; //cat, days, debit/credit, amount/freq
+            Long[][][][] subcategorySpending = new Long[subcategoryCodes.size()][timepointDays.size()][2][2];
+            for (UserVariable userVariable : user.findUserVariables()) {
+            	String code = userVariable.getSubcategoryCode();
+            	int iCategory = categoryCodes.indexOf(code);
+            	int iSubcategory = subcategoryCodes.indexOf(code);
+            	int iTimepoint = timepointDays.indexOf(userVariable.getDaysAgo());
+            	if (iCategory >= 0 && iTimepoint >= 0) {
+        			if (userVariable.getIsDebit()) {
+        				for (int i = iTimepoint; i >= 0; i--) {
+        					categorySpending[iCategory][i][0][0] += userVariable.getAmount();
+        					categorySpending[iCategory][i][0][1] += userVariable.getFrequency();
+        				}
+        			}
+        			else {
+        				for (int i = iTimepoint; i >= 0; i--) {
+        					categorySpending[iCategory][i][1][0] += userVariable.getAmount();
+        					categorySpending[iCategory][i][1][1] += userVariable.getFrequency();
+        				}
+        			}
+            	}
+            	else if (iSubcategory >= 0 && iTimepoint >= 0) {
+            		iCategory = categoryCodes.indexOf(code.split("\\.")[0]);
+            		if (userVariable.getIsDebit()) {
+        				for (int i = iTimepoint; i >= 0; i--) {
+        					categorySpending[iCategory][i][0][0] += userVariable.getAmount();
+        					categorySpending[iCategory][i][0][1] += userVariable.getFrequency();
+        					subcategorySpending[iSubcategory][i][0][0] += userVariable.getAmount();
+        					subcategorySpending[iSubcategory][i][0][1] += userVariable.getFrequency();
+        				}
+        			}
+        			else {
+        				for (int i = iTimepoint; i >= 0; i--) {
+        					categorySpending[iCategory][i][1][0] += userVariable.getAmount();
+        					categorySpending[iCategory][i][1][1] += userVariable.getFrequency();
+        					subcategorySpending[iSubcategory][i][1][0] += userVariable.getAmount();
+        					subcategorySpending[iSubcategory][i][1][1] += userVariable.getFrequency();
+        				}
+        			}
+            	}
+            }
+            for (int i = 0; i < categorySpending.length; i++) for (int j = 0; j < categorySpending[i].length; j++) for (int k = 0; k < categorySpending[i][j].length; k++) for (int l = 0; l < categorySpending[i][j][k].length; l++) {
+				jep.addVariable((l == 0 ? "a" : "f") + categoryCodes.get(i) + (k == 0 ? "d" : "c") + timepointDays.get(j), (double) categorySpending[i][j][k][l]);
+            }
+            for (int i = 0; i < subcategorySpending.length; i++) for (int j = 0; j < subcategorySpending[i].length; j++) for (int k = 0; k < subcategorySpending[i][j].length; k++) for (int l = 0; l < subcategorySpending[i][j][k].length; l++) {
+				jep.addVariable((l == 0 ? "a" : "f") + subcategoryCodes.get(i) + (k == 0 ? "d" : "c") + timepointDays.get(j), (double) subcategorySpending[i][j][k][l]);
+            }
+            // todo: catch invalid parse, and check pay formula at time of video creation
+            for (VideoPayFormula videoPayFormula : this.findVideoPayFormulas()) {
+            	jep.parseExpression(videoPayFormula.getCondition());
+            	if (jep.getValue() == 1.0) {
+            		jep.parseExpression(videoPayFormula.getResult());
+            		return Math.max(1L, (long) Math.round(jep.getValue()));
+            	}
+            }
         }
         catch (Exception e) {e.printStackTrace();}
-        return 0L;
+        return 1L;
     }
 }

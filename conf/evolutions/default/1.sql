@@ -135,8 +135,9 @@ create table user_occupation (
 create table user_variable (
   id                        bigint not null,
   user_username             varchar(255),
-  days_ago                  integer,
   subcategory_code          varchar(255),
+  days_ago                  integer,
+  is_debit                  boolean,
   amount                    bigint,
   frequency                 integer,
   constraint pk_user_variable primary key (id))
@@ -149,6 +150,14 @@ create table video (
   description               varchar(255),
   duration                  integer,
   pay_formula               varchar(255))
+;
+
+create table video_pay_formula (
+  id                        bigint not null,
+  video_id                  bigint,
+  condition                 varchar(255),
+  result                    varchar(255),
+  constraint pk_video_pay_formula primary key (id))
 ;
 
 create table watched_video (
@@ -220,6 +229,8 @@ create sequence user_variable_seq;
 
 create sequence video_seq;
 
+create sequence video_pay_formula_seq;
+
 create sequence watched_video_seq;
 
 create sequence watching_video_seq;
@@ -269,6 +280,8 @@ drop table if exists user_variable;
 
 drop table if exists video;
 
+drop table if exists video_pay_formula;
+
 drop table if exists watched_video;
 
 drop table if exists watching_video;
@@ -312,6 +325,8 @@ drop sequence if exists user_occupation_seq;
 drop sequence if exists user_variable_seq;
 
 drop sequence if exists video_seq;
+
+drop sequence if exists video_pay_formula_seq;
 
 drop sequence if exists watched_video_seq;
 

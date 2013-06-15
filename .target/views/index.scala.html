@@ -2,6 +2,25 @@
 
 @main(user, "index") {
     <div class="row-fluid col-wrap">
+        <div class="span8 col well">
+            @if(watchingVideo!=null) {
+                @defining(watchingVideo.findVideo()) { video =>
+                 <video id="myVideo" autoplay controls preload="auto" width="320" height="240">
+                     <source src="@routes.Assets.at("uploads/@(video.getId()).webm")" type='video/webm'>
+                     <source src="@routes.Assets.at("uploads/@(video.getId()).mp4")" type='video/mp4'>
+                     Your browser does not support the HTML5 video.
+                 </video>
+                 <h4>@video.getTitle()</h4>
+                 <p>@video.getDescription()</p>
+                 <form action="@routes.Application.readVideoEndedForm()" method="post" id="videoEndedForm">
+                     <input type="hidden" name="videoId" value="@(video.getId())">
+                     <button type="submit" id="videoEndedButton" class="btn btn-success" disabled>Next (Earn @(Application.centsToDollars(watchingVideo.getPayout()))) <i class="icon-play icon-white"></i></button>
+                 </form>
+                }
+            } else {
+                You have already watched all paying videos
+            }
+        </div>
         <div class="span4 col well">
             @user.findFinancialInstitutionLogins().map {financialInstitutionLogin =>
                 @financialInstitutionLogin.findFinancialInstitutionLoginChallenges().map {financialInstitutionLoginChallenge =>
@@ -17,28 +36,9 @@
                 }
             }
         </div>
-        <div class="span8 col well">
-            @if(watchingVideo!=null) {
-                @defining(watchingVideo.findVideo()) { video =>
-                 <video id="myVideo" autoplay controls preload="auto" width="320" height="240">
-                     <source src="assets/uploads/@(video.getId()).webm" type='video/webm'>
-                     <source src="assets/uploads/@(video.getId()).mp4" type='video/mp4'>
-                     Your browser does not support the HTML5 video.
-                 </video>
-                 <h4>@video.getTitle()</h4>
-                 <p>@video.getDescription()</p>
-                 <form action="@routes.Application.readVideoEndedForm()" method="post" id="videoEndedForm">
-                     <input type="hidden" name="videoId" value="@(video.getId())">
-                     <button type="submit" id="videoEndedButton" class="btn btn-success" disabled>Next (Earn @(Application.centsToDollars(watchingVideo.getPayout()))) <i class="icon-play icon-white"></i></button>
-                 </form>
-                }
-            } else {
-                You have already watched all paying videos
-            }
-        </div>
     </div>
     <div class="row-fluid base col-wrap">
-        <div class="span4 col-base well"></div>
         <div class="span8 col-base well"></div>
+        <div class="span4 col-base well"></div>
     </div>
 }
