@@ -1,20 +1,20 @@
-@(user: User, watchingVideo: WatchingVideo, form: Form[Application.VideoEndedForm])
+@(user: User, form: Form[Application.VideoEndedForm])
 
 @main(user, "index") {
     <div class="row-fluid col-wrap">
         <div class="span8 col well">
-            @if(watchingVideo!=null) {
-                @defining(watchingVideo.findVideo()) { video =>
+            @if(user.watchingVideo!=null) {
+                @defining(user.watchingVideo) {video =>
                  <video id="myVideo" autoplay controls preload="auto" width="320" height="240">
                      <source src="@routes.Assets.at("uploads/@(video.getId()).webm")" type='video/webm'>
                      <source src="@routes.Assets.at("uploads/@(video.getId()).mp4")" type='video/mp4'>
                      Your browser does not support the HTML5 video.
                  </video>
-                 <h4>@video.getTitle()</h4>
-                 <p>@video.getDescription()</p>
+                 <h4>@video.title</h4>
+                 <p>@video.description</p>
                  <form action="@routes.Application.readVideoEndedForm()" method="post" id="videoEndedForm">
-                     <input type="hidden" name="videoId" value="@(video.getId())">
-                     <button type="submit" id="videoEndedButton" class="btn btn-success" disabled>Next (Earn @(Application.centsToDollars(watchingVideo.getPayout()))) <i class="icon-play icon-white"></i></button>
+                     <input type="hidden" name="videoId" value="@(video.id)">
+                     <button type="submit" id="videoEndedButton" class="btn btn-success" disabled>Next (Earn @(Application.centsToDollars(user.watchingPayout))) <i class="icon-play icon-white"></i></button>
                  </form>
                 }
             } else {
@@ -22,13 +22,13 @@
             }
         </div>
         <div class="span4 col well">
-            @user.findFinancialInstitutionLogins().map {financialInstitutionLogin =>
-                @financialInstitutionLogin.findFinancialInstitutionLoginChallenges().map {financialInstitutionLoginChallenge =>
-                    @if(financialInstitutionLoginChallenge.getChallengeAnswerId()==null) {
+            @user.financialInstitutionLogins.map {financialInstitutionLogin =>
+                @financialInstitutionLogin.loginChallenges.map {loginChallenge =>
+                    @if(loginChallenge.answer==null) {
                         <h4>Your credit card accounts require confirmation</h4>
-                        <p>@financialInstitutionLoginChallenge.findChallengeQuestion().getValue()</p>
+                        <p>@loginChallenge.challengeQuestion.value</p>
                         <form action="@routes.Application.readChallengeAnswerForm()" method="post" id="challengeAnswerForm">
-                            <input type="hidden" name="id" value="@financialInstitutionLoginChallenge.getId()">
+                            <input type="hidden" name="id" value="@loginChallenge.id">
                             <input type="text" name="answer" placeholder="Enter your answer">
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>

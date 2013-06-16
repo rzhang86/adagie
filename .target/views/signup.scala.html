@@ -29,19 +29,19 @@
 	                 <br>
 	                 <p>Occupations:</p>
 	                 <div class="span12">
-	                     @defining(Occupation.findAll()) { occupations =>
-	                         <p><select name="occupation1">@occupations.map {occupation => <option value="@occupation.getId()">@occupation.getName()</option>}</select></p>
-	                         <p><select name="occupation2">@occupations.map {occupation => <option value="@occupation.getId()">@occupation.getName()</option>}</select></p>
+	                     @defining(Occupation.findAll()) {occupations =>
+	                         <p><select name="occupation1">@occupations.map {occupation => <option value="@occupation.id">@occupation.name</option>}</select></p>
+	                         <p><select name="occupation2">@occupations.map {occupation => <option value="@occupation.id">@occupation.name</option>}</select></p>
 	                     }
 	                 </div>
 	                 <p>Interests:</p>
 	                 <div class="span12">
-	                     @defining(Interest.findAll()) { interests =>
-	                         <p><select name="interest1">@interests.map {interest => <option value="@interest.getId()">@interest.getName()</option>}</select></p>
-	                         <p><select name="interest2">@interests.map {interest => <option value="@interest.getId()">@interest.getName()</option>}</select></p>
-	                         <p><select name="interest3">@interests.map {interest => <option value="@interest.getId()">@interest.getName()</option>}</select></p>
-	                         <p><select name="interest4">@interests.map {interest => <option value="@interest.getId()">@interest.getName()</option>}</select></p>
-	                         <p><select name="interest5">@interests.map {interest => <option value="@interest.getId()">@interest.getName()</option>}</select></p>
+	                     @defining(Interest.findAll()) {interests =>
+	                         <p><select name="interest1">@interests.map {interest => <option value="@interest.id">@interest.name</option>}</select></p>
+	                         <p><select name="interest2">@interests.map {interest => <option value="@interest.id">@interest.name</option>}</select></p>
+	                         <p><select name="interest3">@interests.map {interest => <option value="@interest.id">@interest.name</option>}</select></p>
+	                         <p><select name="interest4">@interests.map {interest => <option value="@interest.id">@interest.name</option>}</select></p>
+	                         <p><select name="interest5">@interests.map {interest => <option value="@interest.id">@interest.name</option>}</select></p>
 	                     }
 	                 </div>
 	             </div>

@@ -20,14 +20,14 @@ public class Login extends Controller {
         public String password;
     }
 
-    @Transactional public static Result readLoginForm() {
+    public static Result readLoginForm() {
         session().clear();
         Form<LoginForm> loginForm = form(LoginForm.class).bindFromRequest();
         try {
             String username = loginForm.get().username;
             String password = loginForm.get().password;
-            User user = User.find.ref(username);
-            if (!user.getPassword().equals(password)) flash("failure", "Invalid username/password");
+            User user = User.find.where().eq("username", username).findUnique();
+            if (!user.password.equals(password)) flash("failure", "Invalid username/password");
             else {
                 session("username", username);
                 flash("success", "You have logged in");
@@ -67,7 +67,7 @@ public class Login extends Controller {
     }
 
     //todo: validate username and password can only contain alphanumerics, no escape characters
-    @Transactional public static Result readSignupForm() {
+    public static Result readSignupForm() {
         session().clear();
         Form<SignupForm> signupForm = form(SignupForm.class).bindFromRequest();
         try {
@@ -78,13 +78,13 @@ public class Login extends Controller {
             String gender = signupForm.get().gender;
             Integer birthyear = signupForm.get().birthyear;
             String zip = signupForm.get().zip;
-            Integer occupation1 = signupForm.get().occupation1;
+            /*Integer occupation1 = signupForm.get().occupation1;
             Integer occupation2 = signupForm.get().occupation2;
             Integer interest1 = signupForm.get().interest1;
             Integer interest2 = signupForm.get().interest2;
             Integer interest3 = signupForm.get().interest3;
             Integer interest4 = signupForm.get().interest4;
-            Integer interest5 = signupForm.get().interest5;
+            Integer interest5 = signupForm.get().interest5;*/
             
             if (username.length() < 0) flash("failure", "Username must be at least 1 character");
             else if (username.length() > 31) flash("failure", "Max 31 characters in username");
@@ -94,12 +94,16 @@ public class Login extends Controller {
             else if (!password.equals(passwordRepeat)) flash("failure", "Passwords do not match");
             else if (email.length() > 63) flash("failure", "Max 63 characters in email");
             else {
-                User.create(username, password, email, gender, birthyear, null, null);
-                Balance.create(username, 0L);
-                CommittedBalance.create(username, 0L);
-                ConsumerProfile.create(username, 0L, 0L, 0L, 0, 0, 0);
-                WatchingVideo.create(username, null, null, null);
-                List<Integer> uniqueValues;
+            	User user = new User();
+            	user.username = username;
+            	user.password = password;
+            	user.email = email;
+            	user.gender = gender;
+            	user.birthyear = birthyear;
+            	user.balance = 0L;
+            	user.committedBalance = 0L;
+            	user.save();
+                /*List<Integer> uniqueValues;
                 uniqueValues = new ArrayList<Integer>();
                 if (occupation1 != 1 && !uniqueValues.contains(occupation1)) uniqueValues.add(occupation1);
                 if (occupation2 != 1 && !uniqueValues.contains(occupation2)) uniqueValues.add(occupation2);
@@ -110,7 +114,7 @@ public class Login extends Controller {
                 if (interest3 != 1 && !uniqueValues.contains(interest3)) uniqueValues.add(interest3);
                 if (interest4 != 1 && !uniqueValues.contains(interest4)) uniqueValues.add(interest4);
                 if (interest5 != 1 && !uniqueValues.contains(interest5)) uniqueValues.add(interest5);
-                for (Integer uniqueValue : uniqueValues) UserInterest.create(username, uniqueValue);
+                for (Integer uniqueValue : uniqueValues) UserInterest.create(username, uniqueValue);*/
                 session("username", username);
                 flash("success", "You have signed up");
                 return redirect(routes.Application.index());

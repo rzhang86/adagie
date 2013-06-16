@@ -1,12 +1,8 @@
 - !!models.Occupation
-    id:         1
     name:       Other
 - !!models.Occupation
-    id:         2
     name:       Doctor
 - !!models.Occupation
-    id:         3
     name:       Scientist
 - !!models.Occupation
-    id:         4
     name:       Student

@@ -1,16 +1,14 @@
 package models;
 
 import javax.persistence.*;
+
 import play.db.ebean.*;
 
 @Entity public class ExpenseSubcategory extends Model {
-	@Id public String code; public String getCode() {return this.code;} public ExpenseSubcategory setCode(String code) {this.code = code; return this;}
-
-	// has one ExpenseCategory
-    public ExpenseCategory findExpenseCategory() {return ExpenseCategory.find.ref((code + ".").split("\\.")[0]);}
-    
-	public String name; public String getName() {return this.name;} public ExpenseSubcategory setName(String name) {this.name = name; return this;}
-    
-	public ExpenseSubcategory saveGet() {this.save(); return this;}
-    public static Finder<String, ExpenseSubcategory> find = new Finder<String, ExpenseSubcategory>(String.class, ExpenseSubcategory.class);
+	@Id public Long id; public static Finder<Long, ExpenseSubcategory> find = new Finder<Long, ExpenseSubcategory>(Long.class, ExpenseSubcategory.class);
+	
+	@ManyToOne public ExpenseCategory expenseCategory = null;
+	
+	@Column(unique=true) public String code = null;
+	@Column(unique=true) public String name = null;
 }

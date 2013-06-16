@@ -19,19 +19,16 @@ import views.html.*;
 //todo: crack jep
 @Security.Authenticated(Secured.class) public class Application extends Controller {
     public static Result index() {
-        User user = User.find.ref(request().username());
-        Balance balance = Balance.find.ref(user.getUsername());
-        CommittedBalance committedBalance = CommittedBalance.find.ref(user.getUsername());
-        ConsumerProfile consumerProfile = ConsumerProfile.find.ref(user.getUsername());
+    	User user = User.findByUsername(request().username());
         List<Long> watchedVideoIds = new ArrayList<Long>();
-        for (WatchedVideo watchedVideo : user.findWatchedVideos()) if (watchedVideo.getEndTime() != null) watchedVideoIds.add(watchedVideo.findVideo().getId());
-        List<Video> unwatchedVideos = Video.find.where().ne("userUsername", user.getUsername()).not(Expr.in("id", watchedVideoIds)).findList();
+        for (WatchedVideo watchedVideo : user.watchedVideos) if (watchedVideo.endTime != null) watchedVideoIds.add(watchedVideo.video.id);
+        List<Video> unwatchedVideos = Video.find.where().ne("user", user).not(Expr.in("id", watchedVideoIds)).findList();
         if (unwatchedVideos.size() > 0) {
 	        List<VideoPayoutRate> videoPayoutRates = new ArrayList<VideoPayoutRate>();
 	        for (Video video : unwatchedVideos) {
 	        	long payout = video.getPayout(user);
-	        	CommittedBalance committedBalancePayer = CommittedBalance.find.ref(video.findUser().getUsername());
-	        	if (payout <= committedBalancePayer.getAmount()) {
+	        	User payer = video.user;
+	        	if (payout <= user.committedBalance) {
 			        VideoPayoutRate videoPayoutRate = new VideoPayoutRate(video, payout); 
 			        videoPayoutRates.add(videoPayoutRate);
 	        	}
@@ -40,15 +37,15 @@ import views.html.*;
 	        // todo: send a list of top few videos, to lessen queries
 	        for (VideoPayoutRate videoPayoutRate : videoPayoutRates) {
         		// todo: dont send video by form like this? may not be safe someone could change source to different video id
-	            WatchingVideo watchingVideo = user.findWatchingVideo()
-                    .setStartTime(Calendar.getInstance())
-                    .setVideoId(videoPayoutRate.video.getId())
-                    .setPayout(videoPayoutRate.payout)
-                    .saveGet();
-        		return ok(index.render(user, watchingVideo, form(VideoEndedForm.class)));
+	        	user.watchingVideo = videoPayoutRate.video;
+	        	user.watchingStartTime = Calendar.getInstance().getTimeInMillis();
+	        	user.watchingEndTime = user.watchingStartTime + user.watchingVideo.duration;
+	        	user.watchingPayout = videoPayoutRate.payout;
+	        	user.save();
+        		return ok(index.render(user, form(VideoEndedForm.class)));
 	        }
         }
-        return ok(index.render(user, null, form(VideoEndedForm.class)));
+        return ok(index.render(user, form(VideoEndedForm.class)));
     }
     
     public static class VideoPayoutRate implements Comparable<VideoPayoutRate>{
@@ -70,27 +67,26 @@ import views.html.*;
     }
     
     // only get paid if watching video is being tracked
-    @Transactional public static Result readVideoEndedForm() {
+    public static Result readVideoEndedForm() {
         Form<VideoEndedForm> videoEndedForm = form(VideoEndedForm.class).bindFromRequest();
         try {
-            User user = User.find.ref(request().username());
-            WatchingVideo watchingVideo = user.findWatchingVideo();
-            Video video = Video.find.ref(Long.parseLong(videoEndedForm.get().videoId));
-            if (!watchingVideo.getVideoId().equals(video)) flash("failure", "Video was not tracked");
+        	User user = User.findByUsername(request().username());
+            Video video = Video.find.byId(Long.parseLong(videoEndedForm.get().videoId));
+            if (!user.watchingVideo.equals(video)) flash("failure", "Video was not tracked");
             else {
-                Calendar currentTime = Calendar.getInstance();
-                Calendar endTime = watchingVideo.getStartTime();
-                endTime.add(Calendar.SECOND, watchingVideo.findVideo().getDuration());
-                if (currentTime.before(endTime)) flash("failure", "Video ended prematurely");
-                else if (user.findWatchedVideos().contains(video)) flash("failure", "You have already been paid for watching this video recently");
+            	Long currentTime = Calendar.getInstance().getTimeInMillis();
+                if (currentTime < user.watchingEndTime) flash("failure", "Video ended prematurely");
+                else if (user.watchedVideos.contains(video)) flash("failure", "You have already been paid for watching this video recently");
                 else {
-                    Long payout = watchingVideo.getPayout();
-                    WatchedVideo watchedVideo = WatchedVideo.create(user.getUsername(), video.getId(), watchingVideo.getStartTime(), currentTime, payout);
-                    video.findUser().findCommittedBalance().addAmount(-payout);
-                    user.findBalance().addAmount(payout); // are these transactions safe? require table lock?
-    	        	watchingVideo.setStartTime(null).setVideoId(null).setPayout(0L).save();
-                    flash("success", "You earned " + centsToDollars(payout));
-                    return redirect(routes.Application.index());
+                    WatchedVideo watchedVideo = new WatchedVideo();
+                    watchedVideo.user = user;
+                    watchedVideo.video = video;
+                    watchedVideo.startTime = user.watchingStartTime;
+                    watchedVideo.endTime = currentTime;
+                    watchedVideo.payout = user.watchingPayout;
+                    watchedVideo.save();
+                    if (transferMoney(video.user, user, watchedVideo.payout)) flash("success", "You earned " + centsToDollars(watchedVideo.payout));
+                    else flash("failure", "Error transferring money");
                 }
             }
         }
@@ -98,8 +94,22 @@ import views.html.*;
         return redirect(routes.Application.index());
     }
     
+    @Transactional public static boolean transferMoney(User payer, User payee, Long amount) {
+    	// are these transactions safe? require table lock?
+    	try {
+	    	payer.committedBalance -= amount;
+	    	payee.balance += amount;
+	    	payer.save();
+	    	payee.save();
+	    	return true;
+    	}
+    	catch (Exception e) {System.out.println("error transferring money: " + e.getMessage());}
+    	return false;
+    }
+    
     public static Result myVideos() {
-        return ok(myVideos.render(User.find.ref(request().username()), form(UploadVideoForm.class)));
+    	User user = User.findByUsername(request().username());
+        return ok(myVideos.render(user, form(UploadVideoForm.class)));
     }
 
     public static class UploadVideoForm {
@@ -113,13 +123,15 @@ import views.html.*;
     // todo: adjust ffmpeg resolution
     //todo: verify payformula parses with jep
     public static Result readUploadVideoForm() {
-        Video video = Video.create(request().username(), null, null, null, null);
+    	User user = User.findByUsername(request().username());
+        Video video = new Video();
+        video.user = user;
         Form<UploadVideoForm> uploadVideoForm = form(UploadVideoForm.class).bindFromRequest();
         MultipartFormData formData = request().body().asMultipartFormData();
-        File file = new File("public/uploads/" + video.getId() + "-temp.mp4");
-        File tempFile = new File("public/uploads/" + video.getId() + "-temp.mp4");
-        File finalFileMp4 = new File("public/uploads/" + video.getId() + ".mp4");
-        File finalFileWebm = new File("public/uploads/" + video.getId() + ".webm");
+        File file = new File("public/uploads/" + video.id + "-temp.mp4");
+        File tempFile = new File("public/uploads/" + video.id + "-temp.mp4");
+        File finalFileMp4 = new File("public/uploads/" + video.id + ".mp4");
+        File finalFileWebm = new File("public/uploads/" + video.id + ".webm");
         try {
         	String title = formData.asFormUrlEncoded().get("title")[0];
         	String description = formData.asFormUrlEncoded().get("description")[0];
@@ -128,10 +140,11 @@ import views.html.*;
         	else if (description.length() > 255) flash("failure", "Max of 255 characters in description");
         	else if (payFormula.length() > 255) flash("failure", "Max of 255 characters in pay formula");
         	else {
-	            video.setTitle(title).setDescription(description).setPayFormula(payFormula);
+        		video.title = title;
+        		video.description = description;
+        		//video.payoutFormulas = //todo: implement multiple pay formulas
 	            file = formData.getFile("file").getFile();
-	            Process process;
-	            process = Runtime.getRuntime().exec("cmd /C lib\\ffmpeg -y -i " + file.getAbsolutePath() + " -vf scale=320:trunc(ow/a/2)*2 " + tempFile.getAbsolutePath());
+	            Process process = Runtime.getRuntime().exec("cmd /C lib\\ffmpeg -y -i " + file.getAbsolutePath() + " -vf scale=320:trunc(ow/a/2)*2 " + tempFile.getAbsolutePath());
 	            int duration = getDuration(process);
 	            process = Runtime.getRuntime().exec("cmd /C lib\\ffmpeg -y -i " + tempFile.getAbsolutePath() + " -vf scale=trunc(oh*a/2)*2:240 " + finalFileMp4.getAbsolutePath());
 	            getDuration(process);
@@ -139,7 +152,8 @@ import views.html.*;
 	            getDuration(process);
 	            if (!finalFileMp4.exists() || !finalFileWebm.exists() || duration == 0) flash("failure", "Video improperly formatted");
 	            else {
-	                video.setDuration(duration).save();
+	                video.duration = duration;
+	                video.save();
 	                flash("success", "Video uploaded");
 	                file.delete();
 	                tempFile.delete();
@@ -153,7 +167,7 @@ import views.html.*;
         finalFileMp4.delete();
         finalFileWebm.delete();
         video.delete();
-        return ok(myVideos.render(User.find.ref(request().username()), uploadVideoForm));
+        return ok(myVideos.render(user, uploadVideoForm));
     }
     
     public static int getDuration(Process process) {
@@ -162,8 +176,8 @@ import views.html.*;
             BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
             BufferedReader outputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
-            while ((line = errorReader.readLine()) != null) { if (duration == 0) duration = getDurationReader(line);}
-            while ((line = outputReader.readLine()) != null) { if (duration == 0) duration = getDurationReader(line);}
+            while ((line = errorReader.readLine()) != null) {if (duration == 0) duration = getDurationReader(line);}
+            while ((line = outputReader.readLine()) != null) {if (duration == 0) duration = getDurationReader(line);}
             process.waitFor();
         }
         catch (Exception e) {}
@@ -180,23 +194,24 @@ import views.html.*;
     }
     
     public static Result deleteVideo(Long videoId) {
-        Video video = Video.find.ref(videoId);
-        if (video.findUser().getUsername().equals(request().username())) {
+    	User user = User.findByUsername(request().username());
+        Video video = Video.find.byId(videoId);
+        if (video.user.equals(user)) {
         	(new File("public/uploads/" + video.id + ".mp4")).delete();
         	(new File("public/uploads/" + video.id + ".webm")).delete();
         	video.delete();
             flash("success", "Video deleted");
-            return redirect(routes.Application.myVideos());
         }
         else {
             flash("failure", "You many not delete videos that you did not create");
-            return redirect(routes.Application.myVideos());
             //return forbidden();
         }
+        return redirect(routes.Application.myVideos());
     }
     
     public static Result myProfile() {
-    	return ok(myProfile.render(User.find.ref(request().username()), form(FinancialInstitutionLoginForm.class)));
+    	User user = User.findByUsername(request().username());
+    	return ok(myProfile.render(user, form(FinancialInstitutionLoginForm.class)));
     }
     
     public static class FinancialInstitutionLoginForm {
@@ -206,23 +221,28 @@ import views.html.*;
         public String passwordRepeat;
     }
 
-    @Transactional public static Result readFinancialInstitutionLoginForm() {
-    	User user = User.find.ref(request().username());
+    public static Result readFinancialInstitutionLoginForm() {
+    	User user = User.findByUsername(request().username());
         Form<FinancialInstitutionLoginForm> financialInstitutionLoginForm = form(FinancialInstitutionLoginForm.class).bindFromRequest();
         try {
             String name = financialInstitutionLoginForm.get().name;
             String username = financialInstitutionLoginForm.get().username;
             String password = financialInstitutionLoginForm.get().password;
             String passwordRepeat = financialInstitutionLoginForm.get().passwordRepeat;
-            Long financialInstitutionId = FinancialInstitution.find.where().eq("name", name).findUnique().getId();
+            FinancialInstitution financialInstitution = FinancialInstitution.find.where().eq("name", name).findUnique();
             if (username.length() < 0) flash("failure", "Username must be at least 1 character");
             else if (username.length() > 31) flash("failure", "Max 31 characters in username");
             else if (password.length() < 1) flash("failure", "Password must be at least 1 character");
             else if (password.length() > 31) flash("failure", "Max 31 characters in password");
             else if (!password.equals(passwordRepeat)) flash("failure", "Passwords do not match");
-            else if (financialInstitutionId == null) flash("failure", "Malformed entry, try again");
+            else if (financialInstitution.id == null) flash("failure", "Malformed entry, try again");
             else {
-                FinancialInstitutionLogin.create(request().username(), financialInstitutionId, username, password);
+                FinancialInstitutionLogin financialInstitutionLogin = new FinancialInstitutionLogin();
+                financialInstitutionLogin.financialInstitution = financialInstitution;
+                financialInstitutionLogin.user = user;
+                financialInstitutionLogin.username = username;
+                financialInstitutionLogin.password = password;
+                financialInstitutionLogin.save();
                 flash("success", "Financial institution login saved");
                 return redirect(routes.Application.myProfile());
             }
@@ -237,20 +257,16 @@ import views.html.*;
     }
     
     // only get paid if watching video is being tracked
-    @Transactional public static Result readChallengeAnswerForm() {
+    public static Result readChallengeAnswerForm() {
+    	User user = User.findByUsername(request().username());
         Form<ChallengeAnswerForm> challengeAnswerForm = form(ChallengeAnswerForm.class).bindFromRequest();
         try {
-            Long id = Long.parseLong(challengeAnswerForm.get().id);
+        	LoginChallenge loginChallenge = LoginChallenge.find.byId(Long.parseLong(challengeAnswerForm.get().id));
             String answer = challengeAnswerForm.get().answer;
-            FinancialInstitutionLoginChallenge financialInstitutionLoginChallenge = FinancialInstitutionLoginChallenge.find.ref(id);
-            if (financialInstitutionLoginChallenge.findFinancialInstitutionLogin().getUserUsername().equals(request().username())) {
-            	ChallengeAnswer challengeAnswer = null;
-        		List<ChallengeAnswer> matchingChallengeAnswers = ChallengeAnswer.find.where().eq("value", answer).findList();
-        		if (matchingChallengeAnswers.size() > 0) challengeAnswer = matchingChallengeAnswers.get(0);
-        		else challengeAnswer = ChallengeAnswer.create(answer);
-        		financialInstitutionLoginChallenge.setChallengeAnswerId(challengeAnswer.getId()).save();
+            if (loginChallenge.financialInstitutionLogin.user.equals(user)) {
+        		loginChallenge.answer = answer;
+        		loginChallenge.save();
         		flash("success", "Answer saved");
-                return redirect(routes.Application.index());
             }
             else flash("failure", "Answer not saved, not your challenge");
         }

@@ -13,7 +13,7 @@
             </form>
         </div>
         <div class="span8 col well">
-            @user.findVideos().map {video => @views.html.videos.item(user,video)}
+            @user.videos.map {video => @views.html.videos.item(user,video)}
         </div>
     </div>
     <div class="row-fluid base col-wrap">

@@ -3,13 +3,8 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import static java.nio.file.StandardCopyOption.*;
-import java.sql.*;
 import java.text.*;
 import java.util.*;
-
-import org.apache.commons.lang.time.*;
-import org.nfunk.jep.JEP;
-
 import com.avaje.ebean.*;
 
 import com.intuit.ipp.aggcat.core.*;
@@ -18,8 +13,6 @@ import com.intuit.ipp.aggcat.data.Challenges.Challenge.Choice;
 import com.intuit.ipp.aggcat.data.Challenges.*;
 import com.intuit.ipp.aggcat.exception.*;
 import com.intuit.ipp.aggcat.service.*;
-
-import controllers.routes;
 
 import play.*;
 import play.libs.*;
@@ -35,67 +28,46 @@ public class Global extends GlobalSettings {
     @Override public void onStart(Application app) {
         // Check if the database is empty
         if (User.find.findRowCount() == 0) {
-            Ebean.save((List) Yaml.load("seed/data-Occupation.yml"));
-            Ebean.save((List) Yaml.load("seed/data-Interest.yml"));
-            Ebean.save((List) Yaml.load("seed/data-Zip.yml"));
-            Ebean.save((List) Yaml.load("seed/data-FinancialInstitution.yml"));
-            Ebean.save((List) Yaml.load("seed/data-ExpenseCategory.yml"));
+        	Ebean.save((List) Yaml.load("seed/data-ExpenseCategory.yml"));
             Ebean.save((List) Yaml.load("seed/data-ExpenseSubcategory.yml"));
+            Ebean.save((List) Yaml.load("seed/data-FinancialInstitution.yml"));
+            Ebean.save((List) Yaml.load("seed/data-Interest.yml"));
+            Ebean.save((List) Yaml.load("seed/data-Occupation.yml"));
+            Ebean.save((List) Yaml.load("seed/data-Zip.yml"));
             
-            User.create("Ray", "secret", null, null, null, null, null);
-            Balance.create("Ray", 10000L);
-            CommittedBalance.create("Ray", 10000L);
-            ConsumerProfile.create("Ray", 0L, 0L, 0L, 0, 0, 0);
-            WatchingVideo.create("Ray", null, null, null);
-            FinancialInstitutionLogin.create("Ray", 100000L, "direct", "anyvalue");
-            //FinancialInstitutionLogin tfa1 = FinancialInstitutionLogin.create("Ray", 100000L, "tfa_text", "anyvalue");
-            /*FinancialInstitutionLogin.create("Ray", 100000L, "direct", "anyvalue");
-            FinancialInstitutionLogin.create("Ray", 100000L, "bad", "anyvalue");
-            FinancialInstitutionLogin.create("Ray", 100000L, "anyvalue", "bad");
-            FinancialInstitutionLogin tfa1 = FinancialInstitutionLogin.create("Ray", 100000L, "tfa_text", "anyvalue");
-            FinancialInstitutionLogin tfa2 = FinancialInstitutionLogin.create("Ray", 100000L, "tfa_text2", "anyvalue");
-            /*FinancialInstitutionLogin.create("Ray", 100000L, "tfa_choice", "anyvalue");
-            FinancialInstitutionLogin.create("Ray", 100000L, "tfa_image", "anyvalue");
-            FinancialInstitutionLogin.create("Ray", 100000L, "tfa_dynamic_image", "anyvalue");
-            FinancialInstitutionLogin.create("Ray", 100000L, "request_error", "anyvalue");
-            FinancialInstitutionLogin.create("Ray", 100000L, "error_code", "error number");
-            FinancialInstitutionLogin.create("Ray", 100000L, "error_later", "error number");
-            FinancialInstitutionLogin.create("Ray", 100000L, "MFA ANSWER", "<MFA answer field> loops");
-            FinancialInstitutionLogin.create("Ray", 100000L, "MFA ANSWER", "<MFA answer field> bad");
-            FinancialInstitutionLogin.create("Ray", 100000L, "wrong_zip", "anyvalue");
-            FinancialInstitutionLogin.create("Ray", 100000L, "wrong_state", "anyvalue");
-            FinancialInstitutionLogin.create("Ray", 100000L, "special_char", "anyvalue");
-            FinancialInstitutionLogin.create("Ray", 100000L, "wrong_date", "anyvalue");
-            FinancialInstitutionLogin.create("Ray", 100000L, "null_date", "anyvalue");
-            FinancialInstitutionLogin.create("Ray", 100000L, "null_amt", "anyvalue");
-            FinancialInstitutionLogin.create("Ray", 100000L, "null_acctno", "anyvalue");
-            FinancialInstitutionLogin.create("Ray", 100000L, "unmasked_acctno", "anyvalue");
-            FinancialInstitutionLogin.create("Ray", 100000L, "Opayee_0dd", "anyvalue");
-            FinancialInstitutionLogin.create("Ray", 100000L, "Opayee_dd", "anyvalue");
-            FinancialInstitutionLogin.create("Ray", 100000L, "payee_0dd", "anyvalue");
-            FinancialInstitutionLogin.create("Ray", 100000L, "payee_dd", "anyvalue");
-            FinancialInstitutionLogin.create("Ray", 100000L, "SomeInfoReqd_0dd", "anyvalue");
-            FinancialInstitutionLogin.create("Ray", 100000L, "SomeInfoReqd_dd", "anyvalue");
-            FinancialInstitutionLogin.create("Ray", 100000L, "AllInfoReqd_dd", "anyvalue");*/
+            User user;
+            user = new User();
+            user.username = "Katie";
+            user.password = "secret";
+            user.balance = 10000L;
+            user.committedBalance = 10000L;
+            user.save();
             
-            User.create("Katie", "secret", null, null, null, null, null);
-            Balance.create("Katie", 10000L);
-            CommittedBalance.create("Katie", 10000L);
-            ConsumerProfile.create("Katie", 0L, 0L, 0L, 0, 0, 0);
-            WatchingVideo.create("Katie", null, null, null);
+            user = new User();
+            user.username = "Ray";
+            user.password = "secret";
+            user.balance = 10000L;
+            user.committedBalance = 10000L;
+            user.save();
+            
+            FinancialInstitutionLogin financialInstitutionLogin;
+            financialInstitutionLogin = new FinancialInstitutionLogin();
+            financialInstitutionLogin.user = user;
+            financialInstitutionLogin.financialInstitution = FinancialInstitution.find.where().eq("intuitId", 100000L).findUnique();
+            financialInstitutionLogin.username = "direct";
+            financialInstitutionLogin.password = "anyvalue";
+            financialInstitutionLogin.save();
         }
         
         // start looping maintenance threads
         applicationIsLive = true;
-        aggCatServiceThread.start();
-        //consumerProfileUpdaterThread.start();
+        try {aggCatServiceThread.start();} catch (Exception e) {}
     }
     
     @Override public void onStop(Application app) {
         // signal maintenance threads to stop
         applicationIsLive = false;
         try {aggCatServiceThread.join();} catch (Exception e) {}
-        //try {consumerProfileUpdaterThread.join();} catch (Exception e) {}
     }
 
     /* intuit stuff*/
@@ -163,7 +135,7 @@ public class Global extends GlobalSettings {
             		writer.write("[");
             		String delimiter = "";
             		for (FinancialInstitution financialInstitution : FinancialInstitution.find.orderBy("name").findList()) {
-            			writer.write(delimiter + "\"" + escape(financialInstitution.getName()) + "\"");
+            			writer.write(delimiter + "\"" + escape(financialInstitution.name) + "\"");
             			delimiter = ",";
             		}
             		writer.write("]");
@@ -182,18 +154,23 @@ public class Global extends GlobalSettings {
                     		timepointCalendars[i] = Calendar.getInstance();
                     		timepointCalendars[i].add(Calendar.DATE, -timepointDays[i]);
                     	}
-                    	Map<String, Map<Integer, Long[]>> amountMap = new HashMap<String, Map<Integer, Long[]>>(); //<categoryname, <daysago, amount[0=debit,1=credit]>>
+                    	Map<String, Map<Integer, Long[]>> amountMap = new HashMap<String, Map<Integer, Long[]>>(); //<categoryname, <timepoint, amount[0=debit,1=credit]>>
                     	Map<String, Map<Integer, Integer[]>> frequencyMap = new HashMap<String, Map<Integer, Integer[]>>();
-                        for (UserVariable userVariable : user.findUserVariables()) userVariable.delete(); //todo: handle what if intuit offline? still delete?
-                        for (FinancialInstitutionLogin financialInstitutionLogin : user.findFinancialInstitutionLogins()) {
+                        for (UserVariable userVariable : user.userVariables) userVariable.delete(); //todo: handle what if intuit offline? still delete?
+                        System.out.println("A: " + user.username);
+                        for (FinancialInstitutionLogin financialInstitutionLogin : user.financialInstitutionLogins) {
+                        	System.out.println("B: " + financialInstitutionLogin.username);
+                        	System.out.println("B: " + financialInstitutionLogin.user.username);
                         	try {
-                                FinancialInstitution financialInstitution = financialInstitutionLogin.findFinancialInstitution();
+                                FinancialInstitution financialInstitution = financialInstitutionLogin.financialInstitution;
+                                System.out.println("C: " + financialInstitution.id);
+                                System.out.println("C: " + financialInstitution.name);
                                 Credential usernameCredential = new Credential();
-                                usernameCredential.setName(financialInstitution.getUsernameKey());
-                                usernameCredential.setValue(financialInstitutionLogin.getUsername());
+                                usernameCredential.setName(financialInstitution.usernameKey);
+                                usernameCredential.setValue(financialInstitutionLogin.username);
                                 Credential passwordCredential = new Credential();
-                                passwordCredential.setName(financialInstitution.getPasswordKey());
-                                passwordCredential.setValue(financialInstitutionLogin.getPassword());
+                                passwordCredential.setName(financialInstitution.passwordKey);
+                                passwordCredential.setValue(financialInstitutionLogin.password);
                                 List<Credential> credentialList = new ArrayList<Credential>();
                                 credentialList.add(usernameCredential);
                                 credentialList.add(passwordCredential);
@@ -202,9 +179,8 @@ public class Global extends GlobalSettings {
                                 InstitutionLogin institutionLogin = new InstitutionLogin();
                                 institutionLogin.setCredentials(credentials);
                                 
-                                System.out.println("\n" + usernameCredential.getValue() + "/" + passwordCredential.getValue());
                                 //todo: test multiple MFA challenge question answering
-                                DiscoverAndAddAccountsResponse response = service.discoverAndAddAccounts(financialInstitution.getId(), institutionLogin);
+                                DiscoverAndAddAccountsResponse response = service.discoverAndAddAccounts(financialInstitution.intuitId, institutionLogin);
                                 AccountList accountList = null;
                                 if (response.getChallenges() != null && response.getAccountList() == null) {
                                     List<String> questionList = new ArrayList<String>();
@@ -217,10 +193,10 @@ public class Global extends GlobalSettings {
                                         }
                                     }
                                     Map<String, String> answerKey = new HashMap<String, String>();
-                                    for (FinancialInstitutionLoginChallenge financialInstitutionLoginChallenge : financialInstitutionLogin.findFinancialInstitutionLoginChallenges()) {
+                                    for (LoginChallenge financialInstitutionLoginChallenge : financialInstitutionLogin.loginChallenges) {
                                     	String question, answer;
-                                    	try {question = financialInstitutionLoginChallenge.findChallengeQuestion().getValue();} catch (Exception e) {question = null;}
-                                    	try {answer = financialInstitutionLoginChallenge.findChallengeAnswer().getValue();} catch (Exception e) {answer = null;}
+                                    	try {question = financialInstitutionLoginChallenge.challengeQuestion.value;} catch (Exception e) {question = null;}
+                                    	try {answer = financialInstitutionLoginChallenge.answer;} catch (Exception e) {answer = null;}
                                     	if (question != null) answerKey.put(question, answer);
                                     }
                                     List<String> answerList = new ArrayList<String>();
@@ -231,8 +207,15 @@ public class Global extends GlobalSettings {
                                     		ChallengeQuestion challengeQuestion = null;
                                     		List<ChallengeQuestion> matchingChallengeQuestions = ChallengeQuestion.find.where().eq("value", question).findList();
                                     		if (matchingChallengeQuestions.size() > 0) challengeQuestion = matchingChallengeQuestions.get(0);
-                                    		else challengeQuestion = ChallengeQuestion.create(question);
-                                    		FinancialInstitutionLoginChallenge.create(financialInstitutionLogin.getId(), challengeQuestion.getId(), null);
+                                    		else {
+                                    			challengeQuestion = new ChallengeQuestion();
+                                    			challengeQuestion.value = question;
+                                    			challengeQuestion.save();
+                                    		}
+                                    		LoginChallenge loginChallenge = new LoginChallenge();
+                                    		loginChallenge.financialInstitutionLogin = financialInstitutionLogin;
+                                    		loginChallenge.challengeQuestion = challengeQuestion;
+                                    		loginChallenge.save();
                                     	}
                                     	else if (answerKey.get(question) == null) allAnswersPresent = false;
                                     	else answerList.add(answerKey.get(question));
@@ -240,7 +223,6 @@ public class Global extends GlobalSettings {
                                     if (allAnswersPresent) {
                                     	ChallengeResponses challengeResponses = new ChallengeResponses();
                                     	challengeResponses.setResponses(answerList);
-                                    	for (String a : challengeResponses.getResponses()) System.out.println("  " + a);
                                     	DiscoverAndAddAccountsResponse response2 = service.discoverAndAddAccounts(challengeResponses, response.getChallengeSession());
                                     	accountList = response2.getAccountList();
                                     }
@@ -342,16 +324,34 @@ public class Global extends GlobalSettings {
                         }
                         for (String name : amountMap.keySet()) {
                         	String code = null;
-                            try {code = ExpenseSubcategory.find.where().eq("name", name).findList().get(0).getCode();} catch (Exception e) {}
-                            if (code == null) try {code = ExpenseCategory.find.where().eq("name", name).findList().get(0).getCode();} catch (Exception e) {}
+                            try {code = ExpenseSubcategory.find.where().eq("name", name).findUnique().code;} catch (Exception e) {}
+                            if (code == null) try {code = ExpenseCategory.find.where().eq("name", name).findUnique().code;} catch (Exception e) {}
                             if (code != null) {	
                             	Map<Integer, Long[]> amountSubmap = amountMap.get(name);
                             	Map<Integer, Integer[]> frequencySubmap = frequencyMap.get(name);
-                            	for (Integer daysAgo : amountSubmap.keySet()) {
-                            		Long[] amount = amountSubmap.get(daysAgo);
-                            		Integer[] frequency = frequencySubmap.get(daysAgo);
-                            		if (frequency[0] > 0) UserVariable.create(user.getUsername(), code, daysAgo, true, amount[0], frequency[0]);
-                            		if (frequency[1] > 0) UserVariable.create(user.getUsername(), code, daysAgo, false, amount[1], frequency[1]);
+                            	for (Integer timepoint : amountSubmap.keySet()) {
+                            		Long[] amount = amountSubmap.get(timepoint);
+                            		Integer[] frequency = frequencySubmap.get(timepoint);
+                            		if (frequency[0] > 0) {
+                            			UserVariable userVariable = new UserVariable();
+                            			userVariable.user = user;
+                            			userVariable.code = code;
+                            			userVariable.timepoint = timepoint;
+                            			userVariable.isDebit = true;
+                            			userVariable.amount = amount[0];
+                            			userVariable.frequency = frequency[0];
+                            			userVariable.save();
+                            		}
+                            		if (frequency[1] > 0){
+                            			UserVariable userVariable = new UserVariable();
+                            			userVariable.user = user;
+                            			userVariable.code = code;
+                            			userVariable.timepoint = timepoint;
+                            			userVariable.isDebit = false;
+                            			userVariable.amount = amount[1];
+                            			userVariable.frequency = frequency[1];
+                            			userVariable.save();
+                            		}
                             	}
                             }
                         }

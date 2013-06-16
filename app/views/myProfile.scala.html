@@ -25,14 +25,14 @@
                   </tr>
                 </thead>
                 <tbody>
-                    @defining(user.findUserVariables()) {userVariables =>
+                    @defining(user.userVariables) {userVariables =>
                         @userVariables.map {userVariable =>
                             <tr>
-                                <td>@userVariable.getSubcategoryCode()</td>
-                                <td>@userVariable.getDaysAgo()</td>
-                                <td>@if(userVariable.getIsDebit()) {debit} else {credit}</td>
-                                <td>@Application.centsToDollars(userVariable.getAmount())</td>
-                                <td>@userVariable.getFrequency()</td>
+                                <td>@userVariable.code</td>
+                                <td>@userVariable.timepoint</td>
+                                <td>@if(userVariable.isDebit) {debit} else {credit}</td>
+                                <td>@Application.centsToDollars(userVariable.amount)</td>
+                                <td>@userVariable.frequency</td>
                             </tr>
                         }
                     }
