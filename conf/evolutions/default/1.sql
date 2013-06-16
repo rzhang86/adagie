@@ -31,7 +31,7 @@ create table expense_subcategory (
 
 create table financial_institution (
   id                        bigint not null,
-  intuit_id                 bigint,
+  iid                       bigint,
   name                      varchar(255),
   url                       varchar(255),
   phone                     varchar(255),
@@ -45,7 +45,7 @@ create table financial_institution (
   currency_code             varchar(255),
   username_key              varchar(255),
   password_key              varchar(255),
-  constraint uq_financial_institution_intuit_ unique (intuit_id),
+  constraint uq_financial_institution_iid unique (iid),
   constraint pk_financial_institution primary key (id))
 ;
 

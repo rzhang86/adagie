@@ -22,8 +22,7 @@ import models.*;
 //todo: delete videos after not having paid out or watched in X time
 public class Global extends GlobalSettings {
     public static boolean applicationIsLive = false;
-    public static Thread aggCatServiceThread = new Thread(new AggCatServiceThread());
-    //public static Thread consumerProfileUpdaterThread = new Thread(new ConsumerProfileUpdater());
+    public static Thread aggCatServiceThread;
     
     @Override public void onStart(Application app) {
         // Check if the database is empty
@@ -53,7 +52,7 @@ public class Global extends GlobalSettings {
             FinancialInstitutionLogin financialInstitutionLogin;
             financialInstitutionLogin = new FinancialInstitutionLogin();
             financialInstitutionLogin.user = user;
-            financialInstitutionLogin.financialInstitution = FinancialInstitution.find.where().eq("intuitId", 100000L).findUnique();
+            financialInstitutionLogin.financialInstitution = FinancialInstitution.find.where().eq("iid", 100000L).findUnique();
             financialInstitutionLogin.username = "direct";
             financialInstitutionLogin.password = "anyvalue";
             financialInstitutionLogin.save();
@@ -61,7 +60,12 @@ public class Global extends GlobalSettings {
         
         // start looping maintenance threads
         applicationIsLive = true;
-        try {aggCatServiceThread.start();} catch (Exception e) {}
+        try {
+        	aggCatServiceThread = new Thread(new AggCatServiceThread());
+        	aggCatServiceThread.start();
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
     }
     
     @Override public void onStop(Application app) {
@@ -76,11 +80,11 @@ public class Global extends GlobalSettings {
         String OAUTH_CONSUMER_SECRET = "86MmKfrvrDheNMQdvYNgrkc9HEFvoczwmIRqFaMj";
         String SAML_PROVIDER_ID = "adder.161321.cc.dev-intuit.ipp.prod";
         String userId = "rzhang86"; // i think userId = rzhang86
-        AggCatService service;
         
         public void run() {
             while (applicationIsLive) {
-            	service = getService();
+                AggCatService service = getService();
+                
             	/*
                 Institutions institutions = null;
                 boolean institutionsReceived = false;
@@ -130,7 +134,6 @@ public class Global extends GlobalSettings {
                     }
                 }
                 */
-            	
             	try (BufferedWriter writer = new BufferedWriter(Files.newBufferedWriter(Paths.get("public/data/FinancialInstitutions-temp.json"), Charset.defaultCharset()))) {
             		writer.write("[");
             		String delimiter = "";
@@ -156,15 +159,10 @@ public class Global extends GlobalSettings {
                     	}
                     	Map<String, Map<Integer, Long[]>> amountMap = new HashMap<String, Map<Integer, Long[]>>(); //<categoryname, <timepoint, amount[0=debit,1=credit]>>
                     	Map<String, Map<Integer, Integer[]>> frequencyMap = new HashMap<String, Map<Integer, Integer[]>>();
-                        for (UserVariable userVariable : user.userVariables) userVariable.delete(); //todo: handle what if intuit offline? still delete?
-                        System.out.println("A: " + user.username);
                         for (FinancialInstitutionLogin financialInstitutionLogin : user.financialInstitutionLogins) {
-                        	System.out.println("B: " + financialInstitutionLogin.username);
-                        	System.out.println("B: " + financialInstitutionLogin.user.username);
                         	try {
-                                FinancialInstitution financialInstitution = financialInstitutionLogin.financialInstitution;
-                                System.out.println("C: " + financialInstitution.id);
-                                System.out.println("C: " + financialInstitution.name);
+                        		System.out.println("  accessing " + financialInstitutionLogin.username + "/" + financialInstitutionLogin.password);
+                        		FinancialInstitution financialInstitution = financialInstitutionLogin.financialInstitution;
                                 Credential usernameCredential = new Credential();
                                 usernameCredential.setName(financialInstitution.usernameKey);
                                 usernameCredential.setValue(financialInstitutionLogin.username);
@@ -180,7 +178,7 @@ public class Global extends GlobalSettings {
                                 institutionLogin.setCredentials(credentials);
                                 
                                 //todo: test multiple MFA challenge question answering
-                                DiscoverAndAddAccountsResponse response = service.discoverAndAddAccounts(financialInstitution.intuitId, institutionLogin);
+                                DiscoverAndAddAccountsResponse response = service.discoverAndAddAccounts(financialInstitution.iid, institutionLogin);
                                 AccountList accountList = null;
                                 if (response.getChallenges() != null && response.getAccountList() == null) {
                                     List<String> questionList = new ArrayList<String>();
@@ -251,7 +249,7 @@ public class Global extends GlobalSettings {
 		                                	    		Integer[] frequency;
 		                                	    		if (amountMap.containsKey(transactionCategory)) {
 			                                	    		amountSubmap = amountMap.get(transactionCategory);
-			                                	    		frequencySubmap = frequencyMap.get(transactionCategory);			                                	    		
+			                                	    		frequencySubmap = frequencyMap.get(transactionCategory);
 			                                	    	}
 		                                	    		else {
 			                                	    		amountSubmap = new HashMap<Integer, Long[]>();
@@ -267,13 +265,13 @@ public class Global extends GlobalSettings {
 		                                	    			frequency = new Integer[2];
 		                                	    			frequency[0] = frequency[1] = 0;
 		                                	    		}
-	                                	    			if (transactionAmount < 0L) {
-	                                	    				amount[0] -= transactionAmount;
-	                                	    				frequency[0]++;
+		                                	    		if (transactionAmount < 0L) {
+	                                	    				amount[0] = amount[0] - transactionAmount;
+	                                	    				frequency[0] = frequency[0] + 1;
 	                                	    			}
 	                                	    			else {
-	                                	    				amount[1] += transactionAmount;
-	                                	    				frequency[1]++;
+	                                	    				amount[1] = amount[1] + transactionAmount;
+	                                	    				frequency[1] = frequency[1] + 1;
 	                                	    			}
 	                                	    			amountSubmap.put(timepointDays[i], amount);
 		                                	    		frequencySubmap.put(timepointDays[i], frequency);
@@ -282,46 +280,45 @@ public class Global extends GlobalSettings {
 		                                	    	}
 		                                	    }
 	                                	    }
-	                                		/*
-	                                		System.out.print("\n");
-	                                		try {System.out.print(" "); System.out.print(transaction.getPostedDate().getTime().toString());} catch (Exception e) {System.out.print("na");}
-	                                		try {System.out.print(" | "); System.out.print(transaction.getAvailableDate().getTime().toString());} catch (Exception e) {System.out.print("na");}
-	                                		try {System.out.print(" | "); System.out.print(transaction.getUserDate().getTime().toString());} catch (Exception e) {System.out.print("na");}
-	                                		try {System.out.print(" [A]"); System.out.print(transaction.getPayeeName());} catch (Exception e) {System.out.print("na");}
-                                            try {System.out.print(" [B]"); System.out.print(transaction.getAmount());} catch (Exception e) {System.out.print("na");}
-                                            try {System.out.print(" [C]"); System.out.print(transaction.getCurrencyType());} catch (Exception e) {System.out.print("na");}
-	                                		try {System.out.print(" [D]"); System.out.print(transaction.getType());} catch (Exception e) {System.out.print("na");}
-	                                		try {System.out.print(" [E]"); System.out.print(transaction.getMemo());} catch (Exception e) {System.out.print("na");}
-	                                		try {System.out.print(" [F]"); System.out.print(transaction.getCategorization().getCommon().getNormalizedPayeeName());} catch (Exception e) {System.out.print("na");}
-	                                		try {System.out.print(" [G]"); System.out.print(transaction.getCategorization().getCommon().getMerchant());} catch (Exception e) {System.out.print("na");}
-	                                		try {System.out.print(" [H]"); System.out.print(transaction.getCategorization().getCommon().getSic());} catch (Exception e) {System.out.print("na");}
-	                                		try {System.out.print(" [I]"); System.out.print(transaction.getCategorization().getContexts().get(0).getCategoryName());} catch (Exception e) {System.out.print("na");}
-	                                		try {System.out.print(" [J]"); System.out.print(transaction.getCategorization().getContexts().get(0).getContextType());} catch (Exception e) {System.out.print("na");}
-	                                		try {System.out.print(" [K]"); System.out.print(transaction.getCategorization().getContexts().get(0).getScheduleC());} catch (Exception e) {System.out.print("na");}
-	                                		try {System.out.print(" [L]"); System.out.print(transaction.getCategorization().getContexts().get(0).getSource().value());} catch (Exception e) {System.out.print("na");}
-	                                		*/
+	                                		
+//	                                		System.out.print("\n");
+//	                                		try {System.out.print(" "); System.out.print(transaction.getPostedDate().getTime().toString());} catch (Exception e) {System.out.print("na");}
+//	                                		try {System.out.print(" | "); System.out.print(transaction.getAvailableDate().getTime().toString());} catch (Exception e) {System.out.print("na");}
+//	                                		try {System.out.print(" | "); System.out.print(transaction.getUserDate().getTime().toString());} catch (Exception e) {System.out.print("na");}
+//	                                		try {System.out.print(" [A]"); System.out.print(transaction.getPayeeName());} catch (Exception e) {System.out.print("na");}
+//                                            try {System.out.print(" [B]"); System.out.print(transaction.getAmount());} catch (Exception e) {System.out.print("na");}
+//                                            try {System.out.print(" [C]"); System.out.print(transaction.getCurrencyType());} catch (Exception e) {System.out.print("na");}
+//	                                		try {System.out.print(" [D]"); System.out.print(transaction.getType());} catch (Exception e) {System.out.print("na");}
+//	                                		try {System.out.print(" [E]"); System.out.print(transaction.getMemo());} catch (Exception e) {System.out.print("na");}
+//	                                		try {System.out.print(" [F]"); System.out.print(transaction.getCategorization().getCommon().getNormalizedPayeeName());} catch (Exception e) {System.out.print("na");}
+//	                                		try {System.out.print(" [G]"); System.out.print(transaction.getCategorization().getCommon().getMerchant());} catch (Exception e) {System.out.print("na");}
+//	                                		try {System.out.print(" [H]"); System.out.print(transaction.getCategorization().getCommon().getSic());} catch (Exception e) {System.out.print("na");}
+//	                                		try {System.out.print(" [I]"); System.out.print(transaction.getCategorization().getContexts().get(0).getCategoryName());} catch (Exception e) {System.out.print("na");}
+//	                                		try {System.out.print(" [J]"); System.out.print(transaction.getCategorization().getContexts().get(0).getContextType());} catch (Exception e) {System.out.print("na");}
+//	                                		try {System.out.print(" [K]"); System.out.print(transaction.getCategorization().getContexts().get(0).getScheduleC());} catch (Exception e) {System.out.print("na");}
+//	                                		try {System.out.print(" [L]"); System.out.print(transaction.getCategorization().getContexts().get(0).getSource().value());} catch (Exception e) {System.out.print("na");}
 	                                	}
 	                                }
 	                                System.out.println("    SUCCESS");
                                 }
                                 else System.out.println("    FAILURE");
+
+                                service.deleteCustomer(); //recreating user? how can i access another account at the same institution?
                         	}
                         	catch (AggCatException e) {
-                        		/*switch (Integer.parseInt(e.getErrorCode())) {
-                        			case 503:
-                        				System.out.println("page does not exist");
-                        				break;
-                        			case 403:
-                        				System.out.println("credentials wrong");
-                        				break;
-                        		}*/
-                        		System.out.println("aggcat exception: " + e.getMessage());
+//                        		switch (Integer.parseInt(e.getErrorCode())) {
+//                        			case 503:
+//                        				System.out.println("page does not exist");
+//                        				break;
+//                        			case 403:
+//                        				System.out.println("credentials wrong");
+//                        				break;
+//                        		}
+                        		e.printStackTrace();
                         	}
-            	            catch (Exception e) {
-            	                System.out.println("exception: " + e.getMessage());
-            	                e.printStackTrace();
-            	            }
+            	            catch (Exception e) {e.printStackTrace();}
                         }
+                        for (UserVariable userVariable : user.userVariables) userVariable.delete(); //todo: handle what if intuit offline? still delete?
                         for (String name : amountMap.keySet()) {
                         	String code = null;
                             try {code = ExpenseSubcategory.find.where().eq("name", name).findUnique().code;} catch (Exception e) {}
@@ -365,7 +362,7 @@ public class Global extends GlobalSettings {
             	*/
                 
                 System.out.println("pause...");
-                for (int sec = 0; sec < 1000 * 60 * 60; sec++) {
+                for (int sec = 0; sec < 10; sec++) {
                     if (!applicationIsLive) break;
                     else try {Thread.sleep(1000);} catch (Exception e) {}
                 }

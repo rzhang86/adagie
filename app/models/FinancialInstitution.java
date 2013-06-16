@@ -10,7 +10,7 @@ import play.db.ebean.*;
 	
 	@OneToMany(mappedBy = "financialInstitution", cascade = CascadeType.ALL) public List<FinancialInstitutionLogin> financialInstitutionLogins = new ArrayList<FinancialInstitutionLogin>();
 	
-	@Column(unique=true) public Long intuitId = null;
+	@Column(unique=true) public Long iid = null;
 	public String name = null;
     public String url = null;
     public String phone = null;

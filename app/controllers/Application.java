@@ -237,14 +237,17 @@ import views.html.*;
             else if (!password.equals(passwordRepeat)) flash("failure", "Passwords do not match");
             else if (financialInstitution.id == null) flash("failure", "Malformed entry, try again");
             else {
-                FinancialInstitutionLogin financialInstitutionLogin = new FinancialInstitutionLogin();
-                financialInstitutionLogin.financialInstitution = financialInstitution;
-                financialInstitutionLogin.user = user;
-                financialInstitutionLogin.username = username;
+                FinancialInstitutionLogin financialInstitutionLogin = FinancialInstitutionLogin.find.where().eq("user", user).eq("financialInstitution", financialInstitution).eq("username", username).findUnique();
+                if (financialInstitutionLogin == null) {
+                	financialInstitutionLogin = new FinancialInstitutionLogin();
+                    financialInstitutionLogin.user = user;
+                    financialInstitutionLogin.financialInstitution = financialInstitution;
+                    financialInstitutionLogin.username = username;
+                }
                 financialInstitutionLogin.password = password;
-                financialInstitutionLogin.save();
-                flash("success", "Financial institution login saved");
-                return redirect(routes.Application.myProfile());
+            	financialInstitutionLogin.save();
+            	flash("success", "Financial institution login saved");
+            	return redirect(routes.Application.myProfile());
             }
         }
         catch (Exception e) {flash("failure", "Submission failed");}

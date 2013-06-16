@@ -45,17 +45,17 @@
         <div class="span8 col-base well"></div>
     </div>
     <script type="text/javascript">
-    	$.getJSON("@routes.Assets.at("data/FinancialInstitutions.json")", function(data) {
-    		var names = [];
-      	  	$.each(data, function(key, value) {names.push(value);});
-      	  	$('#name')
-          	  	.typeahead({
-          	    	source: names,
+        $.getJSON("@routes.Assets.at("data/FinancialInstitutions.json")", function(data) {
+            var names = [];
+            $.each(data, function(key, value) {names.push(value);});
+            $('#name')
+                .typeahead({
+                    source: names,
                     items: 64
                 })
                 .blur(function() {
-    	            if($.inArray($(this).val(), names) == -1) {$('#name').val('');}
-    	        });
-    	});
+                    if($.inArray($(this).val(), names) == -1) {$('#name').val('');}
+                });
+        });
     </script>
 }

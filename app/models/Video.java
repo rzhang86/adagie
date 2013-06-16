@@ -33,47 +33,64 @@ import org.nfunk.jep.*;
             //todo: categories do not need to be queried each time, store them somewhow
             List<String> categoryCodes = new ArrayList<String>();
             List<String> subcategoryCodes = new ArrayList<String>();
+            categoryCodes.add("0");
             for (ExpenseCategory expenseCategory : ExpenseCategory.find.all()) categoryCodes.add(expenseCategory.code);
             for (ExpenseSubcategory expenseSubcategory : ExpenseSubcategory.find.all()) subcategoryCodes.add(expenseSubcategory.code);
             Long[][][][] categorySpending = new Long[categoryCodes.size()][timepointDays.size()][2][2]; //cat, days, debit/credit, amount/freq
             Long[][][][] subcategorySpending = new Long[subcategoryCodes.size()][timepointDays.size()][2][2];
+            for (int i = 0; i < categorySpending.length; i++) for (int j = 0; j < categorySpending[i].length; j++) for (int k = 0; k < categorySpending[i][j].length; k++) for (int l = 0; l < categorySpending[i][j][k].length; l++) {
+            	categorySpending[i][j][k][l] = 0L;
+            }
+            for (int i = 0; i < subcategorySpending.length; i++) for (int j = 0; j < subcategorySpending[i].length; j++) for (int k = 0; k < subcategorySpending[i][j].length; k++) for (int l = 0; l < subcategorySpending[i][j][k].length; l++) {
+            	subcategorySpending[i][j][k][l] = 0L;
+            }
             for (UserVariable userVariable : user.userVariables) {
             	String code = userVariable.code;
             	int iCategory = categoryCodes.indexOf(code);
-            	int iSubcategory = subcategoryCodes.indexOf(code);
             	int iTimepoint = timepointDays.indexOf(userVariable.timepoint);
-            	if (iCategory >= 0 && iTimepoint >= 0) {
-        			if (userVariable.isDebit) {
-        				for (int i = iTimepoint; i >= 0; i--) {
-        					categorySpending[iCategory][i][0][0] += userVariable.amount;
-        					categorySpending[iCategory][i][0][1] += userVariable.frequency;
-        				}
-        			}
-        			else {
-        				for (int i = iTimepoint; i >= 0; i--) {
-        					categorySpending[iCategory][i][1][0] += userVariable.amount;
-        					categorySpending[iCategory][i][1][1] += userVariable.frequency;
-        				}
-        			}
-            	}
-            	else if (iSubcategory >= 0 && iTimepoint >= 0) {
-            		iCategory = categoryCodes.indexOf(code.split("\\.")[0]);
-            		if (userVariable.isDebit) {
-        				for (int i = iTimepoint; i >= 0; i--) {
-        					categorySpending[iCategory][i][0][0] += userVariable.amount;
-        					categorySpending[iCategory][i][0][1] += userVariable.frequency;
-        					subcategorySpending[iSubcategory][i][0][0] += userVariable.amount;
-        					subcategorySpending[iSubcategory][i][0][1] += userVariable.frequency;
-        				}
-        			}
-        			else {
-        				for (int i = iTimepoint; i >= 0; i--) {
-        					categorySpending[iCategory][i][1][0] += userVariable.amount;
-        					categorySpending[iCategory][i][1][1] += userVariable.frequency;
-        					subcategorySpending[iSubcategory][i][1][0] += userVariable.amount;
-        					subcategorySpending[iSubcategory][i][1][1] += userVariable.frequency;
-        				}
-        			}
+            	int iSubcategory = subcategoryCodes.indexOf(code);
+            	if (iTimepoint >= 0) {
+	            	if (iSubcategory >= 0) {
+	            		if (userVariable.isDebit) {
+	        				for (int i = iTimepoint; i >= 0; i--) {
+	        					subcategorySpending[iSubcategory][i][0][0] += userVariable.amount;
+	        					subcategorySpending[iSubcategory][i][0][1] += userVariable.frequency;
+	        				}
+	        			}
+	        			else {
+	        				for (int i = iTimepoint; i >= 0; i--) {
+	        					subcategorySpending[iSubcategory][i][1][0] += userVariable.amount;
+	        					subcategorySpending[iSubcategory][i][1][1] += userVariable.frequency;
+	        				}
+	        			}
+	            		iCategory = categoryCodes.indexOf(code.split("\\.")[0]);
+	            	}
+	            	if (iCategory >= 0) {
+	        			if (userVariable.isDebit) {
+	        				for (int i = iTimepoint; i >= 0; i--) {
+	        					categorySpending[iCategory][i][0][0] += userVariable.amount;
+	        					categorySpending[iCategory][i][0][1] += userVariable.frequency;
+	        				}
+	        			}
+	        			else {
+	        				for (int i = iTimepoint; i >= 0; i--) {
+	        					categorySpending[iCategory][i][1][0] += userVariable.amount;
+	        					categorySpending[iCategory][i][1][1] += userVariable.frequency;
+	        				}
+	        			}
+	            	}
+	            	if (userVariable.isDebit) {
+	    				for (int i = iTimepoint; i >= 0; i--) {
+	    					categorySpending[0][i][0][0] += userVariable.amount;
+	    					categorySpending[0][i][0][1] += userVariable.frequency;
+	    				}
+	    			}
+	    			else {
+	    				for (int i = iTimepoint; i >= 0; i--) {
+	    					categorySpending[0][i][1][0] += userVariable.amount;
+	    					categorySpending[0][i][1][1] += userVariable.frequency;
+	    				}
+	    			}
             	}
             }
             for (int i = 0; i < categorySpending.length; i++) for (int j = 0; j < categorySpending[i].length; j++) for (int k = 0; k < categorySpending[i][j].length; k++) for (int l = 0; l < categorySpending[i][j][k].length; l++) {
