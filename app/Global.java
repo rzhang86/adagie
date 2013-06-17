@@ -362,7 +362,7 @@ public class Global extends GlobalSettings {
             	*/
                 
                 System.out.println("pause...");
-                for (int sec = 0; sec < 10; sec++) {
+                for (int sec = 0; sec < 600000; sec++) {
                     if (!applicationIsLive) break;
                     else try {Thread.sleep(1000);} catch (Exception e) {}
                 }

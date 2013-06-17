@@ -101,11 +101,14 @@ import org.nfunk.jep.*;
             }
             // todo: catch invalid parse, and check pay formula at time of video creation
             for (PayoutFormula videoPayFormula : this.payoutFormulas) {
-            	jep.parseExpression(videoPayFormula.condition);
-            	if (jep.getValue() == 1.0) {
-            		jep.parseExpression(videoPayFormula.result);
-            		return Math.max(1L, (long) Math.round(jep.getValue()));
+            	try {
+	            	jep.parseExpression(videoPayFormula.condition);
+	            	if (jep.getValue() == 1.0 || videoPayFormula.condition.trim().equals("")) {
+	            		jep.parseExpression(videoPayFormula.result);
+	            		return Math.max(1L, (long) Math.round(jep.getValue()));
+	            	}
             	}
+            	catch (Exception e) {}
             }
         }
         catch (Exception e) {e.printStackTrace();}

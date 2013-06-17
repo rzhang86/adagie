@@ -13,5 +13,5 @@ import play.db.ebean.*;
 	
 	@Column(unique=true) public String name = null;
 	
-	public static List<Interest> findAll() {return find.orderBy("name").findList();}
+	public static List<Interest> findAll() {return find.findList();}
 }
