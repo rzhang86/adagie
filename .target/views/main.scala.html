@@ -13,8 +13,8 @@
         <meta name="description" content="Adder">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <link rel="stylesheet" href="@routes.Assets.at("css/bootstrap.min.css")">
-        <link rel="stylesheet" href="@routes.Assets.at("css/bootstrap-responsive.min.css")">
+        <link rel="stylesheet" href="@routes.Assets.at("css/bootstrap.css")">
+        <link rel="stylesheet" href="@routes.Assets.at("css/bootstrap-responsive.css")">
         <link rel="stylesheet" href="@routes.Assets.at("css/main.css")">
         
         <style>
@@ -49,38 +49,33 @@
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
 
+        <br><br><br><br>
+
         <div class="container">
-            <div class="masthead">
-                <ul class="nav nav-pills pull-right">
-                    @if(user!=null) {
-	                    <li @if(activeClass.equals("index")) {class="active"}><a href="@routes.Application.index()">Home</a></li>
-	                    <li @if(activeClass.equals("myVideos")) {class="active"}><a href="@routes.Application.myVideos()">Videos</a></li>
-	                    <li @if(activeClass.equals("myProfile")) {class="active"})><a href="@routes.Application.myProfile()">Profile</a></li>
-                        <li @if(activeClass.equals("login")) {class="active"})><a href="@routes.Login.logout()">Log out</a></li>
-                    }
-                </ul>
-                <h3 class="muted">Adder</h3>
-            </div>
             <div class="row">
-                <div class="span6">
-                    <div class="pull-left">                
-	                    @if(flash.contains("success")) {
-	                        <span class="flash-success"><b> > </b>@flash.get("success")</span>
-	                    } else {
-	                        @if(flash.contains("failure")) {
-	                            <span class="flash-failure"><b> > </b>@flash.get("failure")</span>
-	                        } else {
-	                            <span class=""><b> > </b>@flash.get("failure")</span>
-	                        }
-	                    }
+                @if(user!=null) {
+                    <div class="span9">
+                        <ul class="nav nav-tabs ">
+                            <li @if(activeClass.equals("index")) {class="active"}><a href="@routes.Application.index()">Home</a></li>
+                            <li @if(activeClass.equals("myVideos")) {class="active"}><a href="@routes.Application.myVideos()">Videos</a></li>
+                            <li @if(activeClass.equals("myProfile")) {class="active"})><a href="@routes.Application.myProfile()">Profile</a></li>
+                            <li @if(activeClass.equals("login")) {class="active"})><a href="@routes.Login.logout()">Log out</a></li>
+                        </ul>
+                        
                     </div>
-                </div>
-                <div class="span6">
-                    <div class="pull-right">
-	                    @if(user!=null) {
-	                        <b>Logged in as @user.username</b> <span class="muted">(balance: @Application.centsToDollars(user.balance), committed: @Application.centsToDollars(user.committedBalance))</span>
-	                    }
+                } else {
+                    <div class="span9 form-horizontal">
+                        <form action="@routes.Login.readLoginForm()" method="post">
+                            <input type="text" class="span3" name="username" placeholder="Username" maxlength=31>
+                            <input type="password" class="span3" name="password" placeholder="Password" maxlength=31>
+                            <button type="submit" class="btn btn-info">Log in</button>
+                            <a class="btn btn-warning" href="@routes.Login.signup()">Sign up</a>
+                        </form>
                     </div>
+                }
+                <div class="span3" style="height: 30px; line-height: 30px;">
+                    @if(flash.contains("success")) {@flash.get("success")}
+                    @if(flash.contains("failure")) {@flash.get("failure")}
                 </div>
             </div>
             
