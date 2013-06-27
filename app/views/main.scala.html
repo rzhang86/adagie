@@ -8,7 +8,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Adder</title>
+        <title>Adagie</title>
         <meta name="author" content="Ray">
         <meta name="description" content="Adder">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -63,8 +63,16 @@
                         </ul>
                         
                     </div>
+                    <div class="span3" style="height: 30px; line-height: 30px;">
+                        @if(flash.contains("success")) {@flash.get("success")}
+                        @if(flash.contains("failure")) {@flash.get("failure")}
+                    </div>
                 } else {
-                    <div class="span9 form-horizontal">
+                    <div class="span3" style="height: 30px; line-height: 30px;">
+                        @if(flash.contains("success")) {@flash.get("success")}
+                        @if(flash.contains("failure")) {@flash.get("failure")}
+                    </div>
+                    <div class="span9 form-horizontal text-right">
                         <form action="@routes.Login.readLoginForm()" method="post">
                             <input type="text" class="span3" name="username" placeholder="Username" maxlength=31>
                             <input type="password" class="span3" name="password" placeholder="Password" maxlength=31>
@@ -73,10 +81,6 @@
                         </form>
                     </div>
                 }
-                <div class="span3" style="height: 30px; line-height: 30px;">
-                    @if(flash.contains("success")) {@flash.get("success")}
-                    @if(flash.contains("failure")) {@flash.get("failure")}
-                </div>
             </div>
             
             @content
