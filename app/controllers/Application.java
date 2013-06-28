@@ -18,7 +18,7 @@ import views.html.*;
 //todo: ensure user only signed in one location, use global boolean flag
 //todo: crack jep
 @Security.Authenticated(Secured.class) public class Application extends Controller {
-    public static Result index() {
+    public static Result home() {
     	User user = User.findByUsername(request().username());
         List<Long> watchedVideoIds = new ArrayList<Long>();
         for (WatchedVideo watchedVideo : user.watchedVideos) if (watchedVideo.endTime != null) watchedVideoIds.add(watchedVideo.video.id);
@@ -42,10 +42,10 @@ import views.html.*;
 	        	user.watchingEndTime = user.watchingStartTime + user.watchingVideo.duration;
 	        	user.watchingPayout = videoPayoutRate.payout;
 	        	user.save();
-        		return ok(index.render(user, form(VideoEndedForm.class)));
+        		return ok(home.render(user, form(VideoEndedForm.class)));
 	        }
         }
-        return ok(index.render(user, form(VideoEndedForm.class)));
+        return ok(home.render(user, form(VideoEndedForm.class)));
     }
     
     public static class VideoPayoutRate implements Comparable<VideoPayoutRate>{
@@ -91,7 +91,7 @@ import views.html.*;
             }
         }
         catch (Exception e) {}
-        return redirect(routes.Application.index());
+        return redirect(routes.Application.home());
     }
     
     @Transactional public static boolean transferMoney(User payer, User payee, Long amount) {
@@ -318,7 +318,13 @@ import views.html.*;
             else flash("failure", "Answer not saved, not your challenge");
         }
         catch (Exception e) {flash("failure", "Error, answer not saved");}
-        return redirect(routes.Application.index());
+        return redirect(routes.Application.home());
+    }
+    
+    public static Result logout() {
+        session().clear();
+        flash("success", "You have logged out");
+        return redirect(routes.Lobby.index());
     }
     
     public static String centsToDollars(Long cents) {

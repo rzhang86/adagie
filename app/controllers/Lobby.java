@@ -12,10 +12,10 @@ import static play.data.Form.*;
 import models.*;
 import views.html.*;
 
-public class Login extends Controller {
-    public static Result login() {
-        if (session().get("username") != null) return redirect(routes.Application.index());
-        return ok(login.render());
+public class Lobby extends Controller {
+    public static Result index() {
+        if (session().get("username") != null) return redirect(routes.Application.home());
+        return ok(index.render());
     }
 
     public static class LoginForm {
@@ -27,26 +27,23 @@ public class Login extends Controller {
         session().clear();
         Form<LoginForm> loginForm = form(LoginForm.class).bindFromRequest();
         try {
-            String username = loginForm.get().username;
-            String password = loginForm.get().password;
+        	Map<String, String> map = loginForm.data();
+        	String username = (map.containsKey("username") ? map.get("username") : null);
+        	String password = (map.containsKey("password") ? map.get("password") : null);
+            //String username = loginForm.get().username;
+            //String password = loginForm.get().password;
             User user = User.find.where().eq("username", username).findUnique();
             if (!user.password.equals(password)) flash("failure", "Invalid username/password");
             else {
                 session("username", username);
                 flash("success", "You have logged in");
-                return redirect(routes.Application.index());
+                return redirect(routes.Application.home());
             }
         }
         catch (Exception e) {flash("failure", "Invalid username/password");}
-        return redirect(routes.Login.login());
+        return redirect(routes.Lobby.index());
     }
 
-    public static Result logout() {
-        session().clear();
-        flash("success", "You have logged out");
-        return redirect(routes.Login.login());
-    }
-    
     public static Result signup() {
         session().clear();
     	return ok(signup.render(form(SignupForm.class)));
@@ -75,7 +72,6 @@ public class Login extends Controller {
         Form<SignupForm> signupForm = form(SignupForm.class).bindFromRequest();
         try {
         	Map<String, String> map = signupForm.data();
-        	//for (String key : map.keySet()) System.out.println(key + " : " + map.get(key));
         	String username = (map.containsKey("username") ? (!map.get("username").trim().equals("") ? map.get("username") : null) : null);
         	String email = (map.containsKey("email") ? (!map.get("email").trim().equals("") ? map.get("email") : null) : null);
         	String password = (map.containsKey("password") ? (!map.get("password").trim().equals("") ? map.get("password") : null) : null);
@@ -91,6 +87,7 @@ public class Login extends Controller {
             Long interest3 = null; try {interest3 = Long.parseLong(map.get("interest3"));} catch (Exception e) {}
             Long interest4 = null; try {interest4 = Long.parseLong(map.get("interest4"));} catch (Exception e) {}
             
+            //todo: username cannot have weird characters or spaces
             if (username == null || username.length() < 1 || username.length() > 31) flash("failure", "Username invalid");
             else if (User.find.where().eq("username", username).findRowCount() > 0) flash("failure", "Username already taken");
             else if (email == null || email.length() < 1 || email.length() > 63) flash("failure", "Email invalid");
@@ -122,15 +119,15 @@ public class Login extends Controller {
             	Email e = new SimpleEmail();
             	e.setHostName("smtp.googlemail.com");
             	e.setSmtpPort(465);
-            	e.setAuthenticator(new DefaultAuthenticator("rzhang86", "zgoO_466"));
+            	e.setAuthenticator(new DefaultAuthenticator("bibimbop9", "S1_jeec87"));
             	e.setSSLOnConnect(true);
-            	e.setFrom("ray@Adder.com");
-            	e.setSubject("Welcome to Adder");
+            	e.setFrom("info@Adagie.com");
+            	e.setSubject("Welcome to Adagie");
             	e.setMsg("Your usename is " + username);
             	e.addTo(email);
             	e.send();
                 flash("success", "You have signed up");
-                return redirect(routes.Application.index());
+                return redirect(routes.Lobby.index());
             }
         }
         catch (Exception e) {flash("failure", "Sign up failed"); e.printStackTrace();}

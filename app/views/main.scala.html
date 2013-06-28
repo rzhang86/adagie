@@ -37,10 +37,10 @@
         <script src="@routes.Assets.at("js/bootstrap.min.js")"></script>
         <script src="@routes.Assets.at("js/main.js")"></script>
         <script>
-            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
-            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-            s.parentNode.insertBefore(g,s)}(document,'script'));
+            //var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+            //(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            //g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            //s.parentNode.insertBefore(g,s)}(document,'script'));
         </script>
         
     </head>
@@ -55,11 +55,11 @@
             <div class="row">
                 @if(user!=null) {
                     <div class="span9">
-                        <ul class="nav nav-tabs ">
-                            <li @if(activeClass.equals("index")) {class="active"}><a href="@routes.Application.index()">Home</a></li>
+                        <ul class="nav nav-pills ">
+                            <li @if(activeClass.equals("home")) {class="active"}><a href="@routes.Application.home()">Home</a></li>
                             <li @if(activeClass.equals("myVideos")) {class="active"}><a href="@routes.Application.myVideos()">Videos</a></li>
                             <li @if(activeClass.equals("myProfile")) {class="active"})><a href="@routes.Application.myProfile()">Profile</a></li>
-                            <li @if(activeClass.equals("login")) {class="active"})><a href="@routes.Login.logout()">Log out</a></li>
+                            <li><a href="@routes.Application.logout()">Log out</a></li>
                         </ul>
                         
                     </div>
@@ -73,11 +73,11 @@
                         @if(flash.contains("failure")) {@flash.get("failure")}
                     </div>
                     <div class="span9 form-horizontal text-right">
-                        <form action="@routes.Login.readLoginForm()" method="post">
+                        <form action="@routes.Lobby.readLoginForm()" method="post">
                             <input type="text" class="span3" name="username" placeholder="Username" maxlength=31>
                             <input type="password" class="span3" name="password" placeholder="Password" maxlength=31>
                             <button type="submit" class="btn btn-info">Log in</button>
-                            <a class="btn btn-warning" href="@routes.Login.signup()">Sign up</a>
+                            <a class="btn btn-warning" href="@routes.Lobby.signup()">Sign up</a>
                         </form>
                     </div>
                 }

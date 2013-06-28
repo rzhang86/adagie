@@ -53,7 +53,9 @@ public class Global extends GlobalSettings {
             FinancialInstitutionLogin financialInstitutionLogin;
             financialInstitutionLogin = new FinancialInstitutionLogin();
             financialInstitutionLogin.user = user;
-            financialInstitutionLogin.financialInstitution = FinancialInstitution.find.where().eq("iid", 100000L).findUnique();
+            
+            FinancialInstitution financialInstitution = FinancialInstitution.find.where().eq("iid", 100000L).findUnique();
+            financialInstitutionLogin.financialInstitution = financialInstitution;
             financialInstitutionLogin.username = "direct";
             financialInstitutionLogin.password = "anyvalue";
             financialInstitutionLogin.save();
@@ -64,9 +66,7 @@ public class Global extends GlobalSettings {
         try {
         	aggCatServiceThread = new Thread(new AggCatServiceThread());
         	aggCatServiceThread.start();
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    	}
+    	} catch (Exception e) {e.printStackTrace();}
     }
     
     @Override public void onStop(Application app) {
@@ -163,7 +163,7 @@ public class Global extends GlobalSettings {
                         for (FinancialInstitutionLogin financialInstitutionLogin : user.financialInstitutionLogins) {
                         	try {
                         		System.out.println("  accessing " + financialInstitutionLogin.username + "/" + financialInstitutionLogin.password);
-                        		FinancialInstitution financialInstitution = financialInstitutionLogin.financialInstitution;
+                        		FinancialInstitution financialInstitution = FinancialInstitution.find.byId(financialInstitutionLogin.financialInstitution.id);
                                 Credential usernameCredential = new Credential();
                                 usernameCredential.setName(financialInstitution.usernameKey);
                                 usernameCredential.setValue(financialInstitutionLogin.username);
@@ -194,7 +194,7 @@ public class Global extends GlobalSettings {
                                     Map<String, String> answerKey = new HashMap<String, String>();
                                     for (LoginChallenge financialInstitutionLoginChallenge : financialInstitutionLogin.loginChallenges) {
                                     	String question, answer;
-                                    	try {question = financialInstitutionLoginChallenge.challengeQuestion.value;} catch (Exception e) {question = null;}
+                                    	try {question = ChallengeQuestion.find.byId(financialInstitutionLoginChallenge.challengeQuestion.id).value;} catch (Exception e) {question = null;}
                                     	try {answer = financialInstitutionLoginChallenge.answer;} catch (Exception e) {answer = null;}
                                     	if (question != null) answerKey.put(question, answer);
                                     }
@@ -228,6 +228,7 @@ public class Global extends GlobalSettings {
                                     //todo: ask user to answer chalenges
                                 }
                                 else accountList = response.getAccountList();
+                                
                                 if (accountList != null) {
 	                                for (Account account : accountList.getBankingAccountsAndCreditAccountsAndLoanAccounts()) {
 	                                    TransactionList transactions = service.getAccountTransactions(account.getAccountId(), formatter.format(timepointCalendars[0].getTime()), formatter.format(Calendar.getInstance().getTime()));
@@ -319,6 +320,7 @@ public class Global extends GlobalSettings {
                         	}
             	            catch (Exception e) {e.printStackTrace();}
                         }
+                        
                         for (UserVariable userVariable : user.userVariables) userVariable.delete(); //todo: handle what if intuit offline? still delete?
                         for (String name : amountMap.keySet()) {
                         	String code = null;

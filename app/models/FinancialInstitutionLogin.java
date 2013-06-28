@@ -14,4 +14,6 @@ import play.db.ebean.*;
 	
 	public String username = null;
     public String password = null;
+    
+    public User getUser() {return user;}
 }
