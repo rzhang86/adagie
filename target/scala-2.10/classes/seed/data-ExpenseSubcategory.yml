@@ -1,0 +1,297 @@
+- !!models.ExpenseSubcategory
+    code:   1.1
+    name:   Cash & ATM
+- !!models.ExpenseSubcategory
+    code:   1.2
+    name:   Check
+- !!models.ExpenseSubcategory
+    code:   2.1
+    name:   Gas & Fuel
+- !!models.ExpenseSubcategory
+    code:   2.2
+    name:   Parking
+- !!models.ExpenseSubcategory
+    code:   2.3
+    name:   Service & Parts
+- !!models.ExpenseSubcategory
+    code:   2.4
+    name:   Auto Payment
+- !!models.ExpenseSubcategory
+    code:   2.5
+    name:   Auto Insurance
+- !!models.ExpenseSubcategory
+    code:   2.6
+    name:   Public Transportation
+- !!models.ExpenseSubcategory
+    code:   3.1
+    name:   Television
+- !!models.ExpenseSubcategory
+    code:   3.2
+    name:   Home Phone
+- !!models.ExpenseSubcategory
+    code:   3.3
+    name:   Internet
+- !!models.ExpenseSubcategory
+    code:   3.4
+    name:   Mobile Phone
+- !!models.ExpenseSubcategory
+    code:   3.5
+    name:   Utilities
+- !!models.ExpenseSubcategory
+    code:   4.1
+    name:   Advertising
+- !!models.ExpenseSubcategory
+    code:   4.2
+    name:   Office Supplies
+- !!models.ExpenseSubcategory
+    code:   4.3
+    name:   Printing
+- !!models.ExpenseSubcategory
+    code:   4.4
+    name:   Shipping
+- !!models.ExpenseSubcategory
+    code:   4.5
+    name:   Legal
+- !!models.ExpenseSubcategory
+    code:   5.1
+    name:   Tuition
+- !!models.ExpenseSubcategory
+    code:   5.2
+    name:   Student Loan
+- !!models.ExpenseSubcategory
+    code:   5.3
+    name:   Books & Supplies
+- !!models.ExpenseSubcategory
+    code:   6.1
+    name:   Arts
+- !!models.ExpenseSubcategory
+    code:   6.2
+    name:   Amusement
+- !!models.ExpenseSubcategory
+    code:   6.3
+    name:   Music
+- !!models.ExpenseSubcategory
+    code:   6.4
+    name:   Movies & DVDs
+- !!models.ExpenseSubcategory
+    code:   6.5
+    name:   Newspapers & Magazines
+- !!models.ExpenseSubcategory
+    code:   7.1
+    name:   Service Fee
+- !!models.ExpenseSubcategory
+    code:   7.2
+    name:   Late Fee
+- !!models.ExpenseSubcategory
+    code:   7.3
+    name:   Finance Charge
+- !!models.ExpenseSubcategory
+    code:   7.4
+    name:   ATM Fee
+- !!models.ExpenseSubcategory
+    code:   7.5
+    name:   Bank Fee
+- !!models.ExpenseSubcategory
+    code:   7.6
+    name:   Trade Commissions
+- !!models.ExpenseSubcategory
+    code:   8.1
+    name:   Life Insurance
+- !!models.ExpenseSubcategory
+    code:   8.2
+    name:   Financial Advisor
+- !!models.ExpenseSubcategory
+    code:   9.1
+    name:   Groceries
+- !!models.ExpenseSubcategory
+    code:   9.2
+    name:   Coffee Shops
+- !!models.ExpenseSubcategory
+    code:   9.3
+    name:   Fast Food
+- !!models.ExpenseSubcategory
+    code:   9.4
+    name:   Restaurants
+- !!models.ExpenseSubcategory
+    code:   9.5
+    name:   Alcohol & Bars
+- !!models.ExpenseSubcategory
+    code:   10.1
+    name:   Gift
+- !!models.ExpenseSubcategory
+    code:   10.2
+    name:   Charity
+- !!models.ExpenseSubcategory
+    code:   11.1
+    name:   Dentist
+- !!models.ExpenseSubcategory
+    code:   11.2
+    name:   Doctor
+- !!models.ExpenseSubcategory
+    code:   11.3
+    name:   Eyecare
+- !!models.ExpenseSubcategory
+    code:   11.4
+    name:   Pharmacy
+- !!models.ExpenseSubcategory
+    code:   11.5
+    name:   Health Insurance
+- !!models.ExpenseSubcategory
+    code:   11.6
+    name:   Gym
+- !!models.ExpenseSubcategory
+    code:   11.7
+    name:   Sports
+- !!models.ExpenseSubcategory
+    code:   12.1
+    name:   Furnishings
+- !!models.ExpenseSubcategory
+    code:   12.2
+    name:   Lawn & Garden
+- !!models.ExpenseSubcategory
+    code:   12.3
+    name:   Home Improvement
+- !!models.ExpenseSubcategory
+    code:   12.4
+    name:   Home Services
+- !!models.ExpenseSubcategory
+    code:   12.5
+    name:   Home Insurance
+- !!models.ExpenseSubcategory
+    code:   12.6
+    name:   Mortgage & Rent
+- !!models.ExpenseSubcategory
+    code:   12.7
+    name:   Home Supplies
+- !!models.ExpenseSubcategory
+    code:   13.1
+    name:   Paycheck
+- !!models.ExpenseSubcategory
+    code:   13.2
+    name:   Returned Purchase
+- !!models.ExpenseSubcategory
+    code:   13.3
+    name:   Bonus
+- !!models.ExpenseSubcategory
+    code:   13.4
+    name:   Interest Income
+- !!models.ExpenseSubcategory
+    code:   13.5
+    name:   Reimbursement
+- !!models.ExpenseSubcategory
+    code:   13.6
+    name:   Rental Income
+- !!models.ExpenseSubcategory
+    code:   14.1
+    name:   Deposit
+- !!models.ExpenseSubcategory
+    code:   14.2
+    name:   WIthdrawal
+- !!models.ExpenseSubcategory
+    code:   14.3
+    name:   Dividend & Cap Gains
+- !!models.ExpenseSubcategory
+    code:   14.4
+    name:   Buy
+- !!models.ExpenseSubcategory
+    code:   14.5
+    name:   Sell
+- !!models.ExpenseSubcategory
+    code:   15.1
+    name:   Babysitter & Daycare
+- !!models.ExpenseSubcategory
+    code:   15.2
+    name:   Child Support
+- !!models.ExpenseSubcategory
+    code:   15.3
+    name:   Toys
+- !!models.ExpenseSubcategory
+    code:   15.4
+    name:   Kids Activities
+- !!models.ExpenseSubcategory
+    code:   15.5
+    name:   Allowance
+- !!models.ExpenseSubcategory
+    code:   15.6
+    name:   Baby Supplies
+- !!models.ExpenseSubcategory
+    code:   16.1
+    name:   Loan Payment
+- !!models.ExpenseSubcategory
+    code:   16.2
+    name:   Loan Insurance
+- !!models.ExpenseSubcategory
+    code:   16.3
+    name:   Loan Principal
+- !!models.ExpenseSubcategory
+    code:   16.4
+    name:   Loan Interest
+- !!models.ExpenseSubcategory
+    code:   16.5
+    name:   Loan Fees and Charges
+- !!models.ExpenseSubcategory
+    code:   17.1
+    name:   Hair
+- !!models.ExpenseSubcategory
+    code:   17.2
+    name:   Spa & Massage
+- !!models.ExpenseSubcategory
+    code:   17.3
+    name:   Laundry
+- !!models.ExpenseSubcategory
+    code:   18.1
+    name:   Pet Food & Supplies
+- !!models.ExpenseSubcategory
+    code:   18.2
+    name:   Pet Grooming
+- !!models.ExpenseSubcategory
+    code:   18.3
+    name:   Veterinary
+- !!models.ExpenseSubcategory
+    code:   19.1
+    name:   Clothing
+- !!models.ExpenseSubcategory
+    code:   19.2
+    name:   Books
+- !!models.ExpenseSubcategory
+    code:   19.3
+    name:   Electronics & Software
+- !!models.ExpenseSubcategory
+    code:   19.4
+    name:   Hobbies
+- !!models.ExpenseSubcategory
+    code:   19.5
+    name:   Sporting Goods
+- !!models.ExpenseSubcategory
+    code:   20.1
+    name:   Federal Tax
+- !!models.ExpenseSubcategory
+    code:   20.2
+    name:   State Tax
+- !!models.ExpenseSubcategory
+    code:   20.3
+    name:   Local Tax
+- !!models.ExpenseSubcategory
+    code:   20.4
+    name:   Sales Tax
+- !!models.ExpenseSubcategory
+    code:   20.5
+    name:   Property Tax
+- !!models.ExpenseSubcategory
+    code:   21.1
+    name:   Credit Card Payment
+- !!models.ExpenseSubcategory
+    code:   21.2
+    name:   Transfer for Cash Spending
+- !!models.ExpenseSubcategory
+    code:   22.1
+    name:   Air Travel
+- !!models.ExpenseSubcategory
+    code:   22.2
+    name:   Hotel
+- !!models.ExpenseSubcategory
+    code:   22.3
+    name:   Rental Car & Taxi
+- !!models.ExpenseSubcategory
+    code:   22.4
+    name:   Vacation

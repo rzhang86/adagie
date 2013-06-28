@@ -1,0 +1,66 @@
+- !!models.ExpenseCategory
+    code:   1
+    name:   Uncategorized
+- !!models.ExpenseCategory
+    code:   2
+    name:   Auto & Transport
+- !!models.ExpenseCategory
+    code:   3
+    name:   Bills & Utilities
+- !!models.ExpenseCategory
+    code:   4
+    name:   Business Services
+- !!models.ExpenseCategory
+    code:   5
+    name:   Education
+- !!models.ExpenseCategory
+    code:   6
+    name:   Entertainment
+- !!models.ExpenseCategory
+    code:   7
+    name:   Fees & Charges
+- !!models.ExpenseCategory
+    code:   8
+    name:   Financial
+- !!models.ExpenseCategory
+    code:   9
+    name:   Food & Dining
+- !!models.ExpenseCategory
+    code:   10
+    name:   Gifts & Donations
+- !!models.ExpenseCategory
+    code:   11
+    name:   Health & Fitness
+- !!models.ExpenseCategory
+    code:   12
+    name:   Home
+- !!models.ExpenseCategory
+    code:   13
+    name:   Income
+- !!models.ExpenseCategory
+    code:   14
+    name:   Investments
+- !!models.ExpenseCategory
+    code:   15
+    name:   Kids
+- !!models.ExpenseCategory
+    code:   16
+    name:   Loans
+- !!models.ExpenseCategory
+    code:   17
+    name:   Personal Care
+- !!models.ExpenseCategory
+    code:   18
+    name:   Pets
+- !!models.ExpenseCategory
+    code:   19
+    name:   Shopping
+- !!models.ExpenseCategory
+    code:   20
+    name:   Taxes
+- !!models.ExpenseCategory
+    code:   21
+    name:   Transfer
+- !!models.ExpenseCategory
+    code:   22
+    name:   Travel

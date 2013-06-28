@@ -63,16 +63,16 @@ public class Global extends GlobalSettings {
         
         // start looping maintenance threads
         applicationIsLive = true;
-        try {
-        	aggCatServiceThread = new Thread(new AggCatServiceThread());
-        	aggCatServiceThread.start();
-    	} catch (Exception e) {e.printStackTrace();}
+        //try {
+        	//aggCatServiceThread = new Thread(new AggCatServiceThread());
+        	//aggCatServiceThread.start();
+    	//} catch (Exception e) {e.printStackTrace();}
     }
     
     @Override public void onStop(Application app) {
         // signal maintenance threads to stop
         applicationIsLive = false;
-        try {aggCatServiceThread.join();} catch (Exception e) {}
+        //try {aggCatServiceThread.join();} catch (Exception e) {e.printStackTrace();}
     }
 
     /* intuit stuff*/

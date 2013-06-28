@@ -1,0 +1,15 @@
+- !!models.FinancialInstitution
+    iid:             100000
+    name:            "CC Bank"
+    url:             "http://www.intuit.com"
+    phone:           ""
+    address1:        ""
+    address2:        ""
+    address3:        ""
+    city:            ""
+    state:           ""
+    postalCode:      ""
+    country:         "USA"
+    currencyCode:    "USD"
+    usernameKey:     "Banking Userid"
+    passwordKey:     "Banking Password"

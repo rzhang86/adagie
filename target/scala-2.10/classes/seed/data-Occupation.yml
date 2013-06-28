@@ -1,0 +1,44 @@
+- !!models.Occupation
+    name:       Management
+- !!models.Occupation
+    name:       Business and Financial Operations
+- !!models.Occupation
+    name:       Computer and Mathematical
+- !!models.Occupation
+    name:       Architecture and Engineering
+- !!models.Occupation
+    name:       Life, Physical, and Social Science
+- !!models.Occupation
+    name:       Community and Social Service
+- !!models.Occupation
+    name:       Legal
+- !!models.Occupation
+    name:       Education, Training, and Library
+- !!models.Occupation
+    name:       Arts, Design, Entertainment, Sports, and Media
+- !!models.Occupation
+    name:       Healthcare Practitioners and Technical
+- !!models.Occupation
+    name:       Healthcare Support
+- !!models.Occupation
+    name:       Protective Service
+- !!models.Occupation
+    name:       Food Preparation and Serving Related
+- !!models.Occupation
+    name:       Building and Grounds Cleaning and Maintenance
+- !!models.Occupation
+    name:       Personal Care and Service
+- !!models.Occupation
+    name:       Sales and Related
+- !!models.Occupation
+    name:       Office and Administrative Support
+- !!models.Occupation
+    name:       Farming, Fishing, and Forestry
+- !!models.Occupation
+    name:       Construction and Extraction
+- !!models.Occupation
+    name:       Installation, Maintenance, and Repair
+- !!models.Occupation
+    name:       Production
+- !!models.Occupation
+    name:       Transportation and Material Moving

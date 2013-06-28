@@ -1,0 +1,54 @@
+- !!models.Interest
+    name:       Animals
+- !!models.Interest
+    name:       Arts and Humanities
+- !!models.Interest
+    name:       Automotive
+- !!models.Interest
+    name:       Beauty
+- !!models.Interest
+    name:       Business
+- !!models.Interest
+    name:       Computers
+- !!models.Interest
+    name:       Entertainment
+- !!models.Interest
+    name:       Finance
+- !!models.Interest
+    name:       Food and Drink
+- !!models.Interest
+    name:       Games
+- !!models.Interest
+    name:       Home and Garden
+- !!models.Interest
+    name:       Industries
+- !!models.Interest
+    name:       Internet
+- !!models.Interest
+    name:       Lifestyles
+- !!models.Interest
+    name:       Local
+- !!models.Interest
+    name:       News
+- !!models.Interest
+    name:       Photo and Video
+- !!models.Interest
+    name:       Real Estate
+- !!models.Interest
+    name:       Recreation
+- !!models.Interest
+    name:       Reference
+- !!models.Interest
+    name:       Science
+- !!models.Interest
+    name:       Shopping
+- !!models.Interest
+    name:       Social Networks
+- !!models.Interest
+    name:       Society
+- !!models.Interest
+    name:       Sports
+- !!models.Interest
+    name:       Telecommunications
+- !!models.Interest
+    name:       Travel
