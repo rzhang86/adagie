@@ -1,17 +1,9 @@
 package controllers;
 
-import java.io.*;
-import java.text.*;
 import java.util.*;
-
 import play.mvc.*;
-import play.mvc.Http.*;
-import play.mvc.Http.MultipartFormData.*;
 import play.data.*;
-import play.db.ebean.*;
-import com.avaje.ebean.*;
 import static play.data.Form.*;
-
 import models.*;
 import views.html.*;
 
@@ -53,6 +45,7 @@ import views.html.*;
             	user.password = password;
             	user.birthyear = (age != null ? Calendar.getInstance().get(Calendar.YEAR) - age : null);
             	user.gender = gender;
+            	user.zip = Zip.find.where().eq("zipCode", zip).findUnique();
                 List<Long> uniqueValues;
                 uniqueValues = new ArrayList<Long>();
                 if (occupation1 != -1 && !uniqueValues.contains(occupation1)) uniqueValues.add(occupation1);
@@ -66,7 +59,8 @@ import views.html.*;
                 for (Long uniqueValue : uniqueValues) user.interests.add(Interest.find.ref(uniqueValue));
             	user.save();
                 flash("success", "You have signed up");
-                return redirect(routes.Profile.get());
+                //return redirect(routes.Profile.get());
+                return redirect("/profile");
             }
         }
         catch (Exception e) {flash("failure", "Profile change failed"); e.printStackTrace();}

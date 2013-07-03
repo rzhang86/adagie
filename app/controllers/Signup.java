@@ -1,14 +1,10 @@
 package controllers;
 
 import java.util.*;
-
 import org.apache.commons.mail.*;
-
 import play.mvc.*;
 import play.data.*;
-import play.db.ebean.*;
 import static play.data.Form.*;
-
 import models.*;
 import views.html.*;
 
@@ -80,7 +76,8 @@ public class Signup extends Controller {
             	e.addTo(email);
             	e.send();
                 flash("success", "You have signed up");
-                return redirect(routes.Login.get());
+                //return redirect(routes.Login.get());
+                return redirect("/");
             }
         }
         catch (Exception e) {flash("failure", "Sign up failed"); e.printStackTrace();}
@@ -92,7 +89,6 @@ public class Signup extends Controller {
         public String email;
         public String password;
         public String passwordRepeat;
-        
         public String gender;
         public Integer age;
         public String zip;

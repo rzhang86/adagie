@@ -1,66 +1,117 @@
 @(user: User, form: Form[Profile.ProfileForm])
 
 @main(user, "profile") {
-    <div class="row-fluid">
+    <div class="row">
         <div class="span12 well">
-            <form action="@routes.Profile.post()" method="post">
-                <div class="span5">
-                    <h5>Required fields:</h5>
-                    <div class="span12">
-                        <ul class="inline">
-                            <p><input type="text" class="span9" id="username" name="username" placeholder="Username" value="@form("username").value" pattern=".{1,31}"></p>
-                            <p><input type="email" class="span9" id="email" name="email" placeholder="Email" value="@form("email").value" pattern=".{1,63}"></p>
-                            <p>
-                                <input type="password" class="span9" id="password" name="password" placeholder="Password" pattern=".{6,31}" disabled>
-                                <br>
-                                <input type="password" class="span9" id="passwordRepeat" name="passwordRepeat" placeholder="Repeat password" pattern=".{6,31}" disabled>
-                            </p>
-                        </ul>
-                    </div>
+            <div class="row"><div class="span12 text-right"><button type="button" class="btn btn-primary" id="edit-button" data-toggle="button">Edit</button></div></div>
+            <div id="nonform-div">
+                <div class="row"><div class="span12 text-center"><strong>Required fields:</strong></div></div>
+                <div class="row">
+                    <div class="span3 offset2">@form("username").value</div>
+                    <div class="span3"></div>
+                    <div class="span3"></div>
                 </div>
-                <div class="span7">
-                    <h5>Optional fields: *</h5>
-                    <div class="span12">
-                        <ul class="inline">
-                            <input type="number" class="span3" id="age" name="age" placeholder="Age" maxlength="3" min="0" max="999" value="@form("age").value">
-                            <input type="text" class="span3" id="zip" name="zip" placeholder="Zip code" maxlength="5" value="@form("zip").value">
-                            <li><label id="male" class="radio inline"><input type="radio" name="gender" value="M" @if(form("gender").value=="M") {checked}>Male</label></li>
-                            <li><label id="female" class="radio inline"><input type="radio" name="gender" value="F" @if(form("gender").value=="F") {checked}>Female</label></li>
-                        </ul>
-                        <p>Occupations:</p>
-                        <div class="span12">
-                            @defining(Occupation.findAll()) {occupations =>
-                                <select name="occupation1" class="span5 occupation"><option value="-1"></option>@occupations.map {occupation => <option value="@occupation.id" @if(form("occupation1").value==occupation.id.toString()) {selected}>@occupation.name</option>}</select>
-                                <select name="occupation2" class="span5 occupation"><option value="-1"></option>@occupations.map {occupation => <option value="@occupation.id" @if(form("occupation2").value==occupation.id.toString()) {selected}>@occupation.name</option>}</select>
-                            }
-                        </div>
-                        <p>Interests:</p>
-                        <div class="span12">
-                            @defining(Interest.findAll()) {interests =>
-                                <select name="interest1" class="span5 interest"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest1").value==interest.id.toString()) {selected}>@interest.name</option>}</select>
-                                <select name="interest2" class="span5 interest"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest2").value==interest.id.toString()) {selected}>@interest.name</option>}</select>
-                                <br>
-                                <select name="interest3" class="span5 interest"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest3").value==interest.id.toString()) {selected}>@interest.name</option>}</select>
-                                <select name="interest4" class="span5 interest"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest4").value==interest.id.toString()) {selected}>@interest.name</option>}</select>
-                            }
-                        </div>
-                    </div>
-                    <p><i>* Optional fields help match you with higher-paying videos!</i><p>
+                <div class="row">
+                    <div class="span5 offset2">@form("email").value</div>
                 </div>
-                <p><button type="submit" class="btn btn-large btn-success">Submit</button></p>
-            </form>
+                <br>
+                <div class="row"><div class="span12 text-center"><strong>Optional fields: *</strong></div></div>
+                <div class="row">
+                    <div class="span2 offset2">@form("age").value"</div>
+                    <div class="span2">@form("zip").value</div>
+                    <div class="span1">@if(form("gender").value=="M") {<img src="assets/img/male.png">}</div>
+                    <div class="span1">@if(form("gender").value=="F") {<img src="assets/img/female.png">}</div>
+                </div>
+                @defining(Occupation.findAll()) {occupations =>
+                    <div class="row">
+                        <div class="span2 text-right">Occupations:</div>
+                        <div class="span7">@occupations.map {occupation => @if(form("occupation1").value==occupation.id.toString()) {@occupation.name}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="span7 offset2">@occupations.map {occupation => @if(form("occupation2").value==occupation.id.toString()) {@occupation.name}}</div>
+                    </div>
+                }
+                @defining(Interest.findAll()) {interests =>
+                    <div class="row">
+                        <div class="span2 text-right">Interests:</div>
+                        <div class="span4">@interests.map {interest => @if(form("interest1").value==interest.id.toString()) {@interest.name}}</div>
+                        <div class="span4">@interests.map {interest => @if(form("interest2").value==interest.id.toString()) {@interest.name}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="span4 offset2">@interests.map {interest => @if(form("interest3").value==interest.id.toString()) {@interest.name}}</div>
+                        <div class="span4">@interests.map {interest => @if(form("interest4").value==interest.id.toString()) {@interest.name}}</div>
+                    </div>
+                }
+                <p class="text-center"><i>* Optional fields help match you with higher-paying videos!</i><p>
+            </div>
+            <div id="form-div" hidden>
+                <form action="@routes.Profile.post()" method="post">
+                    <div class="row"><div class="span12 text-center"><strong>Required fields:</strong></div></div>
+                    <div class="row">
+                        <div class="span3 offset2"><input class="span3" type="text" id="username" name="username" placeholder="Username" value="@form("username").value" pattern=".{1,31}"></div>
+                        <div class="span3"><input class="span3" type="password" id="password" name="password" placeholder="Password" pattern=".{6,31}"></div>
+                        <div class="span3"><input class="span3" type="password" id="passwordRepeat" name="passwordRepeat" placeholder="Repeat password" pattern=".{6,31}"></div>
+                    </div>
+                    <div class="row">
+                        <div class="span5 offset2"><input class="span5" type="email" id="email" name="email" placeholder="Email" value="@form("email").value" pattern=".{1,63}"></div>
+                    </div>
+                    <br>
+                    <div class="row"><div class="span12 text-center"><strong>Optional fields: *</strong></div></div>
+                    <div class="row">
+                        <div class="span2 offset2"><input class="span2" type="number" id="age" name="age" placeholder="Age" maxlength="3" min="0" max="999" value="@form("age").value"></div>
+                        <div class="span2"><input class="span2" type="text" id="zip" name="zip" placeholder="Zip code" maxlength="5" value="@form("zip").value"></div>
+                        <div class="span1"><label class="radio inline" id="male"><input type="radio" name="gender" value="M" @if(form("gender").value=="M") {checked}><img src="assets/img/male.png"></label></div>
+                        <div class="span1"><label class="radio inline" id="female"><input type="radio" name="gender" value="F" @if(form("gender").value=="F") {checked}><img src="assets/img/female.png"></label></div>
+                    </div>
+                    @defining(Occupation.findAll()) {occupations =>
+                        <div class="row">
+                            <div class="span2 text-right">Occupations:</div>
+                            <div class="span7"><select class="span7 occupation" name="occupation1"><option value="-1"></option>@occupations.map {occupation => <option value="@occupation.id" @if(form("occupation1").value==occupation.id.toString()) {selected}>@occupation.name</option>}</select></div>
+                        </div>
+                        <div class="row">
+                            <div class="span7 offset2"><select class="span7 occupation" name="occupation2"><option value="-1"></option>@occupations.map {occupation => <option value="@occupation.id" @if(form("occupation2").value==occupation.id.toString()) {selected}>@occupation.name</option>}</select></div>
+                        </div>
+                    }
+                    @defining(Interest.findAll()) {interests =>
+                        <div class="row">
+                            <div class="span2 text-right">Interests:</div>
+                            <div class="span4"><select class="span4 interest" name="interest1"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest1").value==interest.id.toString()) {selected}>@interest.name</option>}</select></div>
+                            <div class="span4"><select class="span4 interest" name="interest2"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest2").value==interest.id.toString()) {selected}>@interest.name</option>}</select></div>
+                        </div>
+                        <div class="row">
+                            <div class="span4 offset2"><select class="span4 interest" name="interest3"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest3").value==interest.id.toString()) {selected}>@interest.name</option>}</select></div>
+                            <div class="span4"><select class="span4 interest" name="interest4"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest4").value==interest.id.toString()) {selected}>@interest.name</option>}</select></div>
+                        </div>
+                    }
+                    <p class="text-center"><i>* Optional fields help match you with higher-paying videos!</i><p>
+                    <p class="text-center"><button type="submit" class="btn btn-large btn-success">Submit</button></p>
+                </form>
+            </div>
         </div>
     </div>
     <script type="text/javascript">
-        $('#username').tooltip({placement: "right", title: "Must be between 1 and 31 characters."})
-        $('#email').tooltip({placement: "right", title: "Must be between 1 and 63 characters."})
-        $('#password').tooltip({placement: "right", title: "Must be between 6 and 31 characters."})
-        $('#passwordRepeat').tooltip({placement: "right", title: "Must be between 6 and 31 characters."})
-        $('#age').tooltip({placement: "bottom", title: "Match with videos for your age group."})
-        $('#zip').tooltip({placement: "bottom", title: "Match with videos in your area."})
-        $('#male').tooltip({placement: "bottom", title: "Match you with videos for guys."})
-        $('#female').tooltip({placement: "bottom", title: "Match you with videos for gals."})
-        $('.occupation').tooltip({placement: "bottom", title: "Match with videos related to your job."})
-        $('.interest').tooltip({placement: "bottom", title: "Match with videos about your interests."})
+    	var editButton = $('#edit-button')
+    	editButton.click(function() {
+            //b.button('toggle')
+            if (editButton.hasClass('active')) {
+            	$('#nonform-div').show()
+            	$('#form-div').hide()
+            }
+            else {
+            	$('#nonform-div').hide()
+            	$('#form-div').show()
+            }
+        })
+        
+        $('#username').tooltip({placement: "top", title: "Must be between 1 and 31 characters."})
+        $('#email').tooltip({placement: "top", title: "Must be between 1 and 63 characters."})
+        $('#password').tooltip({placement: "top", title: "Must be between 6 and 31 characters."})
+        $('#passwordRepeat').tooltip({placement: "top", title: "Must be between 6 and 31 characters."})
+        $('#age').tooltip({placement: "top", title: "Match with videos for your age group."})
+        $('#zip').tooltip({placement: "top", title: "Match with videos in your area."})
+        $('#male').tooltip({placement: "top", title: "Match you with videos for guys."})
+        $('#female').tooltip({placement: "top", title: "Match you with videos for gals."})
+        $('.occupation').tooltip({placement: "top", title: "Match with videos related to your job."})
+        $('.interest').tooltip({placement: "top", title: "Match with videos about your interests."})
     </script>
 }
