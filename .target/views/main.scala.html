@@ -56,10 +56,12 @@
                 @if(user!=null) {
                     <div class="span9">
                         <ul class="nav nav-pills ">
-                            <li @if(activeClass.equals("home")) {class="active"}><a href="@routes.Application.home()">Home</a></li>
-                            <li @if(activeClass.equals("myVideos")) {class="active"}><a href="@routes.Application.myVideos()">Videos</a></li>
-                            <li @if(activeClass.equals("myProfile")) {class="active"})><a href="@routes.Application.myProfile()">Profile</a></li>
-                            <li><a href="@routes.Application.logout()">Log out</a></li>
+                            <li @if(activeClass.equals("home")) {class="active"}><a href="@routes.Home.get()">Home</a></li>
+                            <li @if(activeClass.equals("profile")) {class="active"})><a href="@routes.Profile.get()">Profile</a></li>
+                            <li @if(activeClass.equals("uploads")) {class="active"}><a href="@routes.Uploads.get()">Uploads</a></li>
+                            <li @if(activeClass.equals("accounts")) {class="active"})><a href="@routes.Accounts.get()">Accounts</a></li>
+                            <li @if(activeClass.equals("notifications")) {class="active"})><a href="@routes.Notifications.get()">Notifications</a></li>
+                            <li><a href="@routes.Logout.get()">Log out</a></li>
                         </ul>
                         
                     </div>
@@ -73,11 +75,11 @@
                         @if(flash.contains("failure")) {@flash.get("failure")}
                     </div>
                     <div class="span9 form-horizontal text-right">
-                        <form action="@routes.Lobby.postIndex()" method="post">
+                        <form action="@routes.Login.post()" method="post">
                             <input type="text" class="span3" name="username" placeholder="Username" maxlength=31>
                             <input type="password" class="span3" name="password" placeholder="Password" maxlength=31>
                             <button type="submit" class="btn btn-info">Log in</button>
-                            <a class="btn btn-warning" href="@routes.Lobby.getSignup()">Sign up</a>
+                            <a class="btn btn-warning" href="@routes.Signup.get()">Sign up</a>
                         </form>
                     </div>
                 }

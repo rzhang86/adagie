@@ -1,9 +1,9 @@
-@(user: User, form: Form[Application.ProfileForm])
+@(user: User, form: Form[Profile.ProfileForm])
 
 @main(user, "profile") {
     <div class="row-fluid">
         <div class="span12 well">
-            <form action="@routes.Application.postProfile()" method="post">
+            <form action="@routes.Profile.post()" method="post">
                 <div class="span5">
                     <h5>Required fields:</h5>
                     <div class="span12">

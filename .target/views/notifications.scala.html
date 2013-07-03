@@ -1,0 +1,21 @@
+@(user: User)
+
+@main(user, "notifications") {
+    <div class="row-fluid">
+        <div class="span12 well">
+            @user.financialInstitutionLogins.map {financialInstitutionLogin =>
+                @financialInstitutionLogin.loginChallenges.map {loginChallenge =>
+                    @if(loginChallenge.answer==null) {
+                        <h4>Your credit card accounts require confirmation</h4>
+                        <p>@loginChallenge.challengeQuestion.value</p>
+                        <form action="@routes.Notifications.post()" method="post" id="challengeAnswerForm">
+                            <input type="hidden" name="id" value="@loginChallenge.id">
+                            <input type="text" name="answer" placeholder="Enter your answer">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    }
+                }
+            }
+        </div>
+    </div>
+}

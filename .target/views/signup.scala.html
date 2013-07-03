@@ -1,9 +1,9 @@
-@(form: Form[Lobby.SignupForm])
+@(form: Form[Signup.SignupForm])
 
 @main(null, "signup") {
     <div class="row-fluid">
         <div class="span12 well">
-            <form action="@routes.Lobby.postSignup()" method="post">
+            <form action="@routes.Signup.post()" method="post">
                 <div class="span5">
                     <h5>Required fields:</h5>
                     <div class="span12">

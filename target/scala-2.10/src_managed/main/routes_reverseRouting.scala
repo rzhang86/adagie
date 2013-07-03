@@ -1,6 +1,6 @@
 // @SOURCE:C:/programs/ray/adagie/conf/routes
-// @HASH:d8e7615165839265510891e6f4ad9507384fd0c6
-// @DATE:Tue Jul 02 22:25:11 EDT 2013
+// @HASH:b0661e07aab0e5fa576bd1c7b27fcb0addaf9827
+// @DATE:Wed Jul 03 12:11:02 EDT 2013
 
 import Routes.{prefix => _prefix, defaultPrefix => _defaultPrefix}
 import play.core._
@@ -25,6 +25,7 @@ import Router.queryString
 // @LINE:15
 // @LINE:14
 // @LINE:13
+// @LINE:12
 // @LINE:11
 // @LINE:10
 // @LINE:9
@@ -32,96 +33,6 @@ import Router.queryString
 // @LINE:7
 // @LINE:6
 package controllers {
-
-// @LINE:22
-// @LINE:21
-// @LINE:20
-// @LINE:19
-// @LINE:18
-// @LINE:17
-// @LINE:16
-// @LINE:15
-// @LINE:14
-// @LINE:13
-// @LINE:11
-// @LINE:10
-class ReverseApplication {
-    
-
-// @LINE:15
-def readChallengeAnswerForm(): Call = {
-   Call("POST", _prefix + { _defaultPrefix } + "answer")
-}
-                                                
-
-// @LINE:11
-def postProfile(): Call = {
-   Call("POST", _prefix + { _defaultPrefix } + "p")
-}
-                                                
-
-// @LINE:22
-def logout(): Call = {
-   Call("GET", _prefix + { _defaultPrefix } + "logout")
-}
-                                                
-
-// @LINE:16
-def myProfile(): Call = {
-   Call("GET", _prefix + { _defaultPrefix } + "profile")
-}
-                                                
-
-// @LINE:17
-def readFinancialInstitutionLoginForm(): Call = {
-   Call("POST", _prefix + { _defaultPrefix } + "profile")
-}
-                                                
-
-// @LINE:14
-def readVideoEndedForm(): Call = {
-   Call("POST", _prefix + { _defaultPrefix } + "home")
-}
-                                                
-
-// @LINE:21
-def deleteVideo(videoId:Long): Call = {
-   Call("GET", _prefix + { _defaultPrefix } + "delete/" + implicitly[PathBindable[Long]].unbind("videoId", videoId))
-}
-                                                
-
-// @LINE:19
-def myVideos(): Call = {
-   Call("GET", _prefix + { _defaultPrefix } + "videos")
-}
-                                                
-
-// @LINE:20
-def readUploadVideoForm(): Call = {
-   Call("POST", _prefix + { _defaultPrefix } + "videos")
-}
-                                                
-
-// @LINE:18
-def deleteFinancialInstitutionLogin(id:Long): Call = {
-   Call("GET", _prefix + { _defaultPrefix } + "deleteLogin/" + implicitly[PathBindable[Long]].unbind("id", id))
-}
-                                                
-
-// @LINE:13
-def home(): Call = {
-   Call("GET", _prefix + { _defaultPrefix } + "home")
-}
-                                                
-
-// @LINE:10
-def getProfile(): Call = {
-   Call("GET", _prefix + { _defaultPrefix } + "p")
-}
-                                                
-    
-}
-                          
 
 // @LINE:25
 class ReverseAssets {
@@ -136,34 +47,167 @@ def at(file:String): Call = {
 }
                           
 
-// @LINE:9
-// @LINE:8
-// @LINE:7
-// @LINE:6
-class ReverseLobby {
+// @LINE:16
+// @LINE:15
+// @LINE:14
+class ReverseUploads {
     
 
-// @LINE:8
-def getSignup(): Call = {
-   Call("GET", _prefix + { _defaultPrefix } + "signup")
+// @LINE:15
+def post(): Call = {
+   Call("POST", _prefix + { _defaultPrefix } + "uploads")
+}
+                                                
+
+// @LINE:16
+def delete(id:Long): Call = {
+   Call("DELETE", _prefix + { _defaultPrefix } + "uploads/" + implicitly[PathBindable[Long]].unbind("id", id))
+}
+                                                
+
+// @LINE:14
+def get(): Call = {
+   Call("GET", _prefix + { _defaultPrefix } + "uploads")
+}
+                                                
+    
+}
+                          
+
+// @LINE:11
+// @LINE:10
+class ReverseHome {
+    
+
+// @LINE:11
+def post(): Call = {
+   Call("POST", _prefix + { _defaultPrefix } + "home")
+}
+                                                
+
+// @LINE:10
+def get(): Call = {
+   Call("GET", _prefix + { _defaultPrefix } + "home")
+}
+                                                
+    
+}
+                          
+
+// @LINE:13
+// @LINE:12
+class ReverseProfile {
+    
+
+// @LINE:13
+def post(): Call = {
+   Call("POST", _prefix + { _defaultPrefix } + "profile")
+}
+                                                
+
+// @LINE:12
+def get(): Call = {
+   Call("GET", _prefix + { _defaultPrefix } + "profile")
+}
+                                                
+    
+}
+                          
+
+// @LINE:22
+class ReverseLogout {
+    
+
+// @LINE:22
+def get(): Call = {
+   Call("GET", _prefix + { _defaultPrefix } + "logout")
+}
+                                                
+    
+}
+                          
+
+// @LINE:19
+// @LINE:18
+// @LINE:17
+class ReverseAccounts {
+    
+
+// @LINE:18
+def post(): Call = {
+   Call("POST", _prefix + { _defaultPrefix } + "accounts")
+}
+                                                
+
+// @LINE:19
+def delete(id:Long): Call = {
+   Call("DELETE", _prefix + { _defaultPrefix } + "accounts/" + implicitly[PathBindable[Long]].unbind("id", id))
+}
+                                                
+
+// @LINE:17
+def get(): Call = {
+   Call("GET", _prefix + { _defaultPrefix } + "accounts")
+}
+                                                
+    
+}
+                          
+
+// @LINE:7
+// @LINE:6
+class ReverseLogin {
+    
+
+// @LINE:7
+def post(): Call = {
+   Call("POST", _prefix)
 }
                                                 
 
 // @LINE:6
-def getIndex(): Call = {
+def get(): Call = {
    Call("GET", _prefix)
 }
                                                 
+    
+}
+                          
 
 // @LINE:9
-def postSignup(): Call = {
+// @LINE:8
+class ReverseSignup {
+    
+
+// @LINE:9
+def post(): Call = {
    Call("POST", _prefix + { _defaultPrefix } + "signup")
 }
                                                 
 
-// @LINE:7
-def postIndex(): Call = {
-   Call("POST", _prefix)
+// @LINE:8
+def get(): Call = {
+   Call("GET", _prefix + { _defaultPrefix } + "signup")
+}
+                                                
+    
+}
+                          
+
+// @LINE:21
+// @LINE:20
+class ReverseNotifications {
+    
+
+// @LINE:21
+def post(): Call = {
+   Call("POST", _prefix + { _defaultPrefix } + "notifications")
+}
+                                                
+
+// @LINE:20
+def get(): Call = {
+   Call("GET", _prefix + { _defaultPrefix } + "notifications")
 }
                                                 
     
@@ -184,6 +228,7 @@ def postIndex(): Call = {
 // @LINE:15
 // @LINE:14
 // @LINE:13
+// @LINE:12
 // @LINE:11
 // @LINE:10
 // @LINE:9
@@ -191,156 +236,6 @@ def postIndex(): Call = {
 // @LINE:7
 // @LINE:6
 package controllers.javascript {
-
-// @LINE:22
-// @LINE:21
-// @LINE:20
-// @LINE:19
-// @LINE:18
-// @LINE:17
-// @LINE:16
-// @LINE:15
-// @LINE:14
-// @LINE:13
-// @LINE:11
-// @LINE:10
-class ReverseApplication {
-    
-
-// @LINE:15
-def readChallengeAnswerForm : JavascriptReverseRoute = JavascriptReverseRoute(
-   "controllers.Application.readChallengeAnswerForm",
-   """
-      function() {
-      return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "answer"})
-      }
-   """
-)
-                        
-
-// @LINE:11
-def postProfile : JavascriptReverseRoute = JavascriptReverseRoute(
-   "controllers.Application.postProfile",
-   """
-      function() {
-      return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "p"})
-      }
-   """
-)
-                        
-
-// @LINE:22
-def logout : JavascriptReverseRoute = JavascriptReverseRoute(
-   "controllers.Application.logout",
-   """
-      function() {
-      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "logout"})
-      }
-   """
-)
-                        
-
-// @LINE:16
-def myProfile : JavascriptReverseRoute = JavascriptReverseRoute(
-   "controllers.Application.myProfile",
-   """
-      function() {
-      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "profile"})
-      }
-   """
-)
-                        
-
-// @LINE:17
-def readFinancialInstitutionLoginForm : JavascriptReverseRoute = JavascriptReverseRoute(
-   "controllers.Application.readFinancialInstitutionLoginForm",
-   """
-      function() {
-      return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "profile"})
-      }
-   """
-)
-                        
-
-// @LINE:14
-def readVideoEndedForm : JavascriptReverseRoute = JavascriptReverseRoute(
-   "controllers.Application.readVideoEndedForm",
-   """
-      function() {
-      return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "home"})
-      }
-   """
-)
-                        
-
-// @LINE:21
-def deleteVideo : JavascriptReverseRoute = JavascriptReverseRoute(
-   "controllers.Application.deleteVideo",
-   """
-      function(videoId) {
-      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "delete/" + (""" + implicitly[PathBindable[Long]].javascriptUnbind + """)("videoId", videoId)})
-      }
-   """
-)
-                        
-
-// @LINE:19
-def myVideos : JavascriptReverseRoute = JavascriptReverseRoute(
-   "controllers.Application.myVideos",
-   """
-      function() {
-      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "videos"})
-      }
-   """
-)
-                        
-
-// @LINE:20
-def readUploadVideoForm : JavascriptReverseRoute = JavascriptReverseRoute(
-   "controllers.Application.readUploadVideoForm",
-   """
-      function() {
-      return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "videos"})
-      }
-   """
-)
-                        
-
-// @LINE:18
-def deleteFinancialInstitutionLogin : JavascriptReverseRoute = JavascriptReverseRoute(
-   "controllers.Application.deleteFinancialInstitutionLogin",
-   """
-      function(id) {
-      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "deleteLogin/" + (""" + implicitly[PathBindable[Long]].javascriptUnbind + """)("id", id)})
-      }
-   """
-)
-                        
-
-// @LINE:13
-def home : JavascriptReverseRoute = JavascriptReverseRoute(
-   "controllers.Application.home",
-   """
-      function() {
-      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "home"})
-      }
-   """
-)
-                        
-
-// @LINE:10
-def getProfile : JavascriptReverseRoute = JavascriptReverseRoute(
-   "controllers.Application.getProfile",
-   """
-      function() {
-      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "p"})
-      }
-   """
-)
-                        
-    
-}
-              
 
 // @LINE:25
 class ReverseAssets {
@@ -360,27 +255,187 @@ def at : JavascriptReverseRoute = JavascriptReverseRoute(
 }
               
 
-// @LINE:9
-// @LINE:8
-// @LINE:7
-// @LINE:6
-class ReverseLobby {
+// @LINE:16
+// @LINE:15
+// @LINE:14
+class ReverseUploads {
     
 
-// @LINE:8
-def getSignup : JavascriptReverseRoute = JavascriptReverseRoute(
-   "controllers.Lobby.getSignup",
+// @LINE:15
+def post : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Uploads.post",
    """
       function() {
-      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "signup"})
+      return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "uploads"})
+      }
+   """
+)
+                        
+
+// @LINE:16
+def delete : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Uploads.delete",
+   """
+      function(id) {
+      return _wA({method:"DELETE", url:"""" + _prefix + { _defaultPrefix } + """" + "uploads/" + (""" + implicitly[PathBindable[Long]].javascriptUnbind + """)("id", id)})
+      }
+   """
+)
+                        
+
+// @LINE:14
+def get : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Uploads.get",
+   """
+      function() {
+      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "uploads"})
+      }
+   """
+)
+                        
+    
+}
+              
+
+// @LINE:11
+// @LINE:10
+class ReverseHome {
+    
+
+// @LINE:11
+def post : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Home.post",
+   """
+      function() {
+      return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "home"})
+      }
+   """
+)
+                        
+
+// @LINE:10
+def get : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Home.get",
+   """
+      function() {
+      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "home"})
+      }
+   """
+)
+                        
+    
+}
+              
+
+// @LINE:13
+// @LINE:12
+class ReverseProfile {
+    
+
+// @LINE:13
+def post : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Profile.post",
+   """
+      function() {
+      return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "profile"})
+      }
+   """
+)
+                        
+
+// @LINE:12
+def get : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Profile.get",
+   """
+      function() {
+      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "profile"})
+      }
+   """
+)
+                        
+    
+}
+              
+
+// @LINE:22
+class ReverseLogout {
+    
+
+// @LINE:22
+def get : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Logout.get",
+   """
+      function() {
+      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "logout"})
+      }
+   """
+)
+                        
+    
+}
+              
+
+// @LINE:19
+// @LINE:18
+// @LINE:17
+class ReverseAccounts {
+    
+
+// @LINE:18
+def post : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Accounts.post",
+   """
+      function() {
+      return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "accounts"})
+      }
+   """
+)
+                        
+
+// @LINE:19
+def delete : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Accounts.delete",
+   """
+      function(id) {
+      return _wA({method:"DELETE", url:"""" + _prefix + { _defaultPrefix } + """" + "accounts/" + (""" + implicitly[PathBindable[Long]].javascriptUnbind + """)("id", id)})
+      }
+   """
+)
+                        
+
+// @LINE:17
+def get : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Accounts.get",
+   """
+      function() {
+      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "accounts"})
+      }
+   """
+)
+                        
+    
+}
+              
+
+// @LINE:7
+// @LINE:6
+class ReverseLogin {
+    
+
+// @LINE:7
+def post : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Login.post",
+   """
+      function() {
+      return _wA({method:"POST", url:"""" + _prefix + """"})
       }
    """
 )
                         
 
 // @LINE:6
-def getIndex : JavascriptReverseRoute = JavascriptReverseRoute(
-   "controllers.Lobby.getIndex",
+def get : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Login.get",
    """
       function() {
       return _wA({method:"GET", url:"""" + _prefix + """"})
@@ -388,10 +443,18 @@ def getIndex : JavascriptReverseRoute = JavascriptReverseRoute(
    """
 )
                         
+    
+}
+              
 
 // @LINE:9
-def postSignup : JavascriptReverseRoute = JavascriptReverseRoute(
-   "controllers.Lobby.postSignup",
+// @LINE:8
+class ReverseSignup {
+    
+
+// @LINE:9
+def post : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Signup.post",
    """
       function() {
       return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "signup"})
@@ -400,12 +463,42 @@ def postSignup : JavascriptReverseRoute = JavascriptReverseRoute(
 )
                         
 
-// @LINE:7
-def postIndex : JavascriptReverseRoute = JavascriptReverseRoute(
-   "controllers.Lobby.postIndex",
+// @LINE:8
+def get : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Signup.get",
    """
       function() {
-      return _wA({method:"POST", url:"""" + _prefix + """"})
+      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "signup"})
+      }
+   """
+)
+                        
+    
+}
+              
+
+// @LINE:21
+// @LINE:20
+class ReverseNotifications {
+    
+
+// @LINE:21
+def post : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Notifications.post",
+   """
+      function() {
+      return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "notifications"})
+      }
+   """
+)
+                        
+
+// @LINE:20
+def get : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Notifications.get",
+   """
+      function() {
+      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "notifications"})
       }
    """
 )
@@ -428,6 +521,7 @@ def postIndex : JavascriptReverseRoute = JavascriptReverseRoute(
 // @LINE:15
 // @LINE:14
 // @LINE:13
+// @LINE:12
 // @LINE:11
 // @LINE:10
 // @LINE:9
@@ -435,96 +529,6 @@ def postIndex : JavascriptReverseRoute = JavascriptReverseRoute(
 // @LINE:7
 // @LINE:6
 package controllers.ref {
-
-// @LINE:22
-// @LINE:21
-// @LINE:20
-// @LINE:19
-// @LINE:18
-// @LINE:17
-// @LINE:16
-// @LINE:15
-// @LINE:14
-// @LINE:13
-// @LINE:11
-// @LINE:10
-class ReverseApplication {
-    
-
-// @LINE:15
-def readChallengeAnswerForm(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.Application.readChallengeAnswerForm(), HandlerDef(this, "controllers.Application", "readChallengeAnswerForm", Seq(), "POST", """""", _prefix + """answer""")
-)
-                      
-
-// @LINE:11
-def postProfile(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.Application.postProfile(), HandlerDef(this, "controllers.Application", "postProfile", Seq(), "POST", """""", _prefix + """p""")
-)
-                      
-
-// @LINE:22
-def logout(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.Application.logout(), HandlerDef(this, "controllers.Application", "logout", Seq(), "GET", """""", _prefix + """logout""")
-)
-                      
-
-// @LINE:16
-def myProfile(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.Application.myProfile(), HandlerDef(this, "controllers.Application", "myProfile", Seq(), "GET", """""", _prefix + """profile""")
-)
-                      
-
-// @LINE:17
-def readFinancialInstitutionLoginForm(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.Application.readFinancialInstitutionLoginForm(), HandlerDef(this, "controllers.Application", "readFinancialInstitutionLoginForm", Seq(), "POST", """""", _prefix + """profile""")
-)
-                      
-
-// @LINE:14
-def readVideoEndedForm(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.Application.readVideoEndedForm(), HandlerDef(this, "controllers.Application", "readVideoEndedForm", Seq(), "POST", """""", _prefix + """home""")
-)
-                      
-
-// @LINE:21
-def deleteVideo(videoId:Long): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.Application.deleteVideo(videoId), HandlerDef(this, "controllers.Application", "deleteVideo", Seq(classOf[Long]), "GET", """""", _prefix + """delete/$videoId<[^/]+>""")
-)
-                      
-
-// @LINE:19
-def myVideos(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.Application.myVideos(), HandlerDef(this, "controllers.Application", "myVideos", Seq(), "GET", """""", _prefix + """videos""")
-)
-                      
-
-// @LINE:20
-def readUploadVideoForm(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.Application.readUploadVideoForm(), HandlerDef(this, "controllers.Application", "readUploadVideoForm", Seq(), "POST", """""", _prefix + """videos""")
-)
-                      
-
-// @LINE:18
-def deleteFinancialInstitutionLogin(id:Long): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.Application.deleteFinancialInstitutionLogin(id), HandlerDef(this, "controllers.Application", "deleteFinancialInstitutionLogin", Seq(classOf[Long]), "GET", """""", _prefix + """deleteLogin/$id<[^/]+>""")
-)
-                      
-
-// @LINE:13
-def home(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.Application.home(), HandlerDef(this, "controllers.Application", "home", Seq(), "GET", """""", _prefix + """home""")
-)
-                      
-
-// @LINE:10
-def getProfile(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.Application.getProfile(), HandlerDef(this, "controllers.Application", "getProfile", Seq(), "GET", """""", _prefix + """p""")
-)
-                      
-    
-}
-                          
 
 // @LINE:25
 class ReverseAssets {
@@ -539,34 +543,167 @@ def at(path:String, file:String): play.api.mvc.HandlerRef[_] = new play.api.mvc.
 }
                           
 
-// @LINE:9
-// @LINE:8
-// @LINE:7
-// @LINE:6
-class ReverseLobby {
+// @LINE:16
+// @LINE:15
+// @LINE:14
+class ReverseUploads {
     
 
-// @LINE:8
-def getSignup(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.Lobby.getSignup(), HandlerDef(this, "controllers.Lobby", "getSignup", Seq(), "GET", """""", _prefix + """signup""")
+// @LINE:15
+def post(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Uploads.post(), HandlerDef(this, "controllers.Uploads", "post", Seq(), "POST", """""", _prefix + """uploads""")
+)
+                      
+
+// @LINE:16
+def delete(id:Long): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Uploads.delete(id), HandlerDef(this, "controllers.Uploads", "delete", Seq(classOf[Long]), "DELETE", """""", _prefix + """uploads/$id<[^/]+>""")
+)
+                      
+
+// @LINE:14
+def get(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Uploads.get(), HandlerDef(this, "controllers.Uploads", "get", Seq(), "GET", """""", _prefix + """uploads""")
+)
+                      
+    
+}
+                          
+
+// @LINE:11
+// @LINE:10
+class ReverseHome {
+    
+
+// @LINE:11
+def post(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Home.post(), HandlerDef(this, "controllers.Home", "post", Seq(), "POST", """""", _prefix + """home""")
+)
+                      
+
+// @LINE:10
+def get(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Home.get(), HandlerDef(this, "controllers.Home", "get", Seq(), "GET", """""", _prefix + """home""")
+)
+                      
+    
+}
+                          
+
+// @LINE:13
+// @LINE:12
+class ReverseProfile {
+    
+
+// @LINE:13
+def post(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Profile.post(), HandlerDef(this, "controllers.Profile", "post", Seq(), "POST", """""", _prefix + """profile""")
+)
+                      
+
+// @LINE:12
+def get(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Profile.get(), HandlerDef(this, "controllers.Profile", "get", Seq(), "GET", """""", _prefix + """profile""")
+)
+                      
+    
+}
+                          
+
+// @LINE:22
+class ReverseLogout {
+    
+
+// @LINE:22
+def get(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Logout.get(), HandlerDef(this, "controllers.Logout", "get", Seq(), "GET", """""", _prefix + """logout""")
+)
+                      
+    
+}
+                          
+
+// @LINE:19
+// @LINE:18
+// @LINE:17
+class ReverseAccounts {
+    
+
+// @LINE:18
+def post(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Accounts.post(), HandlerDef(this, "controllers.Accounts", "post", Seq(), "POST", """""", _prefix + """accounts""")
+)
+                      
+
+// @LINE:19
+def delete(id:Long): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Accounts.delete(id), HandlerDef(this, "controllers.Accounts", "delete", Seq(classOf[Long]), "DELETE", """""", _prefix + """accounts/$id<[^/]+>""")
+)
+                      
+
+// @LINE:17
+def get(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Accounts.get(), HandlerDef(this, "controllers.Accounts", "get", Seq(), "GET", """""", _prefix + """accounts""")
+)
+                      
+    
+}
+                          
+
+// @LINE:7
+// @LINE:6
+class ReverseLogin {
+    
+
+// @LINE:7
+def post(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Login.post(), HandlerDef(this, "controllers.Login", "post", Seq(), "POST", """""", _prefix + """""")
 )
                       
 
 // @LINE:6
-def getIndex(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.Lobby.getIndex(), HandlerDef(this, "controllers.Lobby", "getIndex", Seq(), "GET", """ Home page""", _prefix + """""")
+def get(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Login.get(), HandlerDef(this, "controllers.Login", "get", Seq(), "GET", """ Home page""", _prefix + """""")
 )
                       
+    
+}
+                          
 
 // @LINE:9
-def postSignup(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.Lobby.postSignup(), HandlerDef(this, "controllers.Lobby", "postSignup", Seq(), "POST", """""", _prefix + """signup""")
+// @LINE:8
+class ReverseSignup {
+    
+
+// @LINE:9
+def post(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Signup.post(), HandlerDef(this, "controllers.Signup", "post", Seq(), "POST", """""", _prefix + """signup""")
 )
                       
 
-// @LINE:7
-def postIndex(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.Lobby.postIndex(), HandlerDef(this, "controllers.Lobby", "postIndex", Seq(), "POST", """""", _prefix + """""")
+// @LINE:8
+def get(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Signup.get(), HandlerDef(this, "controllers.Signup", "get", Seq(), "GET", """""", _prefix + """signup""")
+)
+                      
+    
+}
+                          
+
+// @LINE:21
+// @LINE:20
+class ReverseNotifications {
+    
+
+// @LINE:21
+def post(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Notifications.post(), HandlerDef(this, "controllers.Notifications", "post", Seq(), "POST", """""", _prefix + """notifications""")
+)
+                      
+
+// @LINE:20
+def get(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Notifications.get(), HandlerDef(this, "controllers.Notifications", "get", Seq(), "GET", """""", _prefix + """notifications""")
 )
                       
     

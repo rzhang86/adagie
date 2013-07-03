@@ -1,9 +1,0 @@
-@(user: User, financialInstitutionLogin: FinancialInstitutionLogin)
-
-<div>
-    <h5>@financialInstitutionLogin.financialInstitution.name</h5>
-    <p>@financialInstitutionLogin.username</p>
-    @if(financialInstitutionLogin.user.equals(user)) {
-        (<a href="@routes.Application.deleteFinancialInstitutionLogin(financialInstitutionLogin.id)">Delete</a>)
-    }
-</div>
