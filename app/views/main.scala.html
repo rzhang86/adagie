@@ -73,11 +73,11 @@
                         @if(flash.contains("failure")) {@flash.get("failure")}
                     </div>
                     <div class="span9 form-horizontal text-right">
-                        <form action="@routes.Lobby.readLoginForm()" method="post">
+                        <form action="@routes.Lobby.postIndex()" method="post">
                             <input type="text" class="span3" name="username" placeholder="Username" maxlength=31>
                             <input type="password" class="span3" name="password" placeholder="Password" maxlength=31>
                             <button type="submit" class="btn btn-info">Log in</button>
-                            <a class="btn btn-warning" href="@routes.Lobby.signup()">Sign up</a>
+                            <a class="btn btn-warning" href="@routes.Lobby.getSignup()">Sign up</a>
                         </form>
                     </div>
                 }

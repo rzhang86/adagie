@@ -1,0 +1,66 @@
+@(user: User, form: Form[Application.ProfileForm])
+
+@main(user, "profile") {
+    <div class="row-fluid">
+        <div class="span12 well">
+            <form action="@routes.Application.postProfile()" method="post">
+                <div class="span5">
+                    <h5>Required fields:</h5>
+                    <div class="span12">
+                        <ul class="inline">
+                            <p><input type="text" class="span9" id="username" name="username" placeholder="Username" value="@form("username").value" pattern=".{1,31}"></p>
+                            <p><input type="email" class="span9" id="email" name="email" placeholder="Email" value="@form("email").value" pattern=".{1,63}"></p>
+                            <p>
+                                <input type="password" class="span9" id="password" name="password" placeholder="Password" pattern=".{6,31}" disabled>
+                                <br>
+                                <input type="password" class="span9" id="passwordRepeat" name="passwordRepeat" placeholder="Repeat password" pattern=".{6,31}" disabled>
+                            </p>
+                        </ul>
+                    </div>
+                </div>
+                <div class="span7">
+                    <h5>Optional fields: *</h5>
+                    <div class="span12">
+                        <ul class="inline">
+                            <input type="number" class="span3" id="age" name="age" placeholder="Age" maxlength="3" min="0" max="999" value="@form("age").value">
+                            <input type="text" class="span3" id="zip" name="zip" placeholder="Zip code" maxlength="5" value="@form("zip").value">
+                            <li><label id="male" class="radio inline"><input type="radio" name="gender" value="M" @if(form("gender").value=="M") {checked}>Male</label></li>
+                            <li><label id="female" class="radio inline"><input type="radio" name="gender" value="F" @if(form("gender").value=="F") {checked}>Female</label></li>
+                        </ul>
+                        <p>Occupations:</p>
+                        <div class="span12">
+                            @defining(Occupation.findAll()) {occupations =>
+                                <select name="occupation1" class="span5 occupation"><option value="-1"></option>@occupations.map {occupation => <option value="@occupation.id" @if(form("occupation1").value==occupation.id.toString()) {selected}>@occupation.name</option>}</select>
+                                <select name="occupation2" class="span5 occupation"><option value="-1"></option>@occupations.map {occupation => <option value="@occupation.id" @if(form("occupation2").value==occupation.id.toString()) {selected}>@occupation.name</option>}</select>
+                            }
+                        </div>
+                        <p>Interests:</p>
+                        <div class="span12">
+                            @defining(Interest.findAll()) {interests =>
+                                <select name="interest1" class="span5 interest"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest1").value==interest.id.toString()) {selected}>@interest.name</option>}</select>
+                                <select name="interest2" class="span5 interest"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest2").value==interest.id.toString()) {selected}>@interest.name</option>}</select>
+                                <br>
+                                <select name="interest3" class="span5 interest"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest3").value==interest.id.toString()) {selected}>@interest.name</option>}</select>
+                                <select name="interest4" class="span5 interest"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest4").value==interest.id.toString()) {selected}>@interest.name</option>}</select>
+                            }
+                        </div>
+                    </div>
+                    <p><i>* Optional fields help match you with higher-paying videos!</i><p>
+                </div>
+                <p><button type="submit" class="btn btn-large btn-success">Submit</button></p>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $('#username').tooltip({placement: "right", title: "Must be between 1 and 31 characters."})
+        $('#email').tooltip({placement: "right", title: "Must be between 1 and 63 characters."})
+        $('#password').tooltip({placement: "right", title: "Must be between 6 and 31 characters."})
+        $('#passwordRepeat').tooltip({placement: "right", title: "Must be between 6 and 31 characters."})
+        $('#age').tooltip({placement: "bottom", title: "Match with videos for your age group."})
+        $('#zip').tooltip({placement: "bottom", title: "Match with videos in your area."})
+        $('#male').tooltip({placement: "bottom", title: "Match you with videos for guys."})
+        $('#female').tooltip({placement: "bottom", title: "Match you with videos for gals."})
+        $('.occupation').tooltip({placement: "bottom", title: "Match with videos related to your job."})
+        $('.interest').tooltip({placement: "bottom", title: "Match with videos about your interests."})
+    </script>
+}

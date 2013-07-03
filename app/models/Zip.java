@@ -8,7 +8,7 @@ import play.db.ebean.*;
 @Entity public class Zip extends Model {
 	@Id public Long id; public static Finder<Long, Zip> find = new Finder<Long, Zip>(Long.class, Zip.class);
 	
-	@ManyToMany(mappedBy = "zips", cascade = CascadeType.PERSIST) public List<User> users = new ArrayList<User>();
+	@OneToMany(mappedBy = "zip", cascade = CascadeType.PERSIST) public List<User> users = new ArrayList<User>();
 	
 	@Column(unique=true) public String zipCode = null;
 	public String zipCodeType = null;

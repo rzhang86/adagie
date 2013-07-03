@@ -1,9 +1,9 @@
-@(form: Form[Login.SignupForm])
+@(form: Form[Lobby.SignupForm])
 
 @main(null, "signup") {
     <div class="row-fluid">
         <div class="span12 well">
-            <form action="@routes.Login.readSignupForm()" method="post">
+            <form action="@routes.Lobby.postSignup()" method="post">
                 <div class="span5">
                     <h5>Required fields:</h5>
                     <div class="span12">
@@ -24,8 +24,8 @@
                         <ul class="inline">
                             <input type="number" class="span3" id="age" name="age" placeholder="Age" maxlength="3" min="0" max="999" value="@form("age").value">
                             <input type="text" class="span3" id="zip" name="zip" placeholder="Zip code" maxlength="5" value="@form("zip").value">
-                            <li><label class="radio inline"><input type="radio" id="male" name="gender" value="M" @if(form("gender").value=="M") {checked}>Male</label></li>
-                            <li><label class="radio inline"><input type="radio" id="female" name="gender" value="F" @if(form("gender").value=="F") {checked}>Female</label></li>
+                            <li><label id="male" class="radio inline"><input type="radio" name="gender" value="M" @if(form("gender").value=="M") {checked}>Male</label></li>
+                            <li><label id="female" class="radio inline"><input type="radio" name="gender" value="F" @if(form("gender").value=="F") {checked}>Female</label></li>
                         </ul>
                         <p>Occupations:</p>
                         <div class="span12">
@@ -52,15 +52,15 @@
         </div>
     </div>
     <script type="text/javascript">
-    	$('#username').tooltip({placement: "top", title: "Must be between 1 and 31 characters."})
-    	$('#email').tooltip({placement: "top", title: "Must be between 1 and 63 characters."})
-    	$('#password').tooltip({placement: "top", title: "Must be between 6 and 31 characters."})
-    	$('#passwordRepeat').tooltip({placement: "top", title: "Must be between 6 and 31 characters."})
-    	$('#age').tooltip({placement: "top", title: "Match with videos for your age group."})
-    	$('#zip').tooltip({placement: "top", title: "Match with videos in your area."})
-    	$('#male').tooltip({placement: "top", title: "Match you with videos for men."})
-    	$('#female').tooltip({placement: "top", title: "Match you with videos for women."})
-    	$('.occupation').tooltip({placement: "top", title: "Match  with videos related to your job."})
-    	$('.interest').tooltip({placement: "top", title: "Match with videos about your interests."})
+    	$('#username').tooltip({placement: "right", title: "Must be between 1 and 31 characters."})
+    	$('#email').tooltip({placement: "right", title: "Must be between 1 and 63 characters."})
+    	$('#password').tooltip({placement: "right", title: "Must be between 6 and 31 characters."})
+    	$('#passwordRepeat').tooltip({placement: "right", title: "Must be between 6 and 31 characters."})
+    	$('#age').tooltip({placement: "bottom", title: "Match with videos for your age group."})
+    	$('#zip').tooltip({placement: "bottom", title: "Match with videos in your area."})
+    	$('#male').tooltip({placement: "bottom", title: "Match you with videos for guys."})
+    	$('#female').tooltip({placement: "bottom", title: "Match you with videos for gals."})
+    	$('.occupation').tooltip({placement: "bottom", title: "Match with videos related to your job."})
+    	$('.interest').tooltip({placement: "bottom", title: "Match with videos about your interests."})
     </script>
 }

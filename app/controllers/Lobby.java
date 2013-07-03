@@ -13,17 +13,13 @@ import models.*;
 import views.html.*;
 
 public class Lobby extends Controller {
-    public static Result index() {
+	// -- start index
+    public static Result getIndex() {
         if (session().get("username") != null) return redirect(routes.Application.home());
         return ok(index.render());
     }
-
-    public static class LoginForm {
-        public String username;
-        public String password;
-    }
-
-    public static Result readLoginForm() {
+    
+    public static Result postIndex() {
         session().clear();
         Form<LoginForm> loginForm = form(LoginForm.class).bindFromRequest();
         try {
@@ -41,33 +37,23 @@ public class Lobby extends Controller {
             }
         }
         catch (Exception e) {flash("failure", "Invalid username/password");}
-        return redirect(routes.Lobby.index());
+        return redirect(routes.Lobby.getIndex());
     }
+    
+    public static class LoginForm {
+        public String username;
+        public String password;
+    }
+    // -- end index
 
-    public static Result signup() {
+    // -- start signup
+    public static Result getSignup() {
         session().clear();
     	return ok(signup.render(form(SignupForm.class)));
     }
-
-    public static class SignupForm {
-        public String username;
-        public String email;
-        public String password;
-        public String passwordRepeat;
-        
-        public String gender;
-        public Integer age;
-        public String zip;
-        public Long occupation1;
-        public Long occupation2;
-        public Long interest1;
-        public Long interest2;
-        public Long interest3;
-        public Long interest4;
-    }
-
-    //todo: validate username and password can only contain alphanumerics, no escape characters
-    public static Result readSignupForm() {
+    
+  //todo: validate username and password can only contain alphanumerics, no escape characters
+    public static Result postSignup() {
         session().clear();
         Form<SignupForm> signupForm = form(SignupForm.class).bindFromRequest();
         try {
@@ -100,6 +86,7 @@ public class Lobby extends Controller {
             	user.password = password;
             	user.birthyear = (age != null ? Calendar.getInstance().get(Calendar.YEAR) - age : null);
             	user.gender = gender;
+            	user.zip = Zip.find.where().eq("zipCode", zip).findUnique();
                 List<Long> uniqueValues;
                 uniqueValues = new ArrayList<Long>();
                 if (occupation1 != -1 && !uniqueValues.contains(occupation1)) uniqueValues.add(occupation1);
@@ -127,10 +114,28 @@ public class Lobby extends Controller {
             	e.addTo(email);
             	e.send();
                 flash("success", "You have signed up");
-                return redirect(routes.Lobby.index());
+                return redirect(routes.Lobby.getIndex());
             }
         }
         catch (Exception e) {flash("failure", "Sign up failed"); e.printStackTrace();}
         return ok(signup.render(signupForm));
     }
+    
+    public static class SignupForm {
+        public String username;
+        public String email;
+        public String password;
+        public String passwordRepeat;
+        
+        public String gender;
+        public Integer age;
+        public String zip;
+        public Long occupation1;
+        public Long occupation2;
+        public Long interest1;
+        public Long interest2;
+        public Long interest3;
+        public Long interest4;
+    }
+    // -- end signup
 }

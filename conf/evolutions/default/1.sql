@@ -126,6 +126,7 @@ create table payout_formula (
 create table user (
   id                        bigint not null,
   watching_video_id         bigint,
+  zip_id                    bigint,
   username                  varchar(255),
   password                  varchar(255),
   email                     varchar(255),
@@ -268,16 +269,18 @@ alter table payout_formula add constraint fk_payout_formula_video_7 foreign key 
 create index ix_payout_formula_video_7 on payout_formula (video_id);
 alter table user add constraint fk_user_watchingVideo_8 foreign key (watching_video_id) references video (id) on delete restrict on update restrict;
 create index ix_user_watchingVideo_8 on user (watching_video_id);
-alter table user_variable add constraint fk_user_variable_user_9 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_user_variable_user_9 on user_variable (user_id);
-alter table video add constraint fk_video_user_10 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_video_user_10 on video (user_id);
-alter table watched_video add constraint fk_watched_video_user_11 foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_watched_video_user_11 on watched_video (user_id);
-alter table watched_video add constraint fk_watched_video_video_12 foreign key (video_id) references video (id) on delete restrict on update restrict;
-create index ix_watched_video_video_12 on watched_video (video_id);
-alter table watching_video add constraint fk_watching_video_video_13 foreign key (video_id) references video (id) on delete restrict on update restrict;
-create index ix_watching_video_video_13 on watching_video (video_id);
+alter table user add constraint fk_user_zip_9 foreign key (zip_id) references zip (id) on delete restrict on update restrict;
+create index ix_user_zip_9 on user (zip_id);
+alter table user_variable add constraint fk_user_variable_user_10 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_user_variable_user_10 on user_variable (user_id);
+alter table video add constraint fk_video_user_11 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_video_user_11 on video (user_id);
+alter table watched_video add constraint fk_watched_video_user_12 foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_watched_video_user_12 on watched_video (user_id);
+alter table watched_video add constraint fk_watched_video_video_13 foreign key (video_id) references video (id) on delete restrict on update restrict;
+create index ix_watched_video_video_13 on watched_video (video_id);
+alter table watching_video add constraint fk_watching_video_video_14 foreign key (video_id) references video (id) on delete restrict on update restrict;
+create index ix_watching_video_video_14 on watching_video (video_id);
 
 
 

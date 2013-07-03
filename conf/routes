@@ -3,10 +3,12 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Lobby.index()
-POST    /                           controllers.Lobby.readLoginForm()
-GET     /signup                     controllers.Lobby.signup()
-POST    /signup                     controllers.Lobby.readSignupForm()
+GET     /                           controllers.Lobby.getIndex()
+POST    /                           controllers.Lobby.postIndex()
+GET     /signup                     controllers.Lobby.getSignup()
+POST    /signup                     controllers.Lobby.postSignup()
+GET     /p                          controllers.Application.getProfile()
+POST    /p                          controllers.Application.postProfile()
 
 GET     /home                       controllers.Application.home()
 POST    /home                       controllers.Application.readVideoEndedForm()

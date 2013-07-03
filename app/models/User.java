@@ -18,6 +18,7 @@ import play.db.ebean.*;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL) public List<UserVariable> userVariables = new ArrayList<UserVariable>();
     
     @ManyToOne public Video watchingVideo = null;
+    @ManyToOne public Zip zip = null;
     
     @ManyToMany public List<Occupation> occupations = new ArrayList<Occupation>();
     @ManyToMany public List<Interest> interests = new ArrayList<Interest>();
