@@ -26,8 +26,8 @@
                         <br>
                         <div class="row"><div class="span5 offset1">Occupations:</div></div>
                         <div class="row">
-                            <div class="span5 offset1"><select class="span5 occupation" name="occupation1"><option value="-1"></option>@occupations.map {occupation => <option value="@occupation.id" @if(form("occupation1").value==occupation.id) {selected}>@occupation.name</option>}</select></div>
-                            <div class="span5"><select class="span5 occupation" name="occupation2"><option value="-1"></option>@occupations.map {occupation => <option value="@occupation.id" @if(form("occupation2").value==occupation.id) {selected}>@occupation.name</option>}</select></div>
+                            <div class="span5 offset1"><select class="span5 occupation" name="occupation1"><option value="-1"></option>@occupations.map {occupation => <option value="@occupation.id" @if(form("occupation1").value==occupation.id.toString()) {selected}>@occupation.name</option>}</select></div>
+                            <div class="span5"><select class="span5 occupation" name="occupation2"><option value="-1"></option>@occupations.map {occupation => <option value="@occupation.id" @if(form("occupation2").value==occupation.id.toString()) {selected}>@occupation.name</option>}</select></div>
                         </div>
                         <div class="row">
                             <div class="span2 offset1">Age:</div>
@@ -40,16 +40,16 @@
                             <div class="span2"><input class="span2" type="text" id="zip" name="zip" placeholder="Zip code" maxlength="5" value="@form("zip").value"></div>
                             <div class="span1"><label class="radio inline" id="male"><input type="radio" name="gender" value="M" @if(form("gender").value=="M") {checked}><img src="assets/img/male.png"></label></div>
                             <div class="span1"><label class="radio inline" id="female"><input type="radio" name="gender" value="F" @if(form("gender").value=="F") {checked}><img src="assets/img/female.png"></label></div>
-                            <div class="span4"><select class="span4 interest" name="interest1"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest1").value==interest.id) {selected}>@interest.name</option>}</select></div>
+                            <div class="span4"><select class="span4 interest" name="interest1"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest1").value==interest.id.toString()) {selected}>@interest.name</option>}</select></div>
                         </div>
                         <div class="row">
-                            <div class="span4 offset7"><select class="span4 interest" name="interest2"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest2").value==interest.id) {selected}>@interest.name</option>}</select></div>
+                            <div class="span4 offset7"><select class="span4 interest" name="interest2"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest2").value==interest.id.toString()) {selected}>@interest.name</option>}</select></div>
                         </div>
                         <div class="row">
-                            <div class="span4 offset7"><select class="span4 interest" name="interest3"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest3").value==interest.id) {selected}>@interest.name</option>}</select></div>
+                            <div class="span4 offset7"><select class="span4 interest" name="interest3"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest3").value==interest.id.toString()) {selected}>@interest.name</option>}</select></div>
                         </div>
                         <div class="row">
-                            <div class="span4 offset7"><select class="span4 interest" name="interest4"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest4").value==interest.id) {selected}>@interest.name</option>}</select></div>
+                            <div class="span4 offset7"><select class="span4 interest" name="interest4"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest4").value==interest.id.toString()) {selected}>@interest.name</option>}</select></div>
                         </div>
                         <div class="row"><div class="span12 text-center"><button type="submit" class="btn btn-large btn-success">Submit</button></div></div>
                     }
