@@ -20,7 +20,7 @@ import play.api.data.Field
 import play.mvc.Http.Context.Implicit._
 import views.html._
 /**/
-object index extends BaseScalaTemplate[play.api.templates.Html,Format[play.api.templates.Html]](play.api.templates.HtmlFormat) with play.api.templates.Template0[play.api.templates.Html] {
+object login extends BaseScalaTemplate[play.api.templates.Html,Format[play.api.templates.Html]](play.api.templates.HtmlFormat) with play.api.templates.Template0[play.api.templates.Html] {
 
     /**/
     def apply/*1.2*/():play.api.templates.Html = {
@@ -47,8 +47,8 @@ Seq[Any](format.raw/*1.4*/("""
 }
                 /*
                     -- GENERATED --
-                    DATE: Fri Jun 28 01:17:08 EDT 2013
-                    SOURCE: C:/programs/ray/adagie/app/views/index.scala.html
+                    DATE: Thu Jul 04 13:31:16 EDT 2013
+                    SOURCE: C:/programs/ray/adagie/app/views/login.scala.html
                     HASH: a1cdf38ca4cc75f99058ccf1be7eb6e1d2242822
                     MATRIX: 716->1|794->3|833->8|855->22|894->24
                     LINES: 26->1|29->1|31->3|31->3|31->3

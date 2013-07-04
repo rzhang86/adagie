@@ -25,9 +25,12 @@
             @@media (max-width: 767px) {
                 .row-fluid.base {display:none;}
             }
-            .col-wrap{overflow: hidden;}
+            .col-wrap {overflow: hidden;}
             input {max-width: 100%;}
             textarea {max-width: 100%;}
+            
+            .nonform-div {height: 40px;}
+            .nonform-height {height: 40px;}
         </style>
         
         <script src="@routes.Assets.at("js/modernizr-2.6.2-respond-1.1.0.min.js")"></script>
@@ -64,7 +67,7 @@
                 } else {
                     <div class="form-horizontal text-right">
                         <form action="@routes.Login.post()" method="post">
-                            <input type="text" class="span3" name="username" placeholder="Username" maxlength=31>
+                            <input type="text" class="span4" name="email" placeholder="Email address" maxlength=63>
                             <input type="password" class="span3" name="password" placeholder="Password" maxlength=31>
                             <button type="submit" class="btn btn-info">Log in</button>
                             <a class="btn btn-warning" href="@routes.Signup.get()">Sign up</a>

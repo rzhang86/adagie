@@ -37,14 +37,14 @@ public class Global extends GlobalSettings {
             
             User user;
             user = new User();
-            user.username = "Katie";
+            user.email = "kwang318@gmail.com";
             user.password = "secret";
             user.balance = 10000L;
             user.committedBalance = 10000L;
             user.save();
             
             user = new User();
-            user.username = "Ray";
+            user.email = "rzhang86@gmail.com";
             user.password = "secret";
             user.balance = 10000L;
             user.committedBalance = 10000L;

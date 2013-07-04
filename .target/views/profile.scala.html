@@ -10,29 +10,29 @@
                         <div class="row"><div class="span12 text-center"><strong>Required fields:</strong></div></div>
                         <br>
                         <div class="row">
-                            <div class="span3 offset1">Username:</div>
-                            <div class="span4">Email:</div>
+                            <div class="span4 offset1">Email:</div>
+                            <!--
                             <div class="span3">Password:</div>
+                            -->
                         </div>
                         <div class="row">
-                            <div class="span3 offset1 nonform-div"><i>@form("username").value</i></div>
-                            <div class="span4 nonform-div"><i>@form("email").value</i></div>
+                            <div class="span4 offset1 nonform-div text-info"><i>@form("email").value</i></div>
+                            <div class="span4 offset1 form-div nonform-height text-info"><i>@form("email").value</i></div>
+                            <!--
                             <div class="span3 nonform-div"></div>
-                            <div class="span3 offset1 form-div"><input class="span3" type="text" id="username" name="username" placeholder="Username" value="@form("username").value" pattern=".{1,31}"></div>
-                            <div class="span4 form-div"><input class="span4" type="email" id="email" name="email" placeholder="Email" value="@form("email").value" pattern=".{1,63}"></div>
+                            <div class="span3 nonform-div"></div>
+                            <div class="span4 offset1 form-div"><input class="span4" type="email" id="email" name="email" placeholder="Email" value="@form("email").value" pattern=".{1,63}"></div>
                             <div class="span3 form-div"><input class="span3" type="password" id="password" name="password" placeholder="Password" pattern=".{6,31}"></div>
-                        </div>
-                        <div class="row">
-                            <div class="span3 offset8 nonform-div"></div>
-                            <div class="span3 offset8 form-div"><input class="span3" type="password" id="passwordRepeat" name="passwordRepeat" placeholder="Repeat password" pattern=".{6,31}"></div>
+                            <div class="span3 form-div"><input class="span3" type="password" id="passwordRepeat" name="passwordRepeat" placeholder="Repeat password" pattern=".{6,31}"></div>
+                            -->
                         </div>
                         <br>
-                        <div class="row"><div class="span12 text-center"><strong>Optional fields: </strong><i>(These help match you with higher-paying videos!)</i></div></div>
+                        <div class="row"><div class="span12 text-center"><strong>Optional fields:</strong></div></div>
                         <br>
                         <div class="row"><div class="span5 offset1">Occupations:</div></div>
                         <div class="row ">
-                            <div class="span5 offset1 nonform-div"><i>@occupations.map {occupation => @if(form("occupation1").value==occupation.id.toString()) {@occupation.name}}</i></div>
-                            <div class="span5 nonform-div"><i>@occupations.map {occupation => @if(form("occupation2").value==occupation.id.toString()) {@occupation.name}}</i></div>
+                            <div class="span5 offset1 nonform-div text-info"><i>@occupations.map {occupation => @if(form("occupation1").value==occupation.id.toString()) {@occupation.name}}</i></div>
+                            <div class="span5 nonform-div text-info"><i>@occupations.map {occupation => @if(form("occupation2").value==occupation.id.toString()) {@occupation.name}}</i></div>
                             <div class="span5 offset1 form-div"><select class="span5 occupation" name="occupation1"><option value="-1"></option>@occupations.map {occupation => <option value="@occupation.id" @if(form("occupation1").value==occupation.id.toString()) {selected}>@occupation.name</option>}</select></div>
                             <div class="span5 form-div"><select class="span5 occupation" name="occupation2"><option value="-1"></option>@occupations.map {occupation => <option value="@occupation.id" @if(form("occupation2").value==occupation.id.toString()) {selected}>@occupation.name</option>}</select></div>
                         </div>
@@ -43,31 +43,32 @@
                             <div class="span4">Interests:</div>
                         </div>
                         <div class="row">
-                            <div class="span2 offset1 nonform-div"><i>@form("age").value</i></div>
-                            <div class="span2 nonform-div"><i>@form("zip").value</i></div>
-                            <div class="span1 nonform-div">@if(form("gender").value=="M") {<img src="assets/img/male.png">}</div>
-                            <div class="span1 nonform-div">@if(form("gender").value=="F") {<img src="assets/img/female.png">}</div>
-                            <div class="span4 nonform-div"><i>@interests.map {interest => @if(form("interest1").value==interest.id.toString()) {@interest.name}}</i></div>
+                            <div class="span2 offset1 nonform-div text-info"><i>@form("age").value</i></div>
+                            <div class="span2 nonform-div text-info"><i>@form("zipCode").value</i></div>
+                            <div class="span1 nonform-div text-info">@if(form("gender").value=="M") {<img src="assets/img/male.png">}</div>
+                            <div class="span1 nonform-div text-info">@if(form("gender").value=="F") {<img src="assets/img/female.png">}</div>
+                            <div class="span4 nonform-div text-info"><i>@interests.map {interest => @if(form("interest1").value==interest.id.toString()) {@interest.name}}</i></div>
                             <div class="span2 offset1 form-div"><input class="span2" type="number" id="age" name="age" placeholder="Age" maxlength="3" min="0" max="999" value="@form("age").value"></div>
-                            <div class="span2 form-div"><input class="span2" type="text" id="zip" name="zip" placeholder="Zip code" maxlength="5" value="@form("zip").value"></div>
+                            <div class="span2 form-div"><input class="span2" type="text" id="zipCode" name="zipCode" placeholder="Zip code" maxlength="5" value="@form("zipCode").value"></div>
                             <div class="span1 form-div"><label class="radio inline" id="male"><input type="radio" name="gender" value="M" @if(form("gender").value=="M") {checked}><img src="assets/img/male.png"></label></div>
                             <div class="span1 form-div"><label class="radio inline" id="female"><input type="radio" name="gender" value="F" @if(form("gender").value=="F") {checked}><img src="assets/img/female.png"></label></div>
                             <div class="span4 form-div"><select class="span4 interest" name="interest1"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest1").value==interest.id.toString()) {selected}>@interest.name</option>}</select></div>
                         </div>
                         <div class="row ">
-                            <div class="span4 offset7 nonform-div"><i>@interests.map {interest => @if(form("interest2").value==interest.id.toString()) {@interest.name}}</i></div>
+                            <div class="span4 offset7 nonform-div text-info"><i>@interests.map {interest => @if(form("interest2").value==interest.id.toString()) {@interest.name}}</i></div>
                             <div class="span4 offset7 form-div"><select class="span4 interest" name="interest2"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest2").value==interest.id.toString()) {selected}>@interest.name</option>}</select></div>
                         </div>
                         <div class="row">
-                            <div class="span4 offset7 nonform-div"><i>@interests.map {interest => @if(form("interest3").value==interest.id.toString()) {@interest.name}}</i></div>
+                            <div class="span4 offset7 nonform-div text-info"><i>@interests.map {interest => @if(form("interest3").value==interest.id.toString()) {@interest.name}}</i></div>
                             <div class="span4 offset7 form-div"><select class="span4 interest" name="interest3"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest3").value==interest.id.toString()) {selected}>@interest.name</option>}</select></div>
                         </div>
                         <div class="row">
-                            <div class="span4 offset7 nonform-div"><i>@interests.map {interest => @if(form("interest4").value==interest.id.toString()) {@interest.name}}</i></div>
+                            <div class="span4 offset7 nonform-div text-info"><i>@interests.map {interest => @if(form("interest4").value==interest.id.toString()) {@interest.name}}</i></div>
                             <div class="span4 offset7 form-div"><select class="span4 interest" name="interest4"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest4").value==interest.id.toString()) {selected}>@interest.name</option>}</select></div>
                         </div>
+                        <div class="row"><div class="span12 text-center"><i>Optional fields help match you with higher-paying videos!</i></div></div>
                         <div class="row">
-                            <div class="span12 text-center nonform-div"></div>
+                            <div class="span12 text-center nonform-div text-info"></div>
                             <div class="span12 text-center form-div"><button type="submit" class="btn btn-large btn-success">Submit</button></div>
                         </div>
                     }
@@ -76,30 +77,29 @@
         </div>
     </div>
     <script type="text/javascript">
-		$('.nonform-div').height(40)
     	$('.form-div').hide()
+    	$('.nonform-div').show()
     	var editButton = $('#edit-button')
     	editButton.click(function() {
             //b.button('toggle')
             if (editButton.hasClass('active')) {
-            	$('.nonform-div').show()
             	$('.form-div').hide()
+            	$('.nonform-div').show()
             }
             else {
-            	$('.nonform-div').hide()
             	$('.form-div').show()
+            	$('.nonform-div').hide()
             }
         })
         
-        $('#username').tooltip({placement: "top", title: "Must be between 1 and 31 characters."})
-        $('#email').tooltip({placement: "top", title: "Must be between 1 and 63 characters."})
-        $('#password').tooltip({placement: "top", title: "Must be between 6 and 31 characters."})
-        $('#passwordRepeat').tooltip({placement: "top", title: "Must be between 6 and 31 characters."})
-        $('#age').tooltip({placement: "top", title: "Match with videos for your age group."})
-        $('#zip').tooltip({placement: "top", title: "Match with videos in your area."})
-        $('#male').tooltip({placement: "top", title: "Match you with videos for guys."})
-        $('#female').tooltip({placement: "top", title: "Match you with videos for gals."})
-        $('.occupation').tooltip({placement: "top", title: "Match with videos related to your job."})
-        $('.interest').tooltip({placement: "top", title: "Match with videos about your interests."})
+        $('#email').tooltip({placement: "bottom", title: "Must be between 1 and 63 characters."})
+        $('#password').tooltip({placement: "bottom", title: "Must be between 6 and 31 characters."})
+        $('#passwordRepeat').tooltip({placement: "bottom", title: "Must be between 6 and 31 characters."})
+        $('#age').tooltip({placement: "bottom", title: "Match with videos for your age group."})
+        $('#zipCode').tooltip({placement: "bottom", title: "Match with videos in your area."})
+        $('#male').tooltip({placement: "bottom", title: "Match you with videos for guys."})
+        $('#female').tooltip({placement: "bottom", title: "Match you with videos for gals."})
+        $('.occupation').tooltip({placement: "bottom", title: "Match with videos related to your job."})
+        $('.interest').tooltip({placement: "bottom", title: "Match with videos about your interests."})
     </script>
 }

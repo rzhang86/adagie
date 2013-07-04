@@ -127,9 +127,8 @@ create table user (
   id                        bigint not null,
   watching_video_id         bigint,
   zip_id                    bigint,
-  username                  varchar(255),
-  password                  varchar(255),
   email                     varchar(255),
+  password                  varchar(255),
   gender                    varchar(255),
   birthyear                 integer,
   balance                   bigint,
@@ -137,7 +136,8 @@ create table user (
   watching_start_time       bigint,
   watching_end_time         bigint,
   watching_payout           bigint,
-  constraint uq_user_username unique (username),
+  username                  varchar(255),
+  constraint uq_user_email unique (email),
   constraint pk_user primary key (id))
 ;
 

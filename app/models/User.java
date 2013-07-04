@@ -24,9 +24,8 @@ import play.db.ebean.*;
     @ManyToMany public List<Interest> interests = new ArrayList<Interest>();
     @ManyToMany public List<Zip> zips = new ArrayList<Zip>();
 
-    @Column(unique=true) public String username = null;
+    @Column(unique=true) public String email = null;
     public String password = null;
-    public String email = null;
     public String gender = null;
     public Integer birthyear = null;
     
@@ -36,7 +35,12 @@ import play.db.ebean.*;
     public Long watchingEndTime = null;
     public Long watchingPayout = null;
     
-    public static User findByUsername(String username) {return find.where().eq("username", username).findUnique();}
+    public String username = null;
+    
+    public static User findByUsername(String username) {
+    	try {return User.find.byId(Long.parseLong(username));}
+    	catch (Exception e) {return null;}
+    }
     
     public Long getPayout(Video video) {
     	return video.getPayout(this);
