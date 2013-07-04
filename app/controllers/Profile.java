@@ -43,29 +43,31 @@ import views.html.*;
             Long interest3; 		try {interest3 = Long.parseLong(map.get("interest3").trim());} catch (Exception e) {interest3 = null;}
             Long interest4; 		try {interest4 = Long.parseLong(map.get("interest4").trim());} catch (Exception e) {interest4 = null;}
             
-        	user.setAge(age);
-        	user.setGender(gender);
-        	user.setZip(Zip.find.where().eq("zipCode", zipCode).findUnique());
-            HashSet<Long> uniqueValues;
-            uniqueValues = new HashSet<Long>();
-            uniqueValues.add(occupation1);
-            uniqueValues.add(occupation2);
-            uniqueValues.remove(Long.valueOf(-1));
-            ArrayList<Occupation> occupations = new ArrayList<Occupation>();
-            for (Long uniqueValue : uniqueValues) occupations.add(Occupation.find.ref(uniqueValue));
-            user.setOccupations(occupations);
-            uniqueValues = new HashSet<Long>();
-            uniqueValues.add(interest1);
-            uniqueValues.add(interest2);
-            uniqueValues.add(interest3);
-            uniqueValues.add(interest4);
-            uniqueValues.remove(Long.valueOf(-1));
-            ArrayList<Interest> interests = new ArrayList<Interest>();
-            for (Long uniqueValue : uniqueValues) interests.add(Interest.find.ref(uniqueValue));
-            user.setInterests(interests);
-        	user.save();
-            flash("success", "Edits saved");
-            return redirect("/profile");
+            
+	        	user.setAge(age);
+	        	user.setGender(gender);
+	        	user.setZip(Zip.find.where().eq("zipCode", zipCode).findUnique());
+	            HashSet<Long> uniqueValues;
+	            uniqueValues = new HashSet<Long>();
+	            uniqueValues.add(occupation1);
+	            uniqueValues.add(occupation2);
+	            uniqueValues.remove(Long.valueOf(-1));
+	            ArrayList<Occupation> occupations = new ArrayList<Occupation>();
+	            for (Long uniqueValue : uniqueValues) occupations.add(Occupation.find.ref(uniqueValue));
+	            user.setOccupations(occupations);
+	            uniqueValues = new HashSet<Long>();
+	            uniqueValues.add(interest1);
+	            uniqueValues.add(interest2);
+	            uniqueValues.add(interest3);
+	            uniqueValues.add(interest4);
+	            uniqueValues.remove(Long.valueOf(-1));
+	            ArrayList<Interest> interests = new ArrayList<Interest>();
+	            for (Long uniqueValue : uniqueValues) interests.add(Interest.find.ref(uniqueValue));
+	            user.setInterests(interests);
+	        	user.save();
+	            flash("success", "Edits saved");
+	            return redirect("/profile");
+            
         }
         catch (Exception e) {flash("failure", "Edits failed to save"); e.printStackTrace();}
         return ok(profile.render(user, profileForm));

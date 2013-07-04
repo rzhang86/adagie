@@ -20,7 +20,7 @@ public class Signup extends Controller {
         public String passwordRepeat;
         public String gender;
         public String age;
-        public String zip;
+        public String zipCode;
         public String occupation1;
         public String occupation2;
         public String interest1;

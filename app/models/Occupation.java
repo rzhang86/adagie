@@ -13,6 +13,10 @@ import play.db.ebean.*;
 	@Column(unique=true) public String name = null;
 	
 	public static List<Occupation> findAll() {return find.findList();}
+	
+	public static String getNameByString(String s) {
+		try {return Occupation.find.byId(Long.parseLong(s)).getName();} catch (Exception e) {return "";}
+	}
 
 	
 	

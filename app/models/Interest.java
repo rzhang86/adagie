@@ -14,7 +14,10 @@ import play.db.ebean.*;
 	@Column(unique=true) public String name = null;
 	
 	public static List<Interest> findAll() {return find.findList();}
-
+	
+	public static String getNameByString(String s) {
+		try {return Interest.find.byId(Long.parseLong(s)).getName();} catch (Exception e) {return "";}
+	}
 
 	
 	// getters/setters

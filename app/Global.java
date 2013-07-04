@@ -34,47 +34,132 @@ public class Global extends GlobalSettings {
             Ebean.save((List) Yaml.load("seed/data-Interest.yml"));
             Ebean.save((List) Yaml.load("seed/data-Occupation.yml"));
             Ebean.save((List) Yaml.load("seed/data-Zip.yml"));
+            writeJson();
             
             User user;
             user = new User();
-            user.email = "kwang318@gmail.com";
-            user.password = "secret";
-            user.balance = 10000L;
-            user.committedBalance = 10000L;
+            user.setEmail("kwang318@gmail.com");
+            user.setPassword("secret");
+            user.setBalance(10000L);
+            user.setCommittedBalance(10000L);
             user.save();
             
             user = new User();
-            user.email = "rzhang86@gmail.com";
-            user.password = "secret";
-            user.balance = 10000L;
-            user.committedBalance = 10000L;
+            user.setEmail("rzhang86@gmail.com");
+            user.setPassword("secret");
+            user.setBalance(10000L);
+            user.setCommittedBalance(10000L);
             user.save();
             
             FinancialInstitutionLogin financialInstitutionLogin;
             financialInstitutionLogin = new FinancialInstitutionLogin();
-            financialInstitutionLogin.user = user;
+            financialInstitutionLogin.setUser(user);
             
             FinancialInstitution financialInstitution = FinancialInstitution.find.where().eq("iid", 100000L).findUnique();
             financialInstitutionLogin.financialInstitution = financialInstitution;
-            financialInstitutionLogin.username = "direct";
-            financialInstitutionLogin.password = "anyvalue";
+            financialInstitutionLogin.setUsername("direct");
+            financialInstitutionLogin.setPassword("anyvalue");
             financialInstitutionLogin.save();
         }
         
+        /*
         // start looping maintenance threads
         applicationIsLive = true;
-        //try {
-        	//aggCatServiceThread = new Thread(new AggCatServiceThread());
-        	//aggCatServiceThread.start();
-    	//} catch (Exception e) {e.printStackTrace();}
+        try {
+        	aggCatServiceThread = new Thread(new AggCatServiceThread());
+        	aggCatServiceThread.start();
+    	} catch (Exception e) {e.printStackTrace();}
+    	*/
     }
     
     @Override public void onStop(Application app) {
-        // signal maintenance threads to stop
+        /*
+    	// signal maintenance threads to stop
         applicationIsLive = false;
-        //try {aggCatServiceThread.join();} catch (Exception e) {e.printStackTrace();}
+        try {aggCatServiceThread.join();} catch (Exception e) {e.printStackTrace();}
+        */
     }
 
+    public static void writeJson() {
+    	// objects
+        try (BufferedWriter writer = new BufferedWriter(Files.newBufferedWriter(Paths.get("public/data/ExpenseCategories-temp.json"), Charset.defaultCharset()))) {
+    		writer.write("[");
+    		String delimiter = "";
+    		for (ExpenseCategory expenseCategory : ExpenseCategory.find.orderBy("name").findList()) {
+    			writer.write(delimiter + "{\"id\":" + expenseCategory.getId() + ",\"name\":\"" + escape(expenseCategory.getName()) + "\"}");
+    			delimiter = ",";
+    		}
+    		writer.write("]");
+    		writer.flush();
+    		Files.move(Paths.get("public/data/ExpenseCategories-temp.json"), Paths.get("public/data/ExpenseCategories.json"), REPLACE_EXISTING);
+    	} catch (Exception e) {}
+        
+        try (BufferedWriter writer = new BufferedWriter(Files.newBufferedWriter(Paths.get("public/data/ExpenseSubcategories-temp.json"), Charset.defaultCharset()))) {
+    		writer.write("[");
+    		String delimiter = "";
+    		for (ExpenseSubcategory expenseSubcategory : ExpenseSubcategory.find.orderBy("name").findList()) {
+    			writer.write(delimiter + "{\"id\":" + expenseSubcategory.getId() + ",\"name\":\"" + escape(expenseSubcategory.getName()) + "\"}");
+    			delimiter = ",";
+    		}
+    		writer.write("]");
+    		writer.flush();
+    		Files.move(Paths.get("public/data/ExpenseSubcategories-temp.json"), Paths.get("public/data/ExpenseSubcategories.json"), REPLACE_EXISTING);
+    	} catch (Exception e) {}
+        
+    	try (BufferedWriter writer = new BufferedWriter(Files.newBufferedWriter(Paths.get("public/data/Interests-temp.json"), Charset.defaultCharset()))) {
+    		writer.write("[");
+    		String delimiter = "";
+    		for (Interest interest : Interest.find.orderBy("name").findList()) {
+    			writer.write(delimiter + "{\"id\":" + interest.getId() + ",\"name\":\"" + escape(interest.getName()) + "\"}");
+    			delimiter = ",";
+    		}
+    		writer.write("]");
+    		writer.flush();
+    		Files.move(Paths.get("public/data/Interests-temp.json"), Paths.get("public/data/Interests.json"), REPLACE_EXISTING);
+    	} catch (Exception e) {}
+    	
+    	try (BufferedWriter writer = new BufferedWriter(Files.newBufferedWriter(Paths.get("public/data/Occupations-temp.json"), Charset.defaultCharset()))) {
+    		writer.write("[");
+    		String delimiter = "";
+    		for (Occupation occupation : Occupation.find.orderBy("name").findList()) {
+    			writer.write(delimiter + "{\"id\":" + occupation.getId() + ",\"name\":\"" + escape(occupation.getName()) + "\"}");
+    			delimiter = ",";
+    		}
+    		writer.write("]");
+    		writer.flush();
+    		Files.move(Paths.get("public/data/Occupations-temp.json"), Paths.get("public/data/Occupations.json"), REPLACE_EXISTING);
+    	} catch (Exception e) {}
+    	
+    	// lists
+    	try (BufferedWriter writer = new BufferedWriter(Files.newBufferedWriter(Paths.get("public/data/FinancialInstitutions-temp.json"), Charset.defaultCharset()))) {
+    		writer.write("[");
+    		String delimiter = "";
+    		for (FinancialInstitution financialInstitution : FinancialInstitution.find.orderBy("name").findList()) {
+    			writer.write(delimiter + "\"" +escape(financialInstitution.getName()) + "\"");
+    			delimiter = ",";
+    		}
+    		writer.write("]");
+    		writer.flush();
+    		Files.move(Paths.get("public/data/FinancialInstitutions-temp.json"), Paths.get("public/data/FinancialInstitutions.json"), REPLACE_EXISTING);
+    	} catch (Exception e) {}
+    	
+    	try (BufferedWriter writer = new BufferedWriter(Files.newBufferedWriter(Paths.get("public/data/Zips-temp.json"), Charset.defaultCharset()))) {
+    		writer.write("[");
+    		String delimiter = "";
+    		for (Zip zip : Zip.find.orderBy("zipCode").findList()) {
+    			writer.write(delimiter + "\"" +escape(zip.getZipCode()) + "\"");
+    			delimiter = ",";
+    		}
+    		writer.write("]");
+    		writer.flush();
+    		Files.move(Paths.get("public/data/Zips-temp.json"), Paths.get("public/data/Zips.json"), REPLACE_EXISTING);
+    	} catch (Exception e) {}
+    }
+
+    public static String escape(String input) {
+        return input.replace("\\", "\\\\").replace("@", "@@");
+    }
+    
     /* intuit stuff*/
     public static class AggCatServiceThread implements Runnable {
         String OAUTH_CONSUMER_KEY = "qyprdNIHBI0Ym9iddckwTR8Fzq9Mmj";
@@ -395,10 +480,6 @@ public class Global extends GlobalSettings {
                 if (service == null) try {Thread.sleep(1000 * 60);} catch (Exception e) {}
             }
             return service;
-        }
-        
-        public static String escape(String input) {
-            return input.replace("\\", "\\\\").replace("@", "@@");
         }
     }
     /*
