@@ -50,31 +50,19 @@
         <![endif]-->
 
         <br><br><br><br>
-
         <div class="container">
             <div class="row">
                 @if(user!=null) {
-                    <div class="span9">
-                        <ul class="nav nav-pills ">
-                            <li @if(activeClass.equals("home")) {class="active"}><a href="@routes.Home.get()">Home</a></li>
-                            <li @if(activeClass.equals("profile")) {class="active"})><a href="@routes.Profile.get()">Profile</a></li>
-                            <li @if(activeClass.equals("uploads")) {class="active"}><a href="@routes.Uploads.get()">Uploads</a></li>
-                            <li @if(activeClass.equals("accounts")) {class="active"})><a href="@routes.Accounts.get()">Accounts</a></li>
-                            <li @if(activeClass.equals("notifications")) {class="active"})><a href="@routes.Notifications.get()">Notifications</a></li>
-                            <li><a href="@routes.Logout.get()">Log out</a></li>
-                        </ul>
-                        
-                    </div>
-                    <div class="span3" style="height: 30px; line-height: 30px;">
-                        @if(flash.contains("success")) {@flash.get("success")}
-                        @if(flash.contains("failure")) {@flash.get("failure")}
-                    </div>
+                    <ul class="nav nav-pills">
+                        <li @if(activeClass.equals("home")) {class="active"}><a href="@routes.Home.get()">Home</a></li>
+                        <li @if(activeClass.equals("profile")) {class="active"})><a href="@routes.Profile.get()">Profile</a></li>
+                        <li @if(activeClass.equals("uploads")) {class="active"}><a href="@routes.Uploads.get()">Uploads</a></li>
+                        <li @if(activeClass.equals("accounts")) {class="active"})><a href="@routes.Accounts.get()">Accounts</a></li>
+                        <li @if(activeClass.equals("notifications")) {class="active"})><a href="@routes.Notifications.get()">Notifications</a></li>
+                        <li><a href="@routes.Logout.get()">Log out</a></li>
+                    </ul>
                 } else {
-                    <div class="span3" style="height: 30px; line-height: 30px;">
-                        @if(flash.contains("success")) {@flash.get("success")}
-                        @if(flash.contains("failure")) {@flash.get("failure")}
-                    </div>
-                    <div class="span9 form-horizontal text-right">
+                    <div class="form-horizontal text-right">
                         <form action="@routes.Login.post()" method="post">
                             <input type="text" class="span3" name="username" placeholder="Username" maxlength=31>
                             <input type="password" class="span3" name="password" placeholder="Password" maxlength=31>
@@ -84,9 +72,13 @@
                     </div>
                 }
             </div>
-            
+            <div class="row">
+                <div class="span12">
+                    @if(flash.contains("success")) {@flash.get("success")}
+                    @if(flash.contains("failure")) {@flash.get("failure")}
+                </div>
+            </div>
             @content
-            
             <div class="footer">
                 <p>by Ray</p>
             </div>      
