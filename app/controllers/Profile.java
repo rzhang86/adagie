@@ -16,7 +16,7 @@ import views.html.*;
         public String email;
         public String gender;
         public String age;
-        public String zip;
+        public String zipCode;
         public String occupation1;
         public String occupation2;
         public String interest1;
@@ -26,6 +26,8 @@ import views.html.*;
     }
 	
     //todo: validate username and password can only contain alphanumerics, no escape characters
+	//todo: confirm that making new ArrayList for occupations and interests deletes old entries
+	//todo: make zip selection not free entry
     public static Result post() {
     	User user = User.findByUsername(request().username());
         Form<ProfileForm> profileForm = form(ProfileForm.class).bindFromRequest();
@@ -41,44 +43,50 @@ import views.html.*;
             Long interest3; 		try {interest3 = Long.parseLong(map.get("interest3").trim());} catch (Exception e) {interest3 = null;}
             Long interest4; 		try {interest4 = Long.parseLong(map.get("interest4").trim());} catch (Exception e) {interest4 = null;}
             
-        	user.birthyear = (age != null ? Calendar.getInstance().get(Calendar.YEAR) - age : null);
-        	user.gender = gender;
-        	user.zip = Zip.find.where().eq("zipCode", zipCode).findUnique();
-            List<Long> uniqueValues;
-            uniqueValues = new ArrayList<Long>();
-            if (occupation1 != -1 && !uniqueValues.contains(occupation1)) uniqueValues.add(occupation1);
-            if (occupation2 != -1 && !uniqueValues.contains(occupation2)) uniqueValues.add(occupation2);
-            for (Occupation occupation : user.occupations) user.occupations.remove(occupation);
-            for (Long uniqueValue : uniqueValues) user.occupations.add(Occupation.find.ref(uniqueValue));
-            uniqueValues = new ArrayList<Long>();
-            if (interest1 != -1 && !uniqueValues.contains(interest1)) uniqueValues.add(interest1);
-            if (interest2 != -1 && !uniqueValues.contains(interest2)) uniqueValues.add(interest2);
-            if (interest3 != -1 && !uniqueValues.contains(interest3)) uniqueValues.add(interest3);
-            if (interest4 != -1 && !uniqueValues.contains(interest4)) uniqueValues.add(interest4);
-            for (Interest interest : user.interests) user.interests.remove(interest);
-            for (Long uniqueValue : uniqueValues) user.interests.add(Interest.find.ref(uniqueValue));
+        	user.setAge(age);
+        	user.setGender(gender);
+        	user.setZip(Zip.find.where().eq("zipCode", zipCode).findUnique());
+            HashSet<Long> uniqueValues;
+            uniqueValues = new HashSet<Long>();
+            uniqueValues.add(occupation1);
+            uniqueValues.add(occupation2);
+            uniqueValues.remove(Long.valueOf(-1));
+            ArrayList<Occupation> occupations = new ArrayList<Occupation>();
+            for (Long uniqueValue : uniqueValues) occupations.add(Occupation.find.ref(uniqueValue));
+            user.setOccupations(occupations);
+            uniqueValues = new HashSet<Long>();
+            uniqueValues.add(interest1);
+            uniqueValues.add(interest2);
+            uniqueValues.add(interest3);
+            uniqueValues.add(interest4);
+            uniqueValues.remove(Long.valueOf(-1));
+            ArrayList<Interest> interests = new ArrayList<Interest>();
+            for (Long uniqueValue : uniqueValues) interests.add(Interest.find.ref(uniqueValue));
+            user.setInterests(interests);
         	user.save();
             flash("success", "Edits saved");
             return redirect("/profile");
         }
-        catch (Exception e) {flash("failure", "Edits failed to save");}
+        catch (Exception e) {flash("failure", "Edits failed to save"); e.printStackTrace();}
         return ok(profile.render(user, profileForm));
     }
 	
 	public static Form<ProfileForm> getProfileForm(User user) {
     	ProfileForm profileForm = new ProfileForm();
-    	profileForm.email = 		(user.email != null ? user.email : null);
-    	profileForm.gender = 		(user.gender != null ? user.gender : null);
-    	profileForm.age = 			(user.birthyear != null ? String.valueOf(Calendar.getInstance().get(Calendar.YEAR) - user.birthyear) : null);
-    	profileForm.zip = 			(user.zip != null ? Zip.find.ref(user.zip.id).zipCode : null);
-    	List<Occupation> occupations = user.occupations;
-    	profileForm.occupation1 = 	(occupations.size() >= 1 ? String.valueOf(occupations.get(0).id) : null);
-    	profileForm.occupation2 = 	(occupations.size() >= 2 ? String.valueOf(occupations.get(1).id) : null);
-    	List<Interest> interests = user.interests;
-    	profileForm.interest1 = 	(interests.size() >= 1 ? String.valueOf(interests.get(0).id) : null);
-    	profileForm.interest2 = 	(interests.size() >= 2 ? String.valueOf(interests.get(1).id) : null);
-    	profileForm.interest3 = 	(interests.size() >= 3 ? String.valueOf(interests.get(2).id) : null);
-    	profileForm.interest4 = 	(interests.size() >= 4 ? String.valueOf(interests.get(3).id) : null);
+    	profileForm.email = user.getEmail();
+    	profileForm.gender = user.getGender();
+    	Integer age = user.getAge();
+    	if (age != null) profileForm.age = String.valueOf(age);
+    	Zip zip = user.getZip();
+    	if (zip != null)profileForm.zipCode = zip.getZipCode();
+    	List<Occupation> occupations = user.getOccupations();
+    	if (occupations.size() > 0) profileForm.occupation1 = String.valueOf(occupations.get(0).id);
+    	if (occupations.size() > 1) profileForm.occupation2 = String.valueOf(occupations.get(1).id);
+    	List<Interest> interests = user.getInterests();
+    	if (interests.size() > 0) profileForm.interest1 = String.valueOf(interests.get(0).id);
+    	if (interests.size() > 1) profileForm.interest2 = String.valueOf(interests.get(1).id);
+    	if (interests.size() > 2) profileForm.interest3 = String.valueOf(interests.get(2).id);
+    	if (interests.size() > 3) profileForm.interest4 = String.valueOf(interests.get(3).id);
     	Form<ProfileForm> form = form(ProfileForm.class);
     	form = form.fill(profileForm);
     	return form;

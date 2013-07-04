@@ -10,4 +10,40 @@ import play.db.ebean.*;
 	@ManyToOne public ChallengeQuestion challengeQuestion = null;
 	
 	public String answer = null;
+
+	
+	
+	// getters/setters
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public FinancialInstitutionLogin getFinancialInstitutionLogin() {
+		return financialInstitutionLogin;
+	}
+
+	public void setFinancialInstitutionLogin(
+			FinancialInstitutionLogin financialInstitutionLogin) {
+		this.financialInstitutionLogin = financialInstitutionLogin;
+	}
+
+	public ChallengeQuestion getChallengeQuestion() {
+		return challengeQuestion;
+	}
+
+	public void setChallengeQuestion(ChallengeQuestion challengeQuestion) {
+		this.challengeQuestion = challengeQuestion;
+	}
+
+	public String getAnswer() {
+		return answer;
+	}
+
+	public void setAnswer(String answer) {
+		this.answer = answer;
+	}
 }

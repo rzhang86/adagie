@@ -1,5 +1,6 @@
 package controllers;
 import java.util.*;
+
 import org.apache.commons.mail.*;
 import play.mvc.*;
 import play.data.*;
@@ -53,24 +54,30 @@ public class Signup extends Controller {
             else if (passwordRepeat == null || !passwordRepeat.equals(password)) flash("failure", "Passwords do not match");
             else {
             	User user = new User();
-            	user.email = email;
-            	user.password = password;
-            	user.birthyear = (age != null ? Calendar.getInstance().get(Calendar.YEAR) - age : null);
-            	user.gender = gender;
-            	user.zip = Zip.find.where().eq("zipCode", zipCode).findUnique();
-                List<Long> uniqueValues;
-                uniqueValues = new ArrayList<Long>();
-                if (occupation1 != -1 && !uniqueValues.contains(occupation1)) uniqueValues.add(occupation1);
-                if (occupation2 != -1 && !uniqueValues.contains(occupation2)) uniqueValues.add(occupation2);
-                for (Long uniqueValue : uniqueValues) user.occupations.add(Occupation.find.ref(uniqueValue));
-                uniqueValues = new ArrayList<Long>();
-                if (interest1 != -1 && !uniqueValues.contains(interest1)) uniqueValues.add(interest1);
-                if (interest2 != -1 && !uniqueValues.contains(interest2)) uniqueValues.add(interest2);
-                if (interest3 != -1 && !uniqueValues.contains(interest3)) uniqueValues.add(interest3);
-                if (interest4 != -1 && !uniqueValues.contains(interest4)) uniqueValues.add(interest4);
-                for (Long uniqueValue : uniqueValues) user.interests.add(Interest.find.ref(uniqueValue));
-            	user.balance = 0L;
-            	user.committedBalance = 0L;
+            	user.setEmail(email);
+            	user.setPassword(password);
+            	user.setAge(age);
+            	user.setGender(gender);
+            	user.setZip(Zip.find.where().eq("zipCode", zipCode).findUnique());
+            	HashSet<Long> uniqueValues;
+                uniqueValues = new HashSet<Long>();
+                uniqueValues.add(occupation1);
+                uniqueValues.add(occupation2);
+                uniqueValues.remove(Long.valueOf(-1));
+                ArrayList<Occupation> occupations = new ArrayList<Occupation>();
+                for (Long uniqueValue : uniqueValues) occupations.add(Occupation.find.ref(uniqueValue));
+                user.setOccupations(occupations);
+                uniqueValues = new HashSet<Long>();
+                uniqueValues.add(interest1);
+                uniqueValues.add(interest2);
+                uniqueValues.add(interest3);
+                uniqueValues.add(interest4);
+                uniqueValues.remove(Long.valueOf(-1));
+                ArrayList<Interest> interests = new ArrayList<Interest>();
+                for (Long uniqueValue : uniqueValues) interests.add(Interest.find.ref(uniqueValue));
+                user.setInterests(interests);
+            	user.setBalance(0L);
+            	user.setCommittedBalance(0L);
             	user.save();
                 //session("username", username);
 
@@ -91,7 +98,7 @@ public class Signup extends Controller {
                 return redirect("/");
             }
         }
-        catch (Exception e) {flash("failure", "Sign up failed");}
+        catch (Exception e) {flash("failure", "Sign up failed"); e.printStackTrace();}
         return ok(signup.render(signupForm));
     }
 }

@@ -12,4 +12,31 @@ import play.db.ebean.*;
 	
 	@Column(unique=true) public String code = null;
 	@Column(unique=true) public String name = null;
+	
+	
+	// getters/setters
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public List<ExpenseSubcategory> getExpenseSubcategorys() {
+		return expenseSubcategorys;
+	}
+	public void setExpenseSubcategorys(List<ExpenseSubcategory> expenseSubcategorys) {
+		this.expenseSubcategorys = expenseSubcategorys;
+	}
+	public String getCode() {
+		return code;
+	}
+	public void setCode(String code) {
+		this.code = code;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
 }

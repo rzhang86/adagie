@@ -114,4 +114,71 @@ import org.nfunk.jep.*;
         catch (Exception e) {e.printStackTrace();}
         return 1L;
     }
+
+	
+	
+	// getters/setters
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public List<User> getWatchingUsers() {
+		return watchingUsers;
+	}
+
+	public void setWatchingUsers(List<User> watchingUsers) {
+		this.watchingUsers = watchingUsers;
+	}
+
+	public List<WatchedVideo> getWatchedVideos() {
+		return watchedVideos;
+	}
+
+	public void setWatchedVideos(List<WatchedVideo> watchedVideos) {
+		this.watchedVideos = watchedVideos;
+	}
+
+	public List<PayoutFormula> getPayoutFormulas() {
+		return payoutFormulas;
+	}
+
+	public void setPayoutFormulas(List<PayoutFormula> payoutFormulas) {
+		this.payoutFormulas = payoutFormulas;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Integer getDuration() {
+		return duration;
+	}
+
+	public void setDuration(Integer duration) {
+		this.duration = duration;
+	}
 }

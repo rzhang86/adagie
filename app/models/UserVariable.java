@@ -14,4 +14,50 @@ import play.db.ebean.*;
     public Boolean isDebit = null;
     public Long amount = null;
     public Integer frequency = null;
+
+	
+	
+	// getters/setters
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+	public String getCode() {
+		return code;
+	}
+	public void setCode(String code) {
+		this.code = code;
+	}
+	public Integer getTimepoint() {
+		return timepoint;
+	}
+	public void setTimepoint(Integer timepoint) {
+		this.timepoint = timepoint;
+	}
+	public Boolean getIsDebit() {
+		return isDebit;
+	}
+	public void setIsDebit(Boolean isDebit) {
+		this.isDebit = isDebit;
+	}
+	public Long getAmount() {
+		return amount;
+	}
+	public void setAmount(Long amount) {
+		this.amount = amount;
+	}
+	public Integer getFrequency() {
+		return frequency;
+	}
+	public void setFrequency(Integer frequency) {
+		this.frequency = frequency;
+	}
 }

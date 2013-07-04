@@ -4,53 +4,53 @@
     <div class="row">
         <div class="span12 well">
             <form action="@routes.Signup.post()" method="post">
-                @defining(Occupation.findAll()) { occupations =>
-                    @defining(Interest.findAll()) { interests =>
-                        <div class="row"><div class="span12 text-center"><strong>Required fields:</strong></div></div>
-                        <br>
-                        <div class="row">
-                            <div class="span4 offset1">Email:</div>
-                            <div class="span3">Password:</div>
-                        </div>
-                        <div class="row">
-                            <div class="span4 offset1"><input class="span4" type="email" id="email" name="email" placeholder="Email" value="@form("email").value" pattern=".{1,63}"></div>
-                            <div class="span3"><input class="span3" type="password" id="password" name="password" placeholder="Password" pattern=".{6,31}"></div>
-                            <div class="span3"><input class="span3" type="password" id="passwordRepeat" name="passwordRepeat" placeholder="Repeat password" pattern=".{6,31}"></div>
-                        </div>
-                        <br>
-                        <div class="row"><div class="span12 text-center"><strong>Optional fields:</strong></div></div>
-                        <br>
-                        <div class="row"><div class="span5 offset1">Occupations:</div></div>
-                        <div class="row">
-                            <div class="span5 offset1"><select class="span5 occupation" name="occupation1"><option value="-1"></option>@occupations.map {occupation => <option value="@occupation.id" @if(form("occupation1").value==occupation.id.toString()) {selected}>@occupation.name</option>}</select></div>
-                            <div class="span5"><select class="span5 occupation" name="occupation2"><option value="-1"></option>@occupations.map {occupation => <option value="@occupation.id" @if(form("occupation2").value==occupation.id.toString()) {selected}>@occupation.name</option>}</select></div>
-                        </div>
-                        <div class="row">
-                            <div class="span2 offset1">Age:</div>
-                            <div class="span2">Zip code:</div>
-                            <div class="span2">Gender:</div>
-                            <div class="span4">Interests:</div>
-                        </div>
-                        <div class="row">
-                            <div class="span2 offset1"><input class="span2" type="number" id="age" name="age" placeholder="Age" maxlength="3" min="0" max="999" value="@form("age").value"></div>
-                            <div class="span2"><input class="span2" type="text" id="zipCode" name="zipCode" placeholder="Zip code" maxlength="5" value="@form("zipCode").value"></div>
-                            <div class="span1"><label class="radio inline" id="male"><input type="radio" name="gender" value="M" @if(form("gender").value=="M") {checked}><img src="assets/img/male.png"></label></div>
-                            <div class="span1"><label class="radio inline" id="female"><input type="radio" name="gender" value="F" @if(form("gender").value=="F") {checked}><img src="assets/img/female.png"></label></div>
-                            <div class="span4"><select class="span4 interest" name="interest1"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest1").value==interest.id.toString()) {selected}>@interest.name</option>}</select></div>
-                        </div>
-                        <div class="row">
-                            <div class="span4 offset7"><select class="span4 interest" name="interest2"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest2").value==interest.id.toString()) {selected}>@interest.name</option>}</select></div>
-                        </div>
-                        <div class="row">
-                            <div class="span4 offset7"><select class="span4 interest" name="interest3"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest3").value==interest.id.toString()) {selected}>@interest.name</option>}</select></div>
-                        </div>
-                        <div class="row">
-                            <div class="span4 offset7"><select class="span4 interest" name="interest4"><option value="-1"></option>@interests.map {interest => <option value="@interest.id" @if(form("interest4").value==interest.id.toString()) {selected}>@interest.name</option>}</select></div>
-                        </div>
-                        <div class="row"><div class="span12 text-center"><i>Optional fields help match you with higher-paying videos!</i></div></div>
-                        <div class="row"><div class="span12 text-center"><button type="submit" class="btn btn-large btn-success">Submit</button></div></div>
-                    }
+                <div class="row"><div class="span12 text-center"><strong>Required fields:</strong></div></div>
+                <br>
+                <div class="row">
+                    <div class="span4 offset1">Email:</div>
+                    <div class="span3">Password:</div>
+                </div>
+                <div class="row">
+                    <div class="span4 offset1"><input class="span4" type="email" id="email" name="email" placeholder="Email" value="@form("email").value" pattern=".{1,63}"></div>
+                    <div class="span3"><input class="span3" type="password" id="password" name="password" placeholder="Password" pattern=".{6,31}"></div>
+                    <div class="span3"><input class="span3" type="password" id="passwordRepeat" name="passwordRepeat" placeholder="Repeat password" pattern=".{6,31}"></div>
+                </div>
+                <br>
+                <div class="row"><div class="span12 text-center"><strong>Optional fields:</strong></div></div>
+                <br>
+                <div class="row"><div class="span5 offset1">Occupations:</div></div>
+                @defining(Occupation.findAll()) {occupations =>
+                    <div class="row">
+                        <div class="span5 offset1"><select class="span5 occupation" name="occupation1"><option value="-1"></option>@occupations.map {occupation => <option value="@occupation.getId()" @if(form("occupation1").value==occupation.getId().toString()) {selected}>@occupation.getName()</option>}</select></div>
+                        <div class="span5"><select class="span5 occupation" name="occupation2"><option value="-1"></option>@occupations.map {occupation => <option value="@occupation.getId()" @if(form("occupation2").value==occupation.getId().toString()) {selected}>@occupation.getName()</option>}</select></div>
+                    </div>
                 }
+                <div class="row">
+                    <div class="span2 offset1">Age:</div>
+                    <div class="span2">Zip code:</div>
+                    <div class="span2">Gender:</div>
+                    <div class="span4">Interests:</div>
+                </div>
+                @defining(Interest.findAll()) {interests =>
+                    <div class="row">
+                        <div class="span2 offset1"><input class="span2" type="number" id="age" name="age" placeholder="Age" maxlength="3" min="0" max="999" value="@form("age").value"></div>
+                        <div class="span2"><input class="span2" type="text" id="zipCode" name="zipCode" placeholder="Zip code" maxlength="5" value="@form("zipCode").value"></div>
+                        <div class="span1"><label class="radio inline" id="male"><input type="radio" name="gender" value="M" @if(form("gender").value=="M") {checked}><img src="assets/img/male.png"></label></div>
+                        <div class="span1"><label class="radio inline" id="female"><input type="radio" name="gender" value="F" @if(form("gender").value=="F") {checked}><img src="assets/img/female.png"></label></div>
+                        <div class="span4"><select class="span4 interest" name="interest1"><option value="-1"></option>@interests.map {interest => <option value="@interest.getId()" @if(form("interest1").value==interest.getId().toString()) {selected}>@interest.getName()</option>}</select></div>
+                    </div>
+                    <div class="row">
+                        <div class="span4 offset7"><select class="span4 interest" name="interest2"><option value="-1"></option>@interests.map {interest => <option value="@interest.getId()" @if(form("interest2").value==interest.getId().toString()) {selected}>@interest.getName()</option>}</select></div>
+                    </div>
+                    <div class="row">
+                        <div class="span4 offset7"><select class="span4 interest" name="interest3"><option value="-1"></option>@interests.map {interest => <option value="@interest.getId()" @if(form("interest3").value==interest.getId().toString()) {selected}>@interest.getName()</option>}</select></div>
+                    </div>
+                    <div class="row">
+                        <div class="span4 offset7"><select class="span4 interest" name="interest4"><option value="-1"></option>@interests.map {interest => <option value="@interest.getId()" @if(form("interest4").value==interest.getId().toString()) {selected}>@interest.getName()</option>}</select></div>
+                    </div>
+                }
+                <div class="row"><div class="span12 text-center"><i>Optional fields help match you with higher-paying videos!</i></div></div>
+                <div class="row"><div class="span12 text-center"><button type="submit" class="btn btn-large btn-success">Submit</button></div></div>
             </form>
         </div>
     </div>

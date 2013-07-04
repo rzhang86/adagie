@@ -30,9 +30,9 @@ public class Login extends Controller {
         	String password; 	try {password = map.get("password").trim();} catch(Exception e) {password = null;}
             User user = User.find.where().eq("email", email).findUnique();
             if (user == null) flash("failure", "Email not registered");
-            else if (!user.password.equals(password)) flash("failure", "Incorrect password");
+            else if (!user.getPassword().equals(password)) flash("failure", "Incorrect password");
             else {
-                session("id", String.valueOf(user.id));
+                session("id", String.valueOf(user.getId()));
                 flash("success", "You have logged in");
                 return redirect("/home");
             }
