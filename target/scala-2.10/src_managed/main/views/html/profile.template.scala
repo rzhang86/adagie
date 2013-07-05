@@ -32,145 +32,142 @@ Seq[Any](format.raw/*1.47*/("""
     <div class="row">
         <div class="span12 well">
             <form action=""""),_display_(Seq[Any](/*6.28*/routes/*6.34*/.Profile.post())),format.raw/*6.49*/("""" method="post">
-                <div class="row"><div class="span12 text-right"><button type="button" class="btn btn-primary" id="edit-button" data-toggle="button">Edit</button></div></div>
+                <div class="row"><div class="span12 text-right"><button type="button" class="btn btn-info" id="edit-button" data-toggle="button">Edit</button></div></div>
                 <div class="row"><div class="span6 offset3 text-center"><strong>Required fields:</strong></div></div>
-                <div class="row">
+                <div class="row nonform-height2">
                     <div class="span4 offset1">Email:</div>
-                    <div class="span6">Password:</div>
+                    <div class="span3">Password:</div>
+                    <div class="span4 form-div text-warning">
+                        <label class="checkbox pull-right"><input type="checkbox" id="change-password-box" name="changePassword" value="1"> Change password</label>
+                    </div>
                 </div>
                 <div class="row">
-                    <div class="span4 offset1 nonform-height text-info"><i>"""),_display_(Seq[Any](/*14.77*/form("email")/*14.90*/.value)),format.raw/*14.96*/("""</i></div>
-                    <div class="span5 nonform-div text-info"><i>(not shown of course...)</i></div>
-                    <div class="span3 form-div">
-                        <button type="button" class="btn btn-danger" id="change-password-button" data-toggle="button">Change password</button>
-                        <input type="hidden" class="span1" id="changePassword" name="changePassword" value="0">
-                    </div>
-                    <div class="span3 password-div"><input class="span3" type="password" id="password" name="password" placeholder="Current password" pattern="."""),format.raw/*20.161*/("""{"""),format.raw/*20.162*/("""6,31"""),format.raw/*20.166*/("""}"""),format.raw/*20.167*/(""""></div>
+                    <div class="span4 offset1 nonform-height text-info"><i>"""),_display_(Seq[Any](/*17.77*/form("email")/*17.90*/.value)),format.raw/*17.96*/("""</i></div>
+                    <div class="span5 nonpassword-div text-info"><i>(not shown of course...)</i></div>
+                    <div class="span3 password-div"><input class="span3" type="password" id="password" name="password" placeholder="Current password" pattern="."""),format.raw/*19.161*/("""{"""),format.raw/*19.162*/("""6,31"""),format.raw/*19.166*/("""}"""),format.raw/*19.167*/(""""></div>
                     <!--
                     <div class="span3 nonform-div"></div>
-                    <div class="span4 offset1 form-div"><input class="span4" type="email" id="email" name="email" placeholder="Email" value=""""),_display_(Seq[Any](/*23.143*/form("email")/*23.156*/.value)),format.raw/*23.162*/("""" pattern="."""),format.raw/*23.174*/("""{"""),format.raw/*23.175*/("""1,63"""),format.raw/*23.179*/("""}"""),format.raw/*23.180*/(""""></div>
-                    <div class="span3 form-div"><input class="span3" type="password" id="password" name="password" placeholder="Password" pattern="."""),format.raw/*24.149*/("""{"""),format.raw/*24.150*/("""6,31"""),format.raw/*24.154*/("""}"""),format.raw/*24.155*/(""""></div>
-                    <div class="span3 form-div"><input class="span3" type="password" id="passwordRepeat" name="passwordRepeat" placeholder="Repeat password" pattern="."""),format.raw/*25.168*/("""{"""),format.raw/*25.169*/("""6,31"""),format.raw/*25.173*/("""}"""),format.raw/*25.174*/(""""></div>
+                    <div class="span4 offset1 form-div"><input class="span4" type="email" id="email" name="email" placeholder="Email" value=""""),_display_(Seq[Any](/*22.143*/form("email")/*22.156*/.value)),format.raw/*22.162*/("""" pattern="."""),format.raw/*22.174*/("""{"""),format.raw/*22.175*/("""1,63"""),format.raw/*22.179*/("""}"""),format.raw/*22.180*/(""""></div>
+                    <div class="span3 form-div"><input class="span3" type="password" id="password" name="password" placeholder="Password" pattern="."""),format.raw/*23.149*/("""{"""),format.raw/*23.150*/("""6,31"""),format.raw/*23.154*/("""}"""),format.raw/*23.155*/(""""></div>
+                    <div class="span3 form-div"><input class="span3" type="password" id="passwordRepeat" name="passwordRepeat" placeholder="Repeat password" pattern="."""),format.raw/*24.168*/("""{"""),format.raw/*24.169*/("""6,31"""),format.raw/*24.173*/("""}"""),format.raw/*24.174*/(""""></div>
                     -->
                 </div>
                 <div class="row">
-                    <div class="span3 offset8 nonform-height nonpassword-div"></div>
-                    <div class="span3 offset8 password-div"><input class="span3" type="password" id="newPassword" name="newPassword" placeholder="New password" pattern="."""),format.raw/*30.171*/("""{"""),format.raw/*30.172*/("""6,31"""),format.raw/*30.176*/("""}"""),format.raw/*30.177*/(""""></div>
+                    <div class="span6 offset5 nonform-height nonpassword-div"></div>
+                    <div class="span3 offset5 password-div"><input class="span3" type="password" id="newPassword" name="newPassword" placeholder="New password" pattern="."""),format.raw/*29.171*/("""{"""),format.raw/*29.172*/("""6,31"""),format.raw/*29.176*/("""}"""),format.raw/*29.177*/(""""></div>
+                    <div class="span3 password-div"><input class="span3" type="password" id="newPasswordRepeat" name="newPasswordRepeat" placeholder="Repeat new password" pattern="."""),format.raw/*30.182*/("""{"""),format.raw/*30.183*/("""6,31"""),format.raw/*30.187*/("""}"""),format.raw/*30.188*/(""""></div>
                 </div>
-                <div class="row">
-                    <div class="span3 offset8 nonform-height nonpassword-div"></div>
-                    <div class="span3 offset8 password-div"><input class="span3" type="password" id="newPasswordRepeat" name="newPasswordRepeat" placeholder="Repeat new password" pattern="."""),format.raw/*34.190*/("""{"""),format.raw/*34.191*/("""6,31"""),format.raw/*34.195*/("""}"""),format.raw/*34.196*/(""""></div>
-                </div>
-                <div class="row"><div class="span6 offset3 text-center"><strong>Optional fields*:</strong></div></div>
+                <div class="row"><div class="span6 offset3 text-center"><strong>Optional fields *:</strong></div></div>
                 <br>
                 <div class="row"><div class="span5 offset1">Occupations:</div></div>
-                """),_display_(Seq[Any](/*39.18*/defining(Occupation.findAll())/*39.48*/ {occupations =>_display_(Seq[Any](format.raw/*39.64*/("""
+                """),_display_(Seq[Any](/*35.18*/defining(Occupation.findAll())/*35.48*/ {occupations =>_display_(Seq[Any](format.raw/*35.64*/("""
                     <div class="row ">
-                        <div class="span5 offset1 nonform-div text-info"><i>"""),_display_(Seq[Any](/*41.78*/Occupation/*41.88*/.getNameByString(form("occupation1").value))),format.raw/*41.131*/("""</i></div>
-                        <div class="span5 nonform-div text-info"><i>"""),_display_(Seq[Any](/*42.70*/Occupation/*42.80*/.getNameByString(form("occupation2").value))),format.raw/*42.123*/("""</i></div>
-                        <div class="span5 offset1 form-div"><select class="span5 occupation" name="occupation1"><option value="-1"></option>"""),_display_(Seq[Any](/*43.142*/occupations/*43.153*/.map/*43.157*/ {occupation =>_display_(Seq[Any](format.raw/*43.172*/(""" <option value=""""),_display_(Seq[Any](/*43.189*/occupation/*43.199*/.getId())),format.raw/*43.207*/("""" """),_display_(Seq[Any](/*43.210*/if(occupation.getId().toString().equals(form("occupation1").value))/*43.277*/ {_display_(Seq[Any](format.raw/*43.279*/("""selected""")))})),format.raw/*43.288*/(""">"""),_display_(Seq[Any](/*43.290*/occupation/*43.300*/.getName())),format.raw/*43.310*/("""</option>""")))})),format.raw/*43.320*/("""</select></div>
-                        <div class="span5 form-div"><select class="span5 occupation" name="occupation2"><option value="-1"></option>"""),_display_(Seq[Any](/*44.134*/occupations/*44.145*/.map/*44.149*/ {occupation =>_display_(Seq[Any](format.raw/*44.164*/(""" <option value=""""),_display_(Seq[Any](/*44.181*/occupation/*44.191*/.getId())),format.raw/*44.199*/("""" """),_display_(Seq[Any](/*44.202*/if(occupation.getId().toString().equals(form("occupation2").value))/*44.269*/ {_display_(Seq[Any](format.raw/*44.271*/("""selected""")))})),format.raw/*44.280*/(""">"""),_display_(Seq[Any](/*44.282*/occupation/*44.292*/.getName())),format.raw/*44.302*/("""</option>""")))})),format.raw/*44.312*/("""</select></div>
+                        <div class="span5 offset1 nonform-div text-info"><i>"""),_display_(Seq[Any](/*37.78*/Occupation/*37.88*/.getNameByString(form("occupation1").value))),format.raw/*37.131*/("""</i></div>
+                        <div class="span5 nonform-div text-info"><i>"""),_display_(Seq[Any](/*38.70*/Occupation/*38.80*/.getNameByString(form("occupation2").value))),format.raw/*38.123*/("""</i></div>
+                        <div class="span5 offset1 form-div"><select class="span5 occupation" name="occupation1"><option value="-1"></option>"""),_display_(Seq[Any](/*39.142*/occupations/*39.153*/.map/*39.157*/ {occupation =>_display_(Seq[Any](format.raw/*39.172*/(""" <option value=""""),_display_(Seq[Any](/*39.189*/occupation/*39.199*/.getId())),format.raw/*39.207*/("""" """),_display_(Seq[Any](/*39.210*/if(occupation.getId().toString().equals(form("occupation1").value))/*39.277*/ {_display_(Seq[Any](format.raw/*39.279*/("""selected""")))})),format.raw/*39.288*/(""">"""),_display_(Seq[Any](/*39.290*/occupation/*39.300*/.getName())),format.raw/*39.310*/("""</option>""")))})),format.raw/*39.320*/("""</select></div>
+                        <div class="span5 form-div"><select class="span5 occupation" name="occupation2"><option value="-1"></option>"""),_display_(Seq[Any](/*40.134*/occupations/*40.145*/.map/*40.149*/ {occupation =>_display_(Seq[Any](format.raw/*40.164*/(""" <option value=""""),_display_(Seq[Any](/*40.181*/occupation/*40.191*/.getId())),format.raw/*40.199*/("""" """),_display_(Seq[Any](/*40.202*/if(occupation.getId().toString().equals(form("occupation2").value))/*40.269*/ {_display_(Seq[Any](format.raw/*40.271*/("""selected""")))})),format.raw/*40.280*/(""">"""),_display_(Seq[Any](/*40.282*/occupation/*40.292*/.getName())),format.raw/*40.302*/("""</option>""")))})),format.raw/*40.312*/("""</select></div>
                     </div>
-                """)))})),format.raw/*46.18*/("""
+                """)))})),format.raw/*42.18*/("""
                 <div class="row">
                     <div class="span2 offset1">Age:</div>
                     <div class="span2">Zip code:</div>
                     <div class="span2">Gender:</div>
                     <div class="span4">Interests:</div>
                 </div>
-                """),_display_(Seq[Any](/*53.18*/defining(Interest.findAll())/*53.46*/ {interests =>_display_(Seq[Any](format.raw/*53.60*/("""
+                """),_display_(Seq[Any](/*49.18*/defining(Interest.findAll())/*49.46*/ {interests =>_display_(Seq[Any](format.raw/*49.60*/("""
                     <div class="row">
-                        <div class="span2 offset1 nonform-div text-info"><i>"""),_display_(Seq[Any](/*55.78*/form("age")/*55.89*/.value)),format.raw/*55.95*/("""</i></div>
-                        <div class="span2 nonform-div text-info"><i>"""),_display_(Seq[Any](/*56.70*/form("zipCode")/*56.85*/.value)),format.raw/*56.91*/("""</i></div>
-                        <div class="span1 nonform-div text-info">"""),_display_(Seq[Any](/*57.67*/if(form("gender").value=="M")/*57.96*/ {_display_(Seq[Any](format.raw/*57.98*/("""<img src="assets/img/male.png">""")))})),format.raw/*57.130*/("""</div>
-                        <div class="span1 nonform-div text-info">"""),_display_(Seq[Any](/*58.67*/if(form("gender").value=="F")/*58.96*/ {_display_(Seq[Any](format.raw/*58.98*/("""<img src="assets/img/female.png">""")))})),format.raw/*58.132*/("""</div>
-                        <div class="span4 nonform-div text-info"><i>"""),_display_(Seq[Any](/*59.70*/Interest/*59.78*/.getNameByString(form("interest1").value))),format.raw/*59.119*/("""</i></div>
-                        <div class="span2 offset1 form-div"><input class="span2" type="number" id="age" name="age" placeholder="Age" maxlength="3" min="0" max="999" value=""""),_display_(Seq[Any](/*60.174*/form("age")/*60.185*/.value)),format.raw/*60.191*/(""""></div>
-                        <div class="span2 form-div"><input class="span2" type="text" id="zipCode" name="zipCode" placeholder="Zip code" maxlength="5" value=""""),_display_(Seq[Any](/*61.159*/form("zipCode")/*61.174*/.value)),format.raw/*61.180*/(""""></div>
-                        <div class="span1 form-div"><label class="radio inline" id="male"><input type="radio" name="gender" value="M" """),_display_(Seq[Any](/*62.136*/if(form("gender").value=="M")/*62.165*/ {_display_(Seq[Any](format.raw/*62.167*/("""checked""")))})),format.raw/*62.175*/("""><img src="assets/img/male.png"></label></div>
-                        <div class="span1 form-div"><label class="radio inline" id="female"><input type="radio" name="gender" value="F" """),_display_(Seq[Any](/*63.138*/if(form("gender").value=="F")/*63.167*/ {_display_(Seq[Any](format.raw/*63.169*/("""checked""")))})),format.raw/*63.177*/("""><img src="assets/img/female.png"></label></div>
-                        <div class="span4 form-div"><select class="span4 interest" name="interest1"><option value="-1"></option>"""),_display_(Seq[Any](/*64.130*/interests/*64.139*/.map/*64.143*/ {interest =>_display_(Seq[Any](format.raw/*64.156*/(""" <option value=""""),_display_(Seq[Any](/*64.173*/interest/*64.181*/.getId())),format.raw/*64.189*/("""" """),_display_(Seq[Any](/*64.192*/if(interest.getId().toString().equals(form("interest1").value))/*64.255*/ {_display_(Seq[Any](format.raw/*64.257*/("""selected""")))})),format.raw/*64.266*/(""">"""),_display_(Seq[Any](/*64.268*/interest/*64.276*/.getName())),format.raw/*64.286*/("""</option>""")))})),format.raw/*64.296*/("""</select></div>
+                        <div class="span2 offset1 nonform-div text-info"><i>"""),_display_(Seq[Any](/*51.78*/form("age")/*51.89*/.value)),format.raw/*51.95*/("""</i></div>
+                        <div class="span2 nonform-div text-info"><i>"""),_display_(Seq[Any](/*52.70*/form("zipCode")/*52.85*/.value)),format.raw/*52.91*/("""</i></div>
+                        <div class="span1 nonform-div text-info">"""),_display_(Seq[Any](/*53.67*/if(form("gender").value=="M")/*53.96*/ {_display_(Seq[Any](format.raw/*53.98*/("""<img src="assets/img/male.png" width="15px">""")))})),format.raw/*53.143*/("""</div>
+                        <div class="span1 nonform-div text-info">"""),_display_(Seq[Any](/*54.67*/if(form("gender").value=="F")/*54.96*/ {_display_(Seq[Any](format.raw/*54.98*/("""<img src="assets/img/female.png" width="15px">""")))})),format.raw/*54.145*/("""</div>
+                        <div class="span4 nonform-div text-info"><i>"""),_display_(Seq[Any](/*55.70*/Interest/*55.78*/.getNameByString(form("interest1").value))),format.raw/*55.119*/("""</i></div>
+                        <div class="span2 offset1 form-div"><input class="span2" type="number" id="age" name="age" placeholder="Age" maxlength="3" min="0" max="999" value=""""),_display_(Seq[Any](/*56.174*/form("age")/*56.185*/.value)),format.raw/*56.191*/(""""></div>
+                        <div class="span2 form-div"><input class="span2" type="text" id="zipCode" name="zipCode" placeholder="Zip code" maxlength="5" value=""""),_display_(Seq[Any](/*57.159*/form("zipCode")/*57.174*/.value)),format.raw/*57.180*/(""""></div>
+                        <div class="span1 form-div"><label class="radio inline" id="male"><input type="radio" name="gender" value="M" """),_display_(Seq[Any](/*58.136*/if(form("gender").value=="M")/*58.165*/ {_display_(Seq[Any](format.raw/*58.167*/("""checked""")))})),format.raw/*58.175*/("""><img src="assets/img/male.png" width="15px"></label></div>
+                        <div class="span1 form-div"><label class="radio inline" id="female"><input type="radio" name="gender" value="F" """),_display_(Seq[Any](/*59.138*/if(form("gender").value=="F")/*59.167*/ {_display_(Seq[Any](format.raw/*59.169*/("""checked""")))})),format.raw/*59.177*/("""><img src="assets/img/female.png" width="15px"></label></div>
+                        <div class="span4 form-div"><select class="span4 interest" name="interest1"><option value="-1"></option>"""),_display_(Seq[Any](/*60.130*/interests/*60.139*/.map/*60.143*/ {interest =>_display_(Seq[Any](format.raw/*60.156*/(""" <option value=""""),_display_(Seq[Any](/*60.173*/interest/*60.181*/.getId())),format.raw/*60.189*/("""" """),_display_(Seq[Any](/*60.192*/if(interest.getId().toString().equals(form("interest1").value))/*60.255*/ {_display_(Seq[Any](format.raw/*60.257*/("""selected""")))})),format.raw/*60.266*/(""">"""),_display_(Seq[Any](/*60.268*/interest/*60.276*/.getName())),format.raw/*60.286*/("""</option>""")))})),format.raw/*60.296*/("""</select></div>
                     </div>
                     <div class="row ">
-                        <div class="span4 offset7 nonform-div text-info"><i>"""),_display_(Seq[Any](/*67.78*/Interest/*67.86*/.getNameByString(form("interest2").value))),format.raw/*67.127*/("""</i></div>
-                        <div class="span4 offset7 form-div"><select class="span4 interest" name="interest2"><option value="-1"></option>"""),_display_(Seq[Any](/*68.138*/interests/*68.147*/.map/*68.151*/ {interest =>_display_(Seq[Any](format.raw/*68.164*/(""" <option value=""""),_display_(Seq[Any](/*68.181*/interest/*68.189*/.getId())),format.raw/*68.197*/("""" """),_display_(Seq[Any](/*68.200*/if(interest.getId().toString().equals(form("interest2").value))/*68.263*/ {_display_(Seq[Any](format.raw/*68.265*/("""selected""")))})),format.raw/*68.274*/(""">"""),_display_(Seq[Any](/*68.276*/interest/*68.284*/.getName())),format.raw/*68.294*/("""</option>""")))})),format.raw/*68.304*/("""</select></div>
+                        <div class="span4 offset7 nonform-div text-info"><i>"""),_display_(Seq[Any](/*63.78*/Interest/*63.86*/.getNameByString(form("interest2").value))),format.raw/*63.127*/("""</i></div>
+                        <div class="span4 offset7 form-div"><select class="span4 interest" name="interest2"><option value="-1"></option>"""),_display_(Seq[Any](/*64.138*/interests/*64.147*/.map/*64.151*/ {interest =>_display_(Seq[Any](format.raw/*64.164*/(""" <option value=""""),_display_(Seq[Any](/*64.181*/interest/*64.189*/.getId())),format.raw/*64.197*/("""" """),_display_(Seq[Any](/*64.200*/if(interest.getId().toString().equals(form("interest2").value))/*64.263*/ {_display_(Seq[Any](format.raw/*64.265*/("""selected""")))})),format.raw/*64.274*/(""">"""),_display_(Seq[Any](/*64.276*/interest/*64.284*/.getName())),format.raw/*64.294*/("""</option>""")))})),format.raw/*64.304*/("""</select></div>
                     </div>
                     <div class="row">
-                        <div class="span4 offset7 nonform-div text-info"><i>"""),_display_(Seq[Any](/*71.78*/Interest/*71.86*/.getNameByString(form("interest3").value))),format.raw/*71.127*/("""</i></div>
-                        <div class="span4 offset7 form-div"><select class="span4 interest" name="interest3"><option value="-1"></option>"""),_display_(Seq[Any](/*72.138*/interests/*72.147*/.map/*72.151*/ {interest =>_display_(Seq[Any](format.raw/*72.164*/(""" <option value=""""),_display_(Seq[Any](/*72.181*/interest/*72.189*/.getId())),format.raw/*72.197*/("""" """),_display_(Seq[Any](/*72.200*/if(interest.getId().toString().equals(form("interest3").value))/*72.263*/ {_display_(Seq[Any](format.raw/*72.265*/("""selected""")))})),format.raw/*72.274*/(""">"""),_display_(Seq[Any](/*72.276*/interest/*72.284*/.getName())),format.raw/*72.294*/("""</option>""")))})),format.raw/*72.304*/("""</select></div>
+                        <div class="span4 offset7 nonform-div text-info"><i>"""),_display_(Seq[Any](/*67.78*/Interest/*67.86*/.getNameByString(form("interest3").value))),format.raw/*67.127*/("""</i></div>
+                        <div class="span4 offset7 form-div"><select class="span4 interest" name="interest3"><option value="-1"></option>"""),_display_(Seq[Any](/*68.138*/interests/*68.147*/.map/*68.151*/ {interest =>_display_(Seq[Any](format.raw/*68.164*/(""" <option value=""""),_display_(Seq[Any](/*68.181*/interest/*68.189*/.getId())),format.raw/*68.197*/("""" """),_display_(Seq[Any](/*68.200*/if(interest.getId().toString().equals(form("interest3").value))/*68.263*/ {_display_(Seq[Any](format.raw/*68.265*/("""selected""")))})),format.raw/*68.274*/(""">"""),_display_(Seq[Any](/*68.276*/interest/*68.284*/.getName())),format.raw/*68.294*/("""</option>""")))})),format.raw/*68.304*/("""</select></div>
                     </div>
                     <div class="row">
-                        <div class="span4 offset7 nonform-div text-info"><i>"""),_display_(Seq[Any](/*75.78*/Interest/*75.86*/.getNameByString(form("interest4").value))),format.raw/*75.127*/("""</i></div>
-                        <div class="span4 offset7 form-div"><select class="span4 interest" name="interest4"><option value="-1"></option>"""),_display_(Seq[Any](/*76.138*/interests/*76.147*/.map/*76.151*/ {interest =>_display_(Seq[Any](format.raw/*76.164*/(""" <option value=""""),_display_(Seq[Any](/*76.181*/interest/*76.189*/.getId())),format.raw/*76.197*/("""" """),_display_(Seq[Any](/*76.200*/if(interest.getId().toString().equals(form("interest4").value))/*76.263*/ {_display_(Seq[Any](format.raw/*76.265*/("""selected""")))})),format.raw/*76.274*/(""">"""),_display_(Seq[Any](/*76.276*/interest/*76.284*/.getName())),format.raw/*76.294*/("""</option>""")))})),format.raw/*76.304*/("""</select></div>
+                        <div class="span4 offset7 nonform-div text-info"><i>"""),_display_(Seq[Any](/*71.78*/Interest/*71.86*/.getNameByString(form("interest4").value))),format.raw/*71.127*/("""</i></div>
+                        <div class="span4 offset7 form-div"><select class="span4 interest" name="interest4"><option value="-1"></option>"""),_display_(Seq[Any](/*72.138*/interests/*72.147*/.map/*72.151*/ {interest =>_display_(Seq[Any](format.raw/*72.164*/(""" <option value=""""),_display_(Seq[Any](/*72.181*/interest/*72.189*/.getId())),format.raw/*72.197*/("""" """),_display_(Seq[Any](/*72.200*/if(interest.getId().toString().equals(form("interest4").value))/*72.263*/ {_display_(Seq[Any](format.raw/*72.265*/("""selected""")))})),format.raw/*72.274*/(""">"""),_display_(Seq[Any](/*72.276*/interest/*72.284*/.getName())),format.raw/*72.294*/("""</option>""")))})),format.raw/*72.304*/("""</select></div>
                     </div>
-                """)))})),format.raw/*78.18*/("""
-                <div class="row"><div class="span12 text-center"><i>*Optional fields help match you with higher-paying videos!</i></div></div>
-                <div class="row"><div class="span12 text-center"><button type="submit" class="btn btn-large btn-success" id="submit-button">Submit</button></div></div>
+                """)))})),format.raw/*74.18*/("""
+                <div class="row"><div class="span12 text-center"><i>* Optional fields help match you with higher-paying videos!</i></div></div>
+                <div class="row"><div class="span12 text-center"><button type="submit" class="btn btn-large btn-success" id="submit-button">Save</button></div></div>
             </form>
         </div>
     </div>
     <script type="text/javascript">
-		$('#submit-button').hide();
+        var editButton = $('#edit-button');
+    	var submitButton = $('#submit-button'); 
+        var changePasswordBox = $('#change-password-box');
+		submitButton.hide();
     	$('.form-div').hide();
     	$('.password-div').hide();
     	$('.nonform-div').show();
     	$('.nonpassword-div').show();
-    	var editButton = $('#edit-button');
-        var changePasswordButton = $('#change-password-button');
-    	editButton.click(function() """),format.raw/*92.34*/("""{"""),format.raw/*92.35*/("""
-            if (editButton.hasClass('active')) """),format.raw/*93.48*/("""{"""),format.raw/*93.49*/("""
+    	editButton.click(function() """),format.raw/*89.34*/("""{"""),format.raw/*89.35*/("""
+            if (editButton.hasClass('active')) """),format.raw/*90.48*/("""{"""),format.raw/*90.49*/("""
             	$('.form-div').hide();
             	$('.password-div').hide();
             	$('#submit-button').hide();
             	$('.nonform-div').show();
             	$('.nonpassword-div').show();
-            """),format.raw/*99.13*/("""}"""),format.raw/*99.14*/("""
-            else """),format.raw/*100.18*/("""{"""),format.raw/*100.19*/("""
+            """),format.raw/*96.13*/("""}"""),format.raw/*96.14*/("""
+            else """),format.raw/*97.18*/("""{"""),format.raw/*97.19*/("""
             	$('.form-div').show();
-            	if (changePasswordButton.hasClass('active')) """),format.raw/*102.59*/("""{"""),format.raw/*102.60*/("""
+            	if (changePasswordBox.prop('checked')) """),format.raw/*99.53*/("""{"""),format.raw/*99.54*/("""
                 	$('.password-div').show();
                 	$('.nonpassword-div').hide();
-        		"""),format.raw/*105.11*/("""}"""),format.raw/*105.12*/("""
-            	else """),format.raw/*106.19*/("""{"""),format.raw/*106.20*/("""
+        		"""),format.raw/*102.11*/("""}"""),format.raw/*102.12*/("""
+            	else """),format.raw/*103.19*/("""{"""),format.raw/*103.20*/("""
                 	$('.password-div').hide();
                 	$('.nonpassword-div').show();
-            	"""),format.raw/*109.14*/("""}"""),format.raw/*109.15*/("""
+            	"""),format.raw/*106.14*/("""}"""),format.raw/*106.15*/("""
             	$('#submit-button').show();
             	$('.nonform-div').hide();
-            """),format.raw/*112.13*/("""}"""),format.raw/*112.14*/("""
-        """),format.raw/*113.9*/("""}"""),format.raw/*113.10*/(""");
-    	changePasswordButton.click(function() """),format.raw/*114.44*/("""{"""),format.raw/*114.45*/("""
-            if (changePasswordButton.hasClass('active')) """),format.raw/*115.58*/("""{"""),format.raw/*115.59*/("""
-            	$('#changePassword').val('0');
-            	$('.password-div').hide();
-            	$('.nonpassword-div').show();
-            """),format.raw/*119.13*/("""}"""),format.raw/*119.14*/("""
-            else """),format.raw/*120.18*/("""{"""),format.raw/*120.19*/("""
-            	$('#changePassword').val('1');
-            	$('.password-div').show();
+            """),format.raw/*109.13*/("""}"""),format.raw/*109.14*/("""
+        """),format.raw/*110.9*/("""}"""),format.raw/*110.10*/(""");
+    	changePasswordBox.change(function() """),format.raw/*111.42*/("""{"""),format.raw/*111.43*/("""
+    		if (changePasswordBox.prop('checked')) """),format.raw/*112.46*/("""{"""),format.raw/*112.47*/("""
+    			changePasswordBox.val('1');
             	$('.nonpassword-div').hide();
-            """),format.raw/*124.13*/("""}"""),format.raw/*124.14*/("""
-        """),format.raw/*125.9*/("""}"""),format.raw/*125.10*/(""")
-        """),_display_(Seq[Any](/*126.10*/if(flash.contains("edit"))/*126.36*/ {_display_(Seq[Any](format.raw/*126.38*/("""editButton.click();""")))})),format.raw/*126.58*/("""
-    	"""),_display_(Seq[Any](/*127.7*/if(flash.contains("changePassword"))/*127.43*/ {_display_(Seq[Any](format.raw/*127.45*/("""changePasswordButton.click();""")))})),format.raw/*127.75*/("""
+            	$('.password-div').show();
+    		"""),format.raw/*116.7*/("""}"""),format.raw/*116.8*/("""
+    		else """),format.raw/*117.12*/("""{"""),format.raw/*117.13*/("""
+    			changePasswordBox.val('0');
+            	$('.nonpassword-div').show();
+            	$('.password-div').hide();
+    		"""),format.raw/*121.7*/("""}"""),format.raw/*121.8*/("""
+    	"""),format.raw/*122.6*/("""}"""),format.raw/*122.7*/(""");
+        """),_display_(Seq[Any](/*123.10*/if(flash.contains("edit"))/*123.36*/ {_display_(Seq[Any](format.raw/*123.38*/("""editButton.click();""")))})),format.raw/*123.58*/("""
+    	"""),_display_(Seq[Any](/*124.7*/if(flash.contains("changePassword"))/*124.43*/ {_display_(Seq[Any](format.raw/*124.45*/("""changePasswordBox.click();""")))})),format.raw/*124.72*/("""
         
-        $.getJSON(""""),_display_(Seq[Any](/*129.21*/routes/*129.27*/.Assets.at("data/Zips.json"))),format.raw/*129.55*/("""", function(data) """),format.raw/*129.73*/("""{"""),format.raw/*129.74*/("""
+        $.getJSON(""""),_display_(Seq[Any](/*126.21*/routes/*126.27*/.Assets.at("data/Zips.json"))),format.raw/*126.55*/("""", function(data) """),format.raw/*126.73*/("""{"""),format.raw/*126.74*/("""
             var zipCodes = [];
-            $.each(data, function(i, item) """),format.raw/*131.44*/("""{"""),format.raw/*131.45*/("""zipCodes.push(item);"""),format.raw/*131.65*/("""}"""),format.raw/*131.66*/(""");
+            $.each(data, function(i, item) """),format.raw/*128.44*/("""{"""),format.raw/*128.45*/("""zipCodes.push(item);"""),format.raw/*128.65*/("""}"""),format.raw/*128.66*/(""");
             $('#zipCode')
-                .typeahead("""),format.raw/*133.28*/("""{"""),format.raw/*133.29*/("""source: zipCodes, items: 10"""),format.raw/*133.56*/("""}"""),format.raw/*133.57*/(""")
-                .blur(function() """),format.raw/*134.34*/("""{"""),format.raw/*134.35*/("""if($.inArray($(this).val(), zipCodes) == -1) """),format.raw/*134.80*/("""{"""),format.raw/*134.81*/("""$('#zipCode').val('');"""),format.raw/*134.103*/("""}"""),format.raw/*134.104*/("""}"""),format.raw/*134.105*/(""");
-        """),format.raw/*135.9*/("""}"""),format.raw/*135.10*/(""");
+                .typeahead("""),format.raw/*130.28*/("""{"""),format.raw/*130.29*/("""source: zipCodes, items: 10"""),format.raw/*130.56*/("""}"""),format.raw/*130.57*/(""")
+                .blur(function() """),format.raw/*131.34*/("""{"""),format.raw/*131.35*/("""if($.inArray($(this).val(), zipCodes) == -1) """),format.raw/*131.80*/("""{"""),format.raw/*131.81*/("""$('#zipCode').val('');"""),format.raw/*131.103*/("""}"""),format.raw/*131.104*/("""}"""),format.raw/*131.105*/(""");
+        """),format.raw/*132.9*/("""}"""),format.raw/*132.10*/(""");
     	
-        $('#email').tooltip("""),format.raw/*137.29*/("""{"""),format.raw/*137.30*/("""placement: "bottom", title: "Must be between 1 and 63 characters.""""),format.raw/*137.96*/("""}"""),format.raw/*137.97*/(""")
-        $('#newPassword').tooltip("""),format.raw/*138.35*/("""{"""),format.raw/*138.36*/("""placement: "bottom", title: "Must be between 6 and 31 characters.""""),format.raw/*138.102*/("""}"""),format.raw/*138.103*/(""")
-        $('#newPasswordRepeat').tooltip("""),format.raw/*139.41*/("""{"""),format.raw/*139.42*/("""placement: "bottom", title: "Must be between 6 and 31 characters.""""),format.raw/*139.108*/("""}"""),format.raw/*139.109*/(""")
-        $('#age').tooltip("""),format.raw/*140.27*/("""{"""),format.raw/*140.28*/("""placement: "bottom", title: "Match with videos for your age group.""""),format.raw/*140.95*/("""}"""),format.raw/*140.96*/(""")
-        $('#zipCode').tooltip("""),format.raw/*141.31*/("""{"""),format.raw/*141.32*/("""placement: "bottom", title: "Match with videos in your area.""""),format.raw/*141.93*/("""}"""),format.raw/*141.94*/(""")
-        $('#male').tooltip("""),format.raw/*142.28*/("""{"""),format.raw/*142.29*/("""placement: "bottom", title: "Match you with videos for guys.""""),format.raw/*142.90*/("""}"""),format.raw/*142.91*/(""")
-        $('#female').tooltip("""),format.raw/*143.30*/("""{"""),format.raw/*143.31*/("""placement: "bottom", title: "Match you with videos for gals.""""),format.raw/*143.92*/("""}"""),format.raw/*143.93*/(""")
-        $('.occupation').tooltip("""),format.raw/*144.34*/("""{"""),format.raw/*144.35*/("""placement: "bottom", title: "Match with videos related to your job.""""),format.raw/*144.103*/("""}"""),format.raw/*144.104*/(""")
-        $('.interest').tooltip("""),format.raw/*145.32*/("""{"""),format.raw/*145.33*/("""placement: "bottom", title: "Match with videos about your interests.""""),format.raw/*145.102*/("""}"""),format.raw/*145.103*/(""")
+        $('#email').tooltip("""),format.raw/*134.29*/("""{"""),format.raw/*134.30*/("""placement: "bottom", title: "Must be between 1 and 63 characters.""""),format.raw/*134.96*/("""}"""),format.raw/*134.97*/(""")
+        $('#newPassword').tooltip("""),format.raw/*135.35*/("""{"""),format.raw/*135.36*/("""placement: "bottom", title: "Must be between 6 and 31 characters.""""),format.raw/*135.102*/("""}"""),format.raw/*135.103*/(""")
+        $('#newPasswordRepeat').tooltip("""),format.raw/*136.41*/("""{"""),format.raw/*136.42*/("""placement: "bottom", title: "Must be between 6 and 31 characters.""""),format.raw/*136.108*/("""}"""),format.raw/*136.109*/(""")
+        $('#age').tooltip("""),format.raw/*137.27*/("""{"""),format.raw/*137.28*/("""placement: "bottom", title: "Match with videos for your age group.""""),format.raw/*137.95*/("""}"""),format.raw/*137.96*/(""")
+        $('#zipCode').tooltip("""),format.raw/*138.31*/("""{"""),format.raw/*138.32*/("""placement: "bottom", title: "Match with videos in your area.""""),format.raw/*138.93*/("""}"""),format.raw/*138.94*/(""")
+        $('#male').tooltip("""),format.raw/*139.28*/("""{"""),format.raw/*139.29*/("""placement: "bottom", title: "Match you with videos for guys.""""),format.raw/*139.90*/("""}"""),format.raw/*139.91*/(""")
+        $('#female').tooltip("""),format.raw/*140.30*/("""{"""),format.raw/*140.31*/("""placement: "bottom", title: "Match you with videos for gals.""""),format.raw/*140.92*/("""}"""),format.raw/*140.93*/(""")
+        $('.occupation').tooltip("""),format.raw/*141.34*/("""{"""),format.raw/*141.35*/("""placement: "bottom", title: "Match with videos related to your job.""""),format.raw/*141.103*/("""}"""),format.raw/*141.104*/(""")
+        $('.interest').tooltip("""),format.raw/*142.32*/("""{"""),format.raw/*142.33*/("""placement: "bottom", title: "Match with videos about your interests.""""),format.raw/*142.102*/("""}"""),format.raw/*142.103*/(""")
     </script>
 """)))})))}
     }
@@ -184,11 +181,11 @@ Seq[Any](format.raw/*1.47*/("""
 }
                 /*
                     -- GENERATED --
-                    DATE: Thu Jul 04 21:21:08 EDT 2013
+                    DATE: Fri Jul 05 19:04:10 EDT 2013
                     SOURCE: C:/programs/ray/adagie/app/views/profile.scala.html
-                    HASH: b3bf9c5ad8a7c88a09531a6322c19eff03d16a09
-                    MATRIX: 749->1|871->46|910->51|939->72|978->74|1100->161|1114->167|1150->182|1785->781|1807->794|1835->800|2471->1407|2501->1408|2534->1412|2564->1413|2838->1650|2861->1663|2890->1669|2931->1681|2961->1682|2994->1686|3024->1687|3211->1845|3241->1846|3274->1850|3304->1851|3510->2028|3540->2029|3573->2033|3603->2034|3982->2384|4012->2385|4045->2389|4075->2390|4448->2734|4478->2735|4511->2739|4541->2740|4856->3019|4895->3049|4949->3065|5104->3184|5123->3194|5189->3237|5306->3318|5325->3328|5391->3371|5581->3524|5602->3535|5616->3539|5670->3554|5724->3571|5744->3581|5775->3589|5815->3592|5892->3659|5933->3661|5975->3670|6014->3672|6034->3682|6067->3692|6110->3702|6297->3852|6318->3863|6332->3867|6386->3882|6440->3899|6460->3909|6491->3917|6531->3920|6608->3987|6649->3989|6691->3998|6730->4000|6750->4010|6783->4020|6826->4030|6920->4092|7260->4396|7297->4424|7349->4438|7503->4556|7523->4567|7551->4573|7668->4654|7692->4669|7720->4675|7834->4753|7872->4782|7912->4784|7977->4816|8087->4890|8125->4919|8165->4921|8232->4955|8345->5032|8362->5040|8426->5081|8648->5266|8669->5277|8698->5283|8903->5451|8928->5466|8957->5472|9139->5617|9178->5646|9219->5648|9260->5656|9482->5841|9521->5870|9562->5872|9603->5880|9819->6059|9838->6068|9852->6072|9904->6085|9958->6102|9976->6110|10007->6118|10047->6121|10120->6184|10161->6186|10203->6195|10242->6197|10260->6205|10293->6215|10336->6225|10534->6387|10551->6395|10615->6436|10801->6585|10820->6594|10834->6598|10886->6611|10940->6628|10958->6636|10989->6644|11029->6647|11102->6710|11143->6712|11185->6721|11224->6723|11242->6731|11275->6741|11318->6751|11515->6912|11532->6920|11596->6961|11782->7110|11801->7119|11815->7123|11867->7136|11921->7153|11939->7161|11970->7169|12010->7172|12083->7235|12124->7237|12166->7246|12205->7248|12223->7256|12256->7266|12299->7276|12496->7437|12513->7445|12577->7486|12763->7635|12782->7644|12796->7648|12848->7661|12902->7678|12920->7686|12951->7694|12991->7697|13064->7760|13105->7762|13147->7771|13186->7773|13204->7781|13237->7791|13280->7801|13374->7863|14105->8566|14134->8567|14211->8616|14240->8617|14486->8835|14515->8836|14563->8855|14593->8856|14719->8953|14749->8954|14883->9059|14913->9060|14962->9080|14992->9081|15129->9189|15159->9190|15284->9286|15314->9287|15352->9297|15382->9298|15458->9345|15488->9346|15576->9405|15606->9406|15779->9550|15809->9551|15857->9570|15887->9571|16060->9715|16090->9716|16128->9726|16158->9727|16207->9739|16243->9765|16284->9767|16337->9787|16381->9795|16427->9831|16468->9833|16531->9863|16600->9895|16616->9901|16667->9929|16714->9947|16744->9948|16850->10025|16880->10026|16929->10046|16959->10047|17046->10105|17076->10106|17132->10133|17162->10134|17227->10170|17257->10171|17331->10216|17361->10217|17413->10239|17444->10240|17475->10241|17515->10253|17545->10254|17613->10293|17643->10294|17738->10360|17768->10361|17834->10398|17864->10399|17960->10465|17991->10466|18063->10509|18093->10510|18189->10576|18220->10577|18278->10606|18308->10607|18404->10674|18434->10675|18496->10708|18526->10709|18616->10770|18646->10771|18705->10801|18735->10802|18825->10863|18855->10864|18916->10896|18946->10897|19036->10958|19066->10959|19131->10995|19161->10996|19259->11064|19290->11065|19353->11099|19383->11100|19482->11169|19513->11170
-                    LINES: 26->1|29->1|31->3|31->3|31->3|34->6|34->6|34->6|42->14|42->14|42->14|48->20|48->20|48->20|48->20|51->23|51->23|51->23|51->23|51->23|51->23|51->23|52->24|52->24|52->24|52->24|53->25|53->25|53->25|53->25|58->30|58->30|58->30|58->30|62->34|62->34|62->34|62->34|67->39|67->39|67->39|69->41|69->41|69->41|70->42|70->42|70->42|71->43|71->43|71->43|71->43|71->43|71->43|71->43|71->43|71->43|71->43|71->43|71->43|71->43|71->43|71->43|72->44|72->44|72->44|72->44|72->44|72->44|72->44|72->44|72->44|72->44|72->44|72->44|72->44|72->44|72->44|74->46|81->53|81->53|81->53|83->55|83->55|83->55|84->56|84->56|84->56|85->57|85->57|85->57|85->57|86->58|86->58|86->58|86->58|87->59|87->59|87->59|88->60|88->60|88->60|89->61|89->61|89->61|90->62|90->62|90->62|90->62|91->63|91->63|91->63|91->63|92->64|92->64|92->64|92->64|92->64|92->64|92->64|92->64|92->64|92->64|92->64|92->64|92->64|92->64|92->64|95->67|95->67|95->67|96->68|96->68|96->68|96->68|96->68|96->68|96->68|96->68|96->68|96->68|96->68|96->68|96->68|96->68|96->68|99->71|99->71|99->71|100->72|100->72|100->72|100->72|100->72|100->72|100->72|100->72|100->72|100->72|100->72|100->72|100->72|100->72|100->72|103->75|103->75|103->75|104->76|104->76|104->76|104->76|104->76|104->76|104->76|104->76|104->76|104->76|104->76|104->76|104->76|104->76|104->76|106->78|120->92|120->92|121->93|121->93|127->99|127->99|128->100|128->100|130->102|130->102|133->105|133->105|134->106|134->106|137->109|137->109|140->112|140->112|141->113|141->113|142->114|142->114|143->115|143->115|147->119|147->119|148->120|148->120|152->124|152->124|153->125|153->125|154->126|154->126|154->126|154->126|155->127|155->127|155->127|155->127|157->129|157->129|157->129|157->129|157->129|159->131|159->131|159->131|159->131|161->133|161->133|161->133|161->133|162->134|162->134|162->134|162->134|162->134|162->134|162->134|163->135|163->135|165->137|165->137|165->137|165->137|166->138|166->138|166->138|166->138|167->139|167->139|167->139|167->139|168->140|168->140|168->140|168->140|169->141|169->141|169->141|169->141|170->142|170->142|170->142|170->142|171->143|171->143|171->143|171->143|172->144|172->144|172->144|172->144|173->145|173->145|173->145|173->145
+                    HASH: 8f7d40021cae7ef0f6698bf74dc725abdad2e004
+                    MATRIX: 749->1|871->46|910->51|939->72|978->74|1100->161|1114->167|1150->182|2054->1050|2076->1063|2104->1069|2409->1345|2439->1346|2472->1350|2502->1351|2776->1588|2799->1601|2828->1607|2869->1619|2899->1620|2932->1624|2962->1625|3149->1783|3179->1784|3212->1788|3242->1789|3448->1966|3478->1967|3511->1971|3541->1972|3920->2322|3950->2323|3983->2327|4013->2328|4233->2519|4263->2520|4296->2524|4326->2525|4642->2805|4681->2835|4735->2851|4890->2970|4909->2980|4975->3023|5092->3104|5111->3114|5177->3157|5367->3310|5388->3321|5402->3325|5456->3340|5510->3357|5530->3367|5561->3375|5601->3378|5678->3445|5719->3447|5761->3456|5800->3458|5820->3468|5853->3478|5896->3488|6083->3638|6104->3649|6118->3653|6172->3668|6226->3685|6246->3695|6277->3703|6317->3706|6394->3773|6435->3775|6477->3784|6516->3786|6536->3796|6569->3806|6612->3816|6706->3878|7046->4182|7083->4210|7135->4224|7289->4342|7309->4353|7337->4359|7454->4440|7478->4455|7506->4461|7620->4539|7658->4568|7698->4570|7776->4615|7886->4689|7924->4718|7964->4720|8044->4767|8157->4844|8174->4852|8238->4893|8460->5078|8481->5089|8510->5095|8715->5263|8740->5278|8769->5284|8951->5429|8990->5458|9031->5460|9072->5468|9307->5666|9346->5695|9387->5697|9428->5705|9657->5897|9676->5906|9690->5910|9742->5923|9796->5940|9814->5948|9845->5956|9885->5959|9958->6022|9999->6024|10041->6033|10080->6035|10098->6043|10131->6053|10174->6063|10372->6225|10389->6233|10453->6274|10639->6423|10658->6432|10672->6436|10724->6449|10778->6466|10796->6474|10827->6482|10867->6485|10940->6548|10981->6550|11023->6559|11062->6561|11080->6569|11113->6579|11156->6589|11353->6750|11370->6758|11434->6799|11620->6948|11639->6957|11653->6961|11705->6974|11759->6991|11777->6999|11808->7007|11848->7010|11921->7073|11962->7075|12004->7084|12043->7086|12061->7094|12094->7104|12137->7114|12334->7275|12351->7283|12415->7324|12601->7473|12620->7482|12634->7486|12686->7499|12740->7516|12758->7524|12789->7532|12829->7535|12902->7598|12943->7600|12985->7609|13024->7611|13042->7619|13075->7629|13118->7639|13212->7701|13979->8440|14008->8441|14085->8490|14114->8491|14360->8709|14389->8710|14436->8729|14465->8730|14584->8821|14613->8822|14747->8927|14777->8928|14826->8948|14856->8949|14993->9057|15023->9058|15148->9154|15178->9155|15216->9165|15246->9166|15320->9211|15350->9212|15426->9259|15456->9260|15613->9389|15642->9390|15684->9403|15714->9404|15871->9533|15900->9534|15935->9541|15964->9542|16014->9555|16050->9581|16091->9583|16144->9603|16188->9611|16234->9647|16275->9649|16335->9676|16404->9708|16420->9714|16471->9742|16518->9760|16548->9761|16654->9838|16684->9839|16733->9859|16763->9860|16850->9918|16880->9919|16936->9946|16966->9947|17031->9983|17061->9984|17135->10029|17165->10030|17217->10052|17248->10053|17279->10054|17319->10066|17349->10067|17417->10106|17447->10107|17542->10173|17572->10174|17638->10211|17668->10212|17764->10278|17795->10279|17867->10322|17897->10323|17993->10389|18024->10390|18082->10419|18112->10420|18208->10487|18238->10488|18300->10521|18330->10522|18420->10583|18450->10584|18509->10614|18539->10615|18629->10676|18659->10677|18720->10709|18750->10710|18840->10771|18870->10772|18935->10808|18965->10809|19063->10877|19094->10878|19157->10912|19187->10913|19286->10982|19317->10983
+                    LINES: 26->1|29->1|31->3|31->3|31->3|34->6|34->6|34->6|45->17|45->17|45->17|47->19|47->19|47->19|47->19|50->22|50->22|50->22|50->22|50->22|50->22|50->22|51->23|51->23|51->23|51->23|52->24|52->24|52->24|52->24|57->29|57->29|57->29|57->29|58->30|58->30|58->30|58->30|63->35|63->35|63->35|65->37|65->37|65->37|66->38|66->38|66->38|67->39|67->39|67->39|67->39|67->39|67->39|67->39|67->39|67->39|67->39|67->39|67->39|67->39|67->39|67->39|68->40|68->40|68->40|68->40|68->40|68->40|68->40|68->40|68->40|68->40|68->40|68->40|68->40|68->40|68->40|70->42|77->49|77->49|77->49|79->51|79->51|79->51|80->52|80->52|80->52|81->53|81->53|81->53|81->53|82->54|82->54|82->54|82->54|83->55|83->55|83->55|84->56|84->56|84->56|85->57|85->57|85->57|86->58|86->58|86->58|86->58|87->59|87->59|87->59|87->59|88->60|88->60|88->60|88->60|88->60|88->60|88->60|88->60|88->60|88->60|88->60|88->60|88->60|88->60|88->60|91->63|91->63|91->63|92->64|92->64|92->64|92->64|92->64|92->64|92->64|92->64|92->64|92->64|92->64|92->64|92->64|92->64|92->64|95->67|95->67|95->67|96->68|96->68|96->68|96->68|96->68|96->68|96->68|96->68|96->68|96->68|96->68|96->68|96->68|96->68|96->68|99->71|99->71|99->71|100->72|100->72|100->72|100->72|100->72|100->72|100->72|100->72|100->72|100->72|100->72|100->72|100->72|100->72|100->72|102->74|117->89|117->89|118->90|118->90|124->96|124->96|125->97|125->97|127->99|127->99|130->102|130->102|131->103|131->103|134->106|134->106|137->109|137->109|138->110|138->110|139->111|139->111|140->112|140->112|144->116|144->116|145->117|145->117|149->121|149->121|150->122|150->122|151->123|151->123|151->123|151->123|152->124|152->124|152->124|152->124|154->126|154->126|154->126|154->126|154->126|156->128|156->128|156->128|156->128|158->130|158->130|158->130|158->130|159->131|159->131|159->131|159->131|159->131|159->131|159->131|160->132|160->132|162->134|162->134|162->134|162->134|163->135|163->135|163->135|163->135|164->136|164->136|164->136|164->136|165->137|165->137|165->137|165->137|166->138|166->138|166->138|166->138|167->139|167->139|167->139|167->139|168->140|168->140|168->140|168->140|169->141|169->141|169->141|169->141|170->142|170->142|170->142|170->142
                     -- GENERATED --
                 */
             

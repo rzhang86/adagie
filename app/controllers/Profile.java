@@ -51,7 +51,7 @@ import views.html.*;
             Long interest3; 			try {interest3 = Long.parseLong(map.get("interest3").trim());} catch (Exception e) {interest3 = null;}
             Long interest4; 			try {interest4 = Long.parseLong(map.get("interest4").trim());} catch (Exception e) {interest4 = null;}
 
-            if (changePassword == 1) {
+            if (changePassword != null && changePassword == 1) {
             	if (password == null || !user.getPassword().equals(password)) flash("failure", "Incorrect password");
             	else if (newPassword == null || newPassword.length() < 1 || newPassword.length() > 31) flash("failure", "New password invalid");
                 else if (newPasswordRepeat == null || !newPasswordRepeat.equals(newPassword)) flash("failure", "New passwords do not match");

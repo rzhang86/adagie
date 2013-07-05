@@ -4,19 +4,18 @@
     <div class="row">
         <div class="span12 well">
             <form action="@routes.Profile.post()" method="post">
-                <div class="row"><div class="span12 text-right"><button type="button" class="btn btn-primary" id="edit-button" data-toggle="button">Edit</button></div></div>
+                <div class="row"><div class="span12 text-right"><button type="button" class="btn btn-info" id="edit-button" data-toggle="button">Edit</button></div></div>
                 <div class="row"><div class="span6 offset3 text-center"><strong>Required fields:</strong></div></div>
-                <div class="row">
+                <div class="row nonform-height2">
                     <div class="span4 offset1">Email:</div>
-                    <div class="span6">Password:</div>
+                    <div class="span3">Password:</div>
+                    <div class="span4 form-div text-warning">
+                        <label class="checkbox pull-right"><input type="checkbox" id="change-password-box" name="changePassword" value="1"> Change password</label>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="span4 offset1 nonform-height text-info"><i>@form("email").value</i></div>
-                    <div class="span5 nonform-div text-info"><i>(not shown of course...)</i></div>
-                    <div class="span3 form-div">
-                        <button type="button" class="btn btn-danger" id="change-password-button" data-toggle="button">Change password</button>
-                        <input type="hidden" class="span1" id="changePassword" name="changePassword" value="0">
-                    </div>
+                    <div class="span5 nonpassword-div text-info"><i>(not shown of course...)</i></div>
                     <div class="span3 password-div"><input class="span3" type="password" id="password" name="password" placeholder="Current password" pattern=".{6,31}"></div>
                     <!--
                     <div class="span3 nonform-div"></div>
@@ -26,14 +25,11 @@
                     -->
                 </div>
                 <div class="row">
-                    <div class="span3 offset8 nonform-height nonpassword-div"></div>
-                    <div class="span3 offset8 password-div"><input class="span3" type="password" id="newPassword" name="newPassword" placeholder="New password" pattern=".{6,31}"></div>
+                    <div class="span6 offset5 nonform-height nonpassword-div"></div>
+                    <div class="span3 offset5 password-div"><input class="span3" type="password" id="newPassword" name="newPassword" placeholder="New password" pattern=".{6,31}"></div>
+                    <div class="span3 password-div"><input class="span3" type="password" id="newPasswordRepeat" name="newPasswordRepeat" placeholder="Repeat new password" pattern=".{6,31}"></div>
                 </div>
-                <div class="row">
-                    <div class="span3 offset8 nonform-height nonpassword-div"></div>
-                    <div class="span3 offset8 password-div"><input class="span3" type="password" id="newPasswordRepeat" name="newPasswordRepeat" placeholder="Repeat new password" pattern=".{6,31}"></div>
-                </div>
-                <div class="row"><div class="span6 offset3 text-center"><strong>Optional fields*:</strong></div></div>
+                <div class="row"><div class="span6 offset3 text-center"><strong>Optional fields *:</strong></div></div>
                 <br>
                 <div class="row"><div class="span5 offset1">Occupations:</div></div>
                 @defining(Occupation.findAll()) {occupations =>
@@ -54,13 +50,13 @@
                     <div class="row">
                         <div class="span2 offset1 nonform-div text-info"><i>@form("age").value</i></div>
                         <div class="span2 nonform-div text-info"><i>@form("zipCode").value</i></div>
-                        <div class="span1 nonform-div text-info">@if(form("gender").value=="M") {<img src="assets/img/male.png">}</div>
-                        <div class="span1 nonform-div text-info">@if(form("gender").value=="F") {<img src="assets/img/female.png">}</div>
+                        <div class="span1 nonform-div text-info">@if(form("gender").value=="M") {<img src="assets/img/male.png" width="15px">}</div>
+                        <div class="span1 nonform-div text-info">@if(form("gender").value=="F") {<img src="assets/img/female.png" width="15px">}</div>
                         <div class="span4 nonform-div text-info"><i>@Interest.getNameByString(form("interest1").value)</i></div>
                         <div class="span2 offset1 form-div"><input class="span2" type="number" id="age" name="age" placeholder="Age" maxlength="3" min="0" max="999" value="@form("age").value"></div>
                         <div class="span2 form-div"><input class="span2" type="text" id="zipCode" name="zipCode" placeholder="Zip code" maxlength="5" value="@form("zipCode").value"></div>
-                        <div class="span1 form-div"><label class="radio inline" id="male"><input type="radio" name="gender" value="M" @if(form("gender").value=="M") {checked}><img src="assets/img/male.png"></label></div>
-                        <div class="span1 form-div"><label class="radio inline" id="female"><input type="radio" name="gender" value="F" @if(form("gender").value=="F") {checked}><img src="assets/img/female.png"></label></div>
+                        <div class="span1 form-div"><label class="radio inline" id="male"><input type="radio" name="gender" value="M" @if(form("gender").value=="M") {checked}><img src="assets/img/male.png" width="15px"></label></div>
+                        <div class="span1 form-div"><label class="radio inline" id="female"><input type="radio" name="gender" value="F" @if(form("gender").value=="F") {checked}><img src="assets/img/female.png" width="15px"></label></div>
                         <div class="span4 form-div"><select class="span4 interest" name="interest1"><option value="-1"></option>@interests.map {interest => <option value="@interest.getId()" @if(interest.getId().toString().equals(form("interest1").value)) {selected}>@interest.getName()</option>}</select></div>
                     </div>
                     <div class="row ">
@@ -76,19 +72,20 @@
                         <div class="span4 offset7 form-div"><select class="span4 interest" name="interest4"><option value="-1"></option>@interests.map {interest => <option value="@interest.getId()" @if(interest.getId().toString().equals(form("interest4").value)) {selected}>@interest.getName()</option>}</select></div>
                     </div>
                 }
-                <div class="row"><div class="span12 text-center"><i>*Optional fields help match you with higher-paying videos!</i></div></div>
-                <div class="row"><div class="span12 text-center"><button type="submit" class="btn btn-large btn-success" id="submit-button">Submit</button></div></div>
+                <div class="row"><div class="span12 text-center"><i>* Optional fields help match you with higher-paying videos!</i></div></div>
+                <div class="row"><div class="span12 text-center"><button type="submit" class="btn btn-large btn-success" id="submit-button">Save</button></div></div>
             </form>
         </div>
     </div>
     <script type="text/javascript">
-		$('#submit-button').hide();
+        var editButton = $('#edit-button');
+    	var submitButton = $('#submit-button'); 
+        var changePasswordBox = $('#change-password-box');
+		submitButton.hide();
     	$('.form-div').hide();
     	$('.password-div').hide();
     	$('.nonform-div').show();
     	$('.nonpassword-div').show();
-    	var editButton = $('#edit-button');
-        var changePasswordButton = $('#change-password-button');
     	editButton.click(function() {
             if (editButton.hasClass('active')) {
             	$('.form-div').hide();
@@ -99,7 +96,7 @@
             }
             else {
             	$('.form-div').show();
-            	if (changePasswordButton.hasClass('active')) {
+            	if (changePasswordBox.prop('checked')) {
                 	$('.password-div').show();
                 	$('.nonpassword-div').hide();
         		}
@@ -111,20 +108,20 @@
             	$('.nonform-div').hide();
             }
         });
-    	changePasswordButton.click(function() {
-            if (changePasswordButton.hasClass('active')) {
-            	$('#changePassword').val('0');
-            	$('.password-div').hide();
-            	$('.nonpassword-div').show();
-            }
-            else {
-            	$('#changePassword').val('1');
-            	$('.password-div').show();
+    	changePasswordBox.change(function() {
+    		if (changePasswordBox.prop('checked')) {
+    			changePasswordBox.val('1');
             	$('.nonpassword-div').hide();
-            }
-        })
+            	$('.password-div').show();
+    		}
+    		else {
+    			changePasswordBox.val('0');
+            	$('.nonpassword-div').show();
+            	$('.password-div').hide();
+    		}
+    	});
         @if(flash.contains("edit")) {editButton.click();}
-    	@if(flash.contains("changePassword")) {changePasswordButton.click();}
+    	@if(flash.contains("changePassword")) {changePasswordBox.click();}
         
         $.getJSON("@routes.Assets.at("data/Zips.json")", function(data) {
             var zipCodes = [];

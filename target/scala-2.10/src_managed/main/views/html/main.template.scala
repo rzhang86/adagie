@@ -59,19 +59,20 @@ Seq[Any](format.raw/*1.50*/("""
             
             .nonform-div """),format.raw/*32.26*/("""{"""),format.raw/*32.27*/("""height: 40px;"""),format.raw/*32.40*/("""}"""),format.raw/*32.41*/("""
             .nonform-height """),format.raw/*33.29*/("""{"""),format.raw/*33.30*/("""height: 40px;"""),format.raw/*33.43*/("""}"""),format.raw/*33.44*/("""
+            .nonform-height2 """),format.raw/*34.30*/("""{"""),format.raw/*34.31*/("""height: 30px;"""),format.raw/*34.44*/("""}"""),format.raw/*34.45*/("""
         </style>
         
-        <script src=""""),_display_(Seq[Any](/*36.23*/routes/*36.29*/.Assets.at("js/modernizr-2.6.2-respond-1.1.0.min.js"))),format.raw/*36.82*/(""""></script>
+        <script src=""""),_display_(Seq[Any](/*37.23*/routes/*37.29*/.Assets.at("js/modernizr-2.6.2-respond-1.1.0.min.js"))),format.raw/*37.82*/(""""></script>
         
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src=""""),_display_(Seq[Any](/*39.64*/routes/*39.70*/.Assets.at("js/jquery-1.9.1.min.js"))),format.raw/*39.106*/(""""><\/script>')</script>
-        <script src=""""),_display_(Seq[Any](/*40.23*/routes/*40.29*/.Assets.at("js/bootstrap.min.js"))),format.raw/*40.62*/(""""></script>
-        <script src=""""),_display_(Seq[Any](/*41.23*/routes/*41.29*/.Assets.at("js/main.js"))),format.raw/*41.53*/(""""></script>
+        <script>window.jQuery || document.write('<script src=""""),_display_(Seq[Any](/*40.64*/routes/*40.70*/.Assets.at("js/jquery-1.9.1.min.js"))),format.raw/*40.106*/(""""><\/script>')</script>
+        <script src=""""),_display_(Seq[Any](/*41.23*/routes/*41.29*/.Assets.at("js/bootstrap.min.js"))),format.raw/*41.62*/(""""></script>
+        <script src=""""),_display_(Seq[Any](/*42.23*/routes/*42.29*/.Assets.at("js/main.js"))),format.raw/*42.53*/(""""></script>
         <script>
             //var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
-            //(function(d,t)"""),format.raw/*44.29*/("""{"""),format.raw/*44.30*/("""var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            //(function(d,t)"""),format.raw/*45.29*/("""{"""),format.raw/*45.30*/("""var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
             //g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-            //s.parentNode.insertBefore(g,s)"""),format.raw/*46.45*/("""}"""),format.raw/*46.46*/("""(document,'script'));
+            //s.parentNode.insertBefore(g,s)"""),format.raw/*47.45*/("""}"""),format.raw/*47.46*/("""(document,'script'));
         </script>
         
     </head>
@@ -83,33 +84,33 @@ Seq[Any](format.raw/*1.50*/("""
         <br><br><br><br>
         <div class="container">
             <div class="row">
-                """),_display_(Seq[Any](/*58.18*/if(user!=null)/*58.32*/ {_display_(Seq[Any](format.raw/*58.34*/("""
+                """),_display_(Seq[Any](/*59.18*/if(user!=null)/*59.32*/ {_display_(Seq[Any](format.raw/*59.34*/("""
                     <ul class="nav nav-pills">
-                        <li """),_display_(Seq[Any](/*60.30*/if(activeClass.equals("home"))/*60.60*/ {_display_(Seq[Any](format.raw/*60.62*/("""class="active"""")))})),format.raw/*60.77*/("""><a href=""""),_display_(Seq[Any](/*60.88*/routes/*60.94*/.Home.get())),format.raw/*60.105*/("""">Home</a></li>
-                        <li """),_display_(Seq[Any](/*61.30*/if(activeClass.equals("profile"))/*61.63*/ {_display_(Seq[Any](format.raw/*61.65*/("""class="active"""")))})),format.raw/*61.80*/(""")><a href=""""),_display_(Seq[Any](/*61.92*/routes/*61.98*/.Profile.get())),format.raw/*61.112*/("""">Profile</a></li>
-                        <li """),_display_(Seq[Any](/*62.30*/if(activeClass.equals("uploads"))/*62.63*/ {_display_(Seq[Any](format.raw/*62.65*/("""class="active"""")))})),format.raw/*62.80*/("""><a href=""""),_display_(Seq[Any](/*62.91*/routes/*62.97*/.Uploads.get())),format.raw/*62.111*/("""">Uploads</a></li>
-                        <li """),_display_(Seq[Any](/*63.30*/if(activeClass.equals("accounts"))/*63.64*/ {_display_(Seq[Any](format.raw/*63.66*/("""class="active"""")))})),format.raw/*63.81*/(""")><a href=""""),_display_(Seq[Any](/*63.93*/routes/*63.99*/.Accounts.get())),format.raw/*63.114*/("""">Accounts</a></li>
-                        <li """),_display_(Seq[Any](/*64.30*/if(activeClass.equals("notifications"))/*64.69*/ {_display_(Seq[Any](format.raw/*64.71*/("""class="active"""")))})),format.raw/*64.86*/(""")><a href=""""),_display_(Seq[Any](/*64.98*/routes/*64.104*/.Notifications.get())),format.raw/*64.124*/("""">Notifications</a></li>
-                        <li><a href=""""),_display_(Seq[Any](/*65.39*/routes/*65.45*/.Logout.get())),format.raw/*65.58*/("""">Log out</a></li>
+                        <li """),_display_(Seq[Any](/*61.30*/if(activeClass.equals("home"))/*61.60*/ {_display_(Seq[Any](format.raw/*61.62*/("""class="active"""")))})),format.raw/*61.77*/("""><a href=""""),_display_(Seq[Any](/*61.88*/routes/*61.94*/.Home.get())),format.raw/*61.105*/("""">Home</a></li>
+                        <li """),_display_(Seq[Any](/*62.30*/if(activeClass.equals("profile"))/*62.63*/ {_display_(Seq[Any](format.raw/*62.65*/("""class="active"""")))})),format.raw/*62.80*/(""")><a href=""""),_display_(Seq[Any](/*62.92*/routes/*62.98*/.Profile.get())),format.raw/*62.112*/("""">Profile</a></li>
+                        <li """),_display_(Seq[Any](/*63.30*/if(activeClass.equals("uploads"))/*63.63*/ {_display_(Seq[Any](format.raw/*63.65*/("""class="active"""")))})),format.raw/*63.80*/("""><a href=""""),_display_(Seq[Any](/*63.91*/routes/*63.97*/.Uploads.get())),format.raw/*63.111*/("""">Uploads</a></li>
+                        <li """),_display_(Seq[Any](/*64.30*/if(activeClass.equals("accounts"))/*64.64*/ {_display_(Seq[Any](format.raw/*64.66*/("""class="active"""")))})),format.raw/*64.81*/(""")><a href=""""),_display_(Seq[Any](/*64.93*/routes/*64.99*/.Accounts.get())),format.raw/*64.114*/("""">Accounts</a></li>
+                        <li """),_display_(Seq[Any](/*65.30*/if(activeClass.equals("notifications"))/*65.69*/ {_display_(Seq[Any](format.raw/*65.71*/("""class="active"""")))})),format.raw/*65.86*/(""")><a href=""""),_display_(Seq[Any](/*65.98*/routes/*65.104*/.Notifications.get())),format.raw/*65.124*/("""">Notifications</a></li>
+                        <li><a href=""""),_display_(Seq[Any](/*66.39*/routes/*66.45*/.Logout.get())),format.raw/*66.58*/("""">Log out</a></li>
                     </ul>
-                """)))}/*67.19*/else/*67.24*/{_display_(Seq[Any](format.raw/*67.25*/("""
+                """)))}/*68.19*/else/*68.24*/{_display_(Seq[Any](format.raw/*68.25*/("""
                     <div class="form-horizontal text-right">
-                        <form action=""""),_display_(Seq[Any](/*69.40*/routes/*69.46*/.Login.post())),format.raw/*69.59*/("""" method="post">
+                        <form action=""""),_display_(Seq[Any](/*70.40*/routes/*70.46*/.Login.post())),format.raw/*70.59*/("""" method="post">
                             <input type="text" class="span4" name="email" placeholder="Email address" maxlength=63>
                             <input type="password" class="span3" name="password" placeholder="Password" maxlength=31>
                             <button type="submit" class="btn btn-info">Log in</button>
-                            <a class="btn btn-warning" href=""""),_display_(Seq[Any](/*73.63*/routes/*73.69*/.Signup.get())),format.raw/*73.82*/("""">Sign up</a>
+                            <a class="btn btn-warning" href=""""),_display_(Seq[Any](/*74.63*/routes/*74.69*/.Signup.get())),format.raw/*74.82*/("""">Sign up</a>
                         </form>
                     </div>
-                """)))})),format.raw/*76.18*/("""
+                """)))})),format.raw/*77.18*/("""
             </div>
             <div class="row">
                 <div class="span12">
-                    """),_display_(Seq[Any](/*80.22*/if(flash.contains("success"))/*80.51*/ {_display_(Seq[Any](_display_(Seq[Any](/*80.54*/flash/*80.59*/.get("success")))))})),format.raw/*80.75*/("""
-                    """),_display_(Seq[Any](/*81.22*/if(flash.contains("failure"))/*81.51*/ {_display_(Seq[Any](_display_(Seq[Any](/*81.54*/flash/*81.59*/.get("failure")))))})),format.raw/*81.75*/("""
+                    """),_display_(Seq[Any](/*81.22*/if(flash.contains("success"))/*81.51*/ {_display_(Seq[Any](_display_(Seq[Any](/*81.54*/flash/*81.59*/.get("success")))))})),format.raw/*81.75*/("""
+                    """),_display_(Seq[Any](/*82.22*/if(flash.contains("failure"))/*82.51*/ {_display_(Seq[Any](_display_(Seq[Any](/*82.54*/flash/*82.59*/.get("failure")))))})),format.raw/*82.75*/("""
                 </div>
             </div>
-            """),_display_(Seq[Any](/*84.14*/content)),format.raw/*84.21*/("""
+            """),_display_(Seq[Any](/*85.14*/content)),format.raw/*85.21*/("""
             <div class="footer">
                 <p>by Ray</p>
             </div>      
@@ -131,11 +132,11 @@ Seq[Any](format.raw/*1.50*/("""
 }
                 /*
                     -- GENERATED --
-                    DATE: Thu Jul 04 14:04:33 EDT 2013
+                    DATE: Fri Jul 05 18:43:42 EDT 2013
                     SOURCE: C:/programs/ray/adagie/app/views/main.scala.html
-                    HASH: c4a8179017cee09698c6f9283fd47af5e9fe2498
-                    MATRIX: 732->1|857->49|1554->710|1569->716|1622->747|1700->789|1715->795|1779->837|1857->879|1872->885|1920->911|2017->981|2046->982|2097->1005|2126->1006|2203->1055|2232->1056|2288->1084|2317->1085|2363->1103|2392->1104|2434->1118|2463->1119|2534->1163|2563->1164|2625->1198|2654->1199|2695->1212|2724->1213|2766->1227|2795->1228|2847->1252|2876->1253|2921->1270|2950->1271|2998->1291|3027->1292|3071->1308|3100->1309|3151->1332|3180->1333|3224->1349|3253->1350|3322->1391|3351->1392|3392->1405|3421->1406|3479->1436|3508->1437|3549->1450|3578->1451|3666->1503|3681->1509|3756->1562|3970->1740|3985->1746|4044->1782|4127->1829|4142->1835|4197->1868|4268->1903|4283->1909|4329->1933|4491->2067|4520->2068|4748->2268|4777->2269|5329->2785|5352->2799|5392->2801|5507->2880|5546->2910|5586->2912|5633->2927|5680->2938|5695->2944|5729->2955|5811->3001|5853->3034|5893->3036|5940->3051|5988->3063|6003->3069|6040->3083|6125->3132|6167->3165|6207->3167|6254->3182|6301->3193|6316->3199|6353->3213|6438->3262|6481->3296|6521->3298|6568->3313|6616->3325|6631->3331|6669->3346|6755->3396|6803->3435|6843->3437|6890->3452|6938->3464|6954->3470|6997->3490|7097->3554|7112->3560|7147->3573|7230->3638|7243->3643|7282->3644|7421->3747|7436->3753|7471->3766|7911->4170|7926->4176|7961->4189|8086->4282|8234->4394|8272->4423|8321->4426|8335->4431|8377->4447|8436->4470|8474->4499|8523->4502|8537->4507|8579->4523|8674->4582|8703->4589
-                    LINES: 26->1|29->1|44->16|44->16|44->16|45->17|45->17|45->17|46->18|46->18|46->18|49->21|49->21|50->22|50->22|50->22|50->22|51->23|51->23|51->23|51->23|52->24|52->24|53->25|53->25|54->26|54->26|54->26|54->26|55->27|55->27|56->28|56->28|56->28|56->28|57->29|57->29|57->29|57->29|58->30|58->30|58->30|58->30|60->32|60->32|60->32|60->32|61->33|61->33|61->33|61->33|64->36|64->36|64->36|67->39|67->39|67->39|68->40|68->40|68->40|69->41|69->41|69->41|72->44|72->44|74->46|74->46|86->58|86->58|86->58|88->60|88->60|88->60|88->60|88->60|88->60|88->60|89->61|89->61|89->61|89->61|89->61|89->61|89->61|90->62|90->62|90->62|90->62|90->62|90->62|90->62|91->63|91->63|91->63|91->63|91->63|91->63|91->63|92->64|92->64|92->64|92->64|92->64|92->64|92->64|93->65|93->65|93->65|95->67|95->67|95->67|97->69|97->69|97->69|101->73|101->73|101->73|104->76|108->80|108->80|108->80|108->80|108->80|109->81|109->81|109->81|109->81|109->81|112->84|112->84
+                    HASH: 189064b0474f0fdf5c7e7a84a83f14a4dbb4ca78
+                    MATRIX: 732->1|857->49|1554->710|1569->716|1622->747|1700->789|1715->795|1779->837|1857->879|1872->885|1920->911|2017->981|2046->982|2097->1005|2126->1006|2203->1055|2232->1056|2288->1084|2317->1085|2363->1103|2392->1104|2434->1118|2463->1119|2534->1163|2563->1164|2625->1198|2654->1199|2695->1212|2724->1213|2766->1227|2795->1228|2847->1252|2876->1253|2921->1270|2950->1271|2998->1291|3027->1292|3071->1308|3100->1309|3151->1332|3180->1333|3224->1349|3253->1350|3322->1391|3351->1392|3392->1405|3421->1406|3479->1436|3508->1437|3549->1450|3578->1451|3637->1482|3666->1483|3707->1496|3736->1497|3824->1549|3839->1555|3914->1608|4128->1786|4143->1792|4202->1828|4285->1875|4300->1881|4355->1914|4426->1949|4441->1955|4487->1979|4649->2113|4678->2114|4906->2314|4935->2315|5487->2831|5510->2845|5550->2847|5665->2926|5704->2956|5744->2958|5791->2973|5838->2984|5853->2990|5887->3001|5969->3047|6011->3080|6051->3082|6098->3097|6146->3109|6161->3115|6198->3129|6283->3178|6325->3211|6365->3213|6412->3228|6459->3239|6474->3245|6511->3259|6596->3308|6639->3342|6679->3344|6726->3359|6774->3371|6789->3377|6827->3392|6913->3442|6961->3481|7001->3483|7048->3498|7096->3510|7112->3516|7155->3536|7255->3600|7270->3606|7305->3619|7388->3684|7401->3689|7440->3690|7579->3793|7594->3799|7629->3812|8069->4216|8084->4222|8119->4235|8244->4328|8392->4440|8430->4469|8479->4472|8493->4477|8535->4493|8594->4516|8632->4545|8681->4548|8695->4553|8737->4569|8832->4628|8861->4635
+                    LINES: 26->1|29->1|44->16|44->16|44->16|45->17|45->17|45->17|46->18|46->18|46->18|49->21|49->21|50->22|50->22|50->22|50->22|51->23|51->23|51->23|51->23|52->24|52->24|53->25|53->25|54->26|54->26|54->26|54->26|55->27|55->27|56->28|56->28|56->28|56->28|57->29|57->29|57->29|57->29|58->30|58->30|58->30|58->30|60->32|60->32|60->32|60->32|61->33|61->33|61->33|61->33|62->34|62->34|62->34|62->34|65->37|65->37|65->37|68->40|68->40|68->40|69->41|69->41|69->41|70->42|70->42|70->42|73->45|73->45|75->47|75->47|87->59|87->59|87->59|89->61|89->61|89->61|89->61|89->61|89->61|89->61|90->62|90->62|90->62|90->62|90->62|90->62|90->62|91->63|91->63|91->63|91->63|91->63|91->63|91->63|92->64|92->64|92->64|92->64|92->64|92->64|92->64|93->65|93->65|93->65|93->65|93->65|93->65|93->65|94->66|94->66|94->66|96->68|96->68|96->68|98->70|98->70|98->70|102->74|102->74|102->74|105->77|109->81|109->81|109->81|109->81|109->81|110->82|110->82|110->82|110->82|110->82|113->85|113->85
                     -- GENERATED --
                 */
             

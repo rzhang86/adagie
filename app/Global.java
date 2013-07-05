@@ -40,6 +40,8 @@ public class Global extends GlobalSettings {
             user = new User();
             user.setEmail("kwang318@gmail.com");
             user.setPassword("secret");
+            user.setGender("F");
+            user.setAge(26);
             user.setBalance(10000L);
             user.setCommittedBalance(10000L);
             user.save();
@@ -47,6 +49,8 @@ public class Global extends GlobalSettings {
             user = new User();
             user.setEmail("rzhang86@gmail.com");
             user.setPassword("secret");
+            user.setGender("M");
+            user.setAge(27);
             user.setBalance(10000L);
             user.setCommittedBalance(10000L);
             user.save();

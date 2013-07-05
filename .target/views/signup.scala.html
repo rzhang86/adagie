@@ -16,7 +16,7 @@
                     <div class="span3"><input class="span3" type="password" id="passwordRepeat" name="passwordRepeat" placeholder="Repeat password" pattern=".{6,31}"></div>
                 </div>
                 <br>
-                <div class="row"><div class="span12 text-center"><strong>Optional fields:</strong></div></div>
+                <div class="row"><div class="span12 text-center"><strong>Optional fields *:</strong></div></div>
                 <br>
                 <div class="row"><div class="span5 offset1">Occupations:</div></div>
                 @defining(Occupation.findAll()) {occupations =>
@@ -35,8 +35,8 @@
                     <div class="row">
                         <div class="span2 offset1"><input class="span2" type="number" id="age" name="age" placeholder="Age" maxlength="3" min="0" max="999" value="@form("age").value"></div>
                         <div class="span2"><input class="span2" type="text" id="zipCode" name="zipCode" placeholder="Zip code" maxlength="5" value="@form("zipCode").value" autocomplete="off"></div>
-                        <div class="span1"><label class="radio inline" id="male"><input type="radio" name="gender" value="M" @if(form("gender").value=="M") {checked}><img src="assets/img/male.png"></label></div>
-                        <div class="span1"><label class="radio inline" id="female"><input type="radio" name="gender" value="F" @if(form("gender").value=="F") {checked}><img src="assets/img/female.png"></label></div>
+                        <div class="span1"><label class="radio inline" id="male"><input type="radio" name="gender" value="M" @if(form("gender").value=="M") {checked}><img src="assets/img/male.png" width="15px"></label></div>
+                        <div class="span1"><label class="radio inline" id="female"><input type="radio" name="gender" value="F" @if(form("gender").value=="F") {checked}><img src="assets/img/female.png" width="15px"></label></div>
                         <div class="span4"><select class="span4 interest" id="interest1" name="interest1"><option value="-1"></option>@interests.map {interest => <option value="@interest.getId()" @if(interest.getId().toString().equals(form("interest1").value)) {selected}>@interest.getName()</option>}</select></div>
                     </div>
                     <div class="row">
@@ -49,7 +49,7 @@
                         <div class="span4 offset7"><select class="span4 interest" id="interest4" name="interest4"><option value="-1"></option>@interests.map {interest => <option value="@interest.getId()" @if(interest.getId().toString().equals(form("interest4").value)) {selected}>@interest.getName()</option>}</select></div>
                     </div>
                 }
-                <div class="row"><div class="span12 text-center"><i>Optional fields help match you with higher-paying videos!</i></div></div>
+                <div class="row"><div class="span12 text-center"><i>* Optional fields help match you with higher-paying videos!</i></div></div>
                 <div class="row"><div class="span12 text-center"><button type="submit" class="btn btn-large btn-success">Submit</button></div></div>
             </form>
         </div>
