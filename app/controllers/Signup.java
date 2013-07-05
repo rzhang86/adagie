@@ -36,8 +36,8 @@ public class Signup extends Controller {
         try {
         	Map<String, String> map = signupForm.data();
         	String email;			try {email = map.get("email").trim().toLowerCase();} catch(Exception e) {email = null;}
-        	String password; 		try {password = map.get("password").trim();} catch(Exception e) {password = null;}
-        	String passwordRepeat;  try {passwordRepeat = map.get("passwordRepeat").trim();} catch(Exception e) {passwordRepeat = null;}
+        	String password; 		try {password = map.get("password");} catch(Exception e) {password = null;}
+        	String passwordRepeat;  try {passwordRepeat = map.get("passwordRepeat");} catch(Exception e) {passwordRepeat = null;}
             Integer age;			try {age = Integer.parseInt(map.get("age").trim());} catch (Exception e) {age = null;}
             String zipCode;			try {zipCode = map.get("zipCode").trim();} catch(Exception e) {zipCode = null;}
             String gender;			try {gender = map.get("gender").trim();} catch(Exception e) {gender = null;}
