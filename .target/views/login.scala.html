@@ -1,10 +1,53 @@
-@()
+@(form: Form[Login.LoginForm])
 
-@main(null, "") {
-    <div class="row-fluid">
+@main(null, "login") {
+    <div class="row">
 	    <div class="span12 well">
-	        <h2>Welcome!</h2>
-	        <p class="lead">This is Rays cool site</p>
+            <form action="@routes.Login.post()" method="post">
+                <div class="row">
+                    <div class="span4 offset1">
+                        <div class="row nonform-height2"><div class="span4">Email:</div></div>
+                        <div class="row"><div class="span4"><input type="text" class="span4" id="email" name="email" placeholder="Email address" value="@form("email").value" pattern=".{1,63}" required></div></div>
+                    </div>
+                    <div class="span6">
+                        <div class="row nonform-height2"><div class="span7">Password:</div></div>
+                        <div class="row password-div">
+                            <div class="span3"><input type="password" class="span3" id="password" name="password" placeholder="Password" pattern=".{6,31}" required></div>
+                            <div class="span3"><button type="submit" class="btn btn-info">Log in</button></div>
+                        </div>
+                        <div class="row nonpassword-div"><div class="span3"><button type="submit" class="btn btn-warning">Reset password</button></div></div>
+                    </div>
+                </div>
+                <div class="row"><div class="span4 offset1 text-warning"><label class="checkbox"><input type="checkbox" id="change-password-box" name="changePassword" value="1"> Forgot password?</label></div></div>
+            </form>
 	    </div>
     </div>
+    <script type="text/javascript">
+    	$('.nonpassword-div').hide();
+    	$('.password-div').show();
+        var changePasswordBox = $('#change-password-box');
+        changePasswordBox.change(function() {
+            if (changePasswordBox.prop('checked')) {
+                $('#password').prop('disabled', true);
+                $('#password').prop('required', false);
+            	$('.password-div').hide();
+            	$('.nonpassword-div').show();
+            }
+            else {
+            	$('#password').prop('disabled', false);
+                $('#password').prop('required', true);
+            	$('.nonpassword-div').hide();
+            	$('.password-div').show();
+            }
+        });
+        @if(flash.contains("changePassword")) {changePasswordBox.click();}
+        
+        $.getJSON("@routes.Assets.at("data/Zips.json")", function(data) {
+            var zipCodes = [];
+            $.each(data, function(i, item) {zipCodes.push(item);});
+            $('#zipCode')
+                .typeahead({source: zipCodes, items: 10})
+                .blur(function() {if($.inArray($(this).val(), zipCodes) == -1) {$('#zipCode').val('');}});
+        });
+    </script>
 }

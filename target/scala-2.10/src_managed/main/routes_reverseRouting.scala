@@ -1,6 +1,6 @@
 // @SOURCE:C:/programs/ray/adagie/conf/routes
-// @HASH:b0661e07aab0e5fa576bd1c7b27fcb0addaf9827
-// @DATE:Wed Jul 03 12:11:02 EDT 2013
+// @HASH:4070ee6b14a4f5c92cd7e7633209dc40504a156f
+// @DATE:Sat Jul 06 16:09:38 EDT 2013
 
 import Routes.{prefix => _prefix, defaultPrefix => _defaultPrefix}
 import play.core._
@@ -14,7 +14,10 @@ import play.libs.F
 import Router.queryString
 
 
+// @LINE:28
 // @LINE:25
+// @LINE:24
+// @LINE:23
 // @LINE:22
 // @LINE:21
 // @LINE:20
@@ -34,11 +37,11 @@ import Router.queryString
 // @LINE:6
 package controllers {
 
-// @LINE:25
+// @LINE:28
 class ReverseAssets {
     
 
-// @LINE:25
+// @LINE:28
 def at(file:String): Call = {
    Call("GET", _prefix + { _defaultPrefix } + "assets/" + implicitly[PathBindable[String]].unbind("file", file))
 }
@@ -47,25 +50,38 @@ def at(file:String): Call = {
 }
                           
 
-// @LINE:16
-// @LINE:15
-// @LINE:14
+// @LINE:10
+class ReverseAbout {
+    
+
+// @LINE:10
+def get(): Call = {
+   Call("GET", _prefix + { _defaultPrefix } + "about")
+}
+                                                
+    
+}
+                          
+
+// @LINE:19
+// @LINE:18
+// @LINE:17
 class ReverseUploads {
     
 
-// @LINE:15
+// @LINE:18
 def post(): Call = {
    Call("POST", _prefix + { _defaultPrefix } + "uploads")
 }
                                                 
 
-// @LINE:16
+// @LINE:19
 def delete(id:Long): Call = {
    Call("DELETE", _prefix + { _defaultPrefix } + "uploads/" + implicitly[PathBindable[Long]].unbind("id", id))
 }
                                                 
 
-// @LINE:14
+// @LINE:17
 def get(): Call = {
    Call("GET", _prefix + { _defaultPrefix } + "uploads")
 }
@@ -74,18 +90,31 @@ def get(): Call = {
 }
                           
 
-// @LINE:11
-// @LINE:10
+// @LINE:12
+class ReverseContact {
+    
+
+// @LINE:12
+def get(): Call = {
+   Call("GET", _prefix + { _defaultPrefix } + "contact")
+}
+                                                
+    
+}
+                          
+
+// @LINE:14
+// @LINE:13
 class ReverseHome {
     
 
-// @LINE:11
+// @LINE:14
 def post(): Call = {
    Call("POST", _prefix + { _defaultPrefix } + "home")
 }
                                                 
 
-// @LINE:10
+// @LINE:13
 def get(): Call = {
    Call("GET", _prefix + { _defaultPrefix } + "home")
 }
@@ -94,18 +123,18 @@ def get(): Call = {
 }
                           
 
-// @LINE:13
-// @LINE:12
+// @LINE:16
+// @LINE:15
 class ReverseProfile {
     
 
-// @LINE:13
+// @LINE:16
 def post(): Call = {
    Call("POST", _prefix + { _defaultPrefix } + "profile")
 }
                                                 
 
-// @LINE:12
+// @LINE:15
 def get(): Call = {
    Call("GET", _prefix + { _defaultPrefix } + "profile")
 }
@@ -114,11 +143,11 @@ def get(): Call = {
 }
                           
 
-// @LINE:22
+// @LINE:25
 class ReverseLogout {
     
 
-// @LINE:22
+// @LINE:25
 def get(): Call = {
    Call("GET", _prefix + { _defaultPrefix } + "logout")
 }
@@ -127,25 +156,25 @@ def get(): Call = {
 }
                           
 
-// @LINE:19
-// @LINE:18
-// @LINE:17
+// @LINE:22
+// @LINE:21
+// @LINE:20
 class ReverseAccounts {
     
 
-// @LINE:18
+// @LINE:21
 def post(): Call = {
    Call("POST", _prefix + { _defaultPrefix } + "accounts")
 }
                                                 
 
-// @LINE:19
+// @LINE:22
 def delete(id:Long): Call = {
    Call("DELETE", _prefix + { _defaultPrefix } + "accounts/" + implicitly[PathBindable[Long]].unbind("id", id))
 }
                                                 
 
-// @LINE:17
+// @LINE:20
 def get(): Call = {
    Call("GET", _prefix + { _defaultPrefix } + "accounts")
 }
@@ -174,6 +203,19 @@ def get(): Call = {
 }
                           
 
+// @LINE:11
+class ReverseFaq {
+    
+
+// @LINE:11
+def get(): Call = {
+   Call("GET", _prefix + { _defaultPrefix } + "faq")
+}
+                                                
+    
+}
+                          
+
 // @LINE:9
 // @LINE:8
 class ReverseSignup {
@@ -194,18 +236,18 @@ def get(): Call = {
 }
                           
 
-// @LINE:21
-// @LINE:20
+// @LINE:24
+// @LINE:23
 class ReverseNotifications {
     
 
-// @LINE:21
+// @LINE:24
 def post(): Call = {
    Call("POST", _prefix + { _defaultPrefix } + "notifications")
 }
                                                 
 
-// @LINE:20
+// @LINE:23
 def get(): Call = {
    Call("GET", _prefix + { _defaultPrefix } + "notifications")
 }
@@ -217,7 +259,10 @@ def get(): Call = {
                   
 
 
+// @LINE:28
 // @LINE:25
+// @LINE:24
+// @LINE:23
 // @LINE:22
 // @LINE:21
 // @LINE:20
@@ -237,11 +282,11 @@ def get(): Call = {
 // @LINE:6
 package controllers.javascript {
 
-// @LINE:25
+// @LINE:28
 class ReverseAssets {
     
 
-// @LINE:25
+// @LINE:28
 def at : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Assets.at",
    """
@@ -255,13 +300,31 @@ def at : JavascriptReverseRoute = JavascriptReverseRoute(
 }
               
 
-// @LINE:16
-// @LINE:15
-// @LINE:14
+// @LINE:10
+class ReverseAbout {
+    
+
+// @LINE:10
+def get : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.About.get",
+   """
+      function() {
+      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "about"})
+      }
+   """
+)
+                        
+    
+}
+              
+
+// @LINE:19
+// @LINE:18
+// @LINE:17
 class ReverseUploads {
     
 
-// @LINE:15
+// @LINE:18
 def post : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Uploads.post",
    """
@@ -272,7 +335,7 @@ def post : JavascriptReverseRoute = JavascriptReverseRoute(
 )
                         
 
-// @LINE:16
+// @LINE:19
 def delete : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Uploads.delete",
    """
@@ -283,7 +346,7 @@ def delete : JavascriptReverseRoute = JavascriptReverseRoute(
 )
                         
 
-// @LINE:14
+// @LINE:17
 def get : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Uploads.get",
    """
@@ -297,12 +360,30 @@ def get : JavascriptReverseRoute = JavascriptReverseRoute(
 }
               
 
-// @LINE:11
-// @LINE:10
+// @LINE:12
+class ReverseContact {
+    
+
+// @LINE:12
+def get : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Contact.get",
+   """
+      function() {
+      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "contact"})
+      }
+   """
+)
+                        
+    
+}
+              
+
+// @LINE:14
+// @LINE:13
 class ReverseHome {
     
 
-// @LINE:11
+// @LINE:14
 def post : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Home.post",
    """
@@ -313,7 +394,7 @@ def post : JavascriptReverseRoute = JavascriptReverseRoute(
 )
                         
 
-// @LINE:10
+// @LINE:13
 def get : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Home.get",
    """
@@ -327,12 +408,12 @@ def get : JavascriptReverseRoute = JavascriptReverseRoute(
 }
               
 
-// @LINE:13
-// @LINE:12
+// @LINE:16
+// @LINE:15
 class ReverseProfile {
     
 
-// @LINE:13
+// @LINE:16
 def post : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Profile.post",
    """
@@ -343,7 +424,7 @@ def post : JavascriptReverseRoute = JavascriptReverseRoute(
 )
                         
 
-// @LINE:12
+// @LINE:15
 def get : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Profile.get",
    """
@@ -357,11 +438,11 @@ def get : JavascriptReverseRoute = JavascriptReverseRoute(
 }
               
 
-// @LINE:22
+// @LINE:25
 class ReverseLogout {
     
 
-// @LINE:22
+// @LINE:25
 def get : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Logout.get",
    """
@@ -375,13 +456,13 @@ def get : JavascriptReverseRoute = JavascriptReverseRoute(
 }
               
 
-// @LINE:19
-// @LINE:18
-// @LINE:17
+// @LINE:22
+// @LINE:21
+// @LINE:20
 class ReverseAccounts {
     
 
-// @LINE:18
+// @LINE:21
 def post : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Accounts.post",
    """
@@ -392,7 +473,7 @@ def post : JavascriptReverseRoute = JavascriptReverseRoute(
 )
                         
 
-// @LINE:19
+// @LINE:22
 def delete : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Accounts.delete",
    """
@@ -403,7 +484,7 @@ def delete : JavascriptReverseRoute = JavascriptReverseRoute(
 )
                         
 
-// @LINE:17
+// @LINE:20
 def get : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Accounts.get",
    """
@@ -447,6 +528,24 @@ def get : JavascriptReverseRoute = JavascriptReverseRoute(
 }
               
 
+// @LINE:11
+class ReverseFaq {
+    
+
+// @LINE:11
+def get : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.Faq.get",
+   """
+      function() {
+      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "faq"})
+      }
+   """
+)
+                        
+    
+}
+              
+
 // @LINE:9
 // @LINE:8
 class ReverseSignup {
@@ -477,12 +576,12 @@ def get : JavascriptReverseRoute = JavascriptReverseRoute(
 }
               
 
-// @LINE:21
-// @LINE:20
+// @LINE:24
+// @LINE:23
 class ReverseNotifications {
     
 
-// @LINE:21
+// @LINE:24
 def post : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Notifications.post",
    """
@@ -493,7 +592,7 @@ def post : JavascriptReverseRoute = JavascriptReverseRoute(
 )
                         
 
-// @LINE:20
+// @LINE:23
 def get : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Notifications.get",
    """
@@ -510,7 +609,10 @@ def get : JavascriptReverseRoute = JavascriptReverseRoute(
         
 
 
+// @LINE:28
 // @LINE:25
+// @LINE:24
+// @LINE:23
 // @LINE:22
 // @LINE:21
 // @LINE:20
@@ -530,11 +632,11 @@ def get : JavascriptReverseRoute = JavascriptReverseRoute(
 // @LINE:6
 package controllers.ref {
 
-// @LINE:25
+// @LINE:28
 class ReverseAssets {
     
 
-// @LINE:25
+// @LINE:28
 def at(path:String, file:String): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Assets.at(path, file), HandlerDef(this, "controllers.Assets", "at", Seq(classOf[String], classOf[String]), "GET", """ Map static resources from the /public folder to the /assets URL path""", _prefix + """assets/$file<.+>""")
 )
@@ -543,25 +645,38 @@ def at(path:String, file:String): play.api.mvc.HandlerRef[_] = new play.api.mvc.
 }
                           
 
-// @LINE:16
-// @LINE:15
-// @LINE:14
+// @LINE:10
+class ReverseAbout {
+    
+
+// @LINE:10
+def get(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.About.get(), HandlerDef(this, "controllers.About", "get", Seq(), "GET", """""", _prefix + """about""")
+)
+                      
+    
+}
+                          
+
+// @LINE:19
+// @LINE:18
+// @LINE:17
 class ReverseUploads {
     
 
-// @LINE:15
+// @LINE:18
 def post(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Uploads.post(), HandlerDef(this, "controllers.Uploads", "post", Seq(), "POST", """""", _prefix + """uploads""")
 )
                       
 
-// @LINE:16
+// @LINE:19
 def delete(id:Long): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Uploads.delete(id), HandlerDef(this, "controllers.Uploads", "delete", Seq(classOf[Long]), "DELETE", """""", _prefix + """uploads/$id<[^/]+>""")
 )
                       
 
-// @LINE:14
+// @LINE:17
 def get(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Uploads.get(), HandlerDef(this, "controllers.Uploads", "get", Seq(), "GET", """""", _prefix + """uploads""")
 )
@@ -570,18 +685,31 @@ def get(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
 }
                           
 
-// @LINE:11
-// @LINE:10
+// @LINE:12
+class ReverseContact {
+    
+
+// @LINE:12
+def get(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Contact.get(), HandlerDef(this, "controllers.Contact", "get", Seq(), "GET", """""", _prefix + """contact""")
+)
+                      
+    
+}
+                          
+
+// @LINE:14
+// @LINE:13
 class ReverseHome {
     
 
-// @LINE:11
+// @LINE:14
 def post(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Home.post(), HandlerDef(this, "controllers.Home", "post", Seq(), "POST", """""", _prefix + """home""")
 )
                       
 
-// @LINE:10
+// @LINE:13
 def get(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Home.get(), HandlerDef(this, "controllers.Home", "get", Seq(), "GET", """""", _prefix + """home""")
 )
@@ -590,18 +718,18 @@ def get(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
 }
                           
 
-// @LINE:13
-// @LINE:12
+// @LINE:16
+// @LINE:15
 class ReverseProfile {
     
 
-// @LINE:13
+// @LINE:16
 def post(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Profile.post(), HandlerDef(this, "controllers.Profile", "post", Seq(), "POST", """""", _prefix + """profile""")
 )
                       
 
-// @LINE:12
+// @LINE:15
 def get(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Profile.get(), HandlerDef(this, "controllers.Profile", "get", Seq(), "GET", """""", _prefix + """profile""")
 )
@@ -610,11 +738,11 @@ def get(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
 }
                           
 
-// @LINE:22
+// @LINE:25
 class ReverseLogout {
     
 
-// @LINE:22
+// @LINE:25
 def get(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Logout.get(), HandlerDef(this, "controllers.Logout", "get", Seq(), "GET", """""", _prefix + """logout""")
 )
@@ -623,25 +751,25 @@ def get(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
 }
                           
 
-// @LINE:19
-// @LINE:18
-// @LINE:17
+// @LINE:22
+// @LINE:21
+// @LINE:20
 class ReverseAccounts {
     
 
-// @LINE:18
+// @LINE:21
 def post(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Accounts.post(), HandlerDef(this, "controllers.Accounts", "post", Seq(), "POST", """""", _prefix + """accounts""")
 )
                       
 
-// @LINE:19
+// @LINE:22
 def delete(id:Long): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Accounts.delete(id), HandlerDef(this, "controllers.Accounts", "delete", Seq(classOf[Long]), "DELETE", """""", _prefix + """accounts/$id<[^/]+>""")
 )
                       
 
-// @LINE:17
+// @LINE:20
 def get(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Accounts.get(), HandlerDef(this, "controllers.Accounts", "get", Seq(), "GET", """""", _prefix + """accounts""")
 )
@@ -670,6 +798,19 @@ def get(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
 }
                           
 
+// @LINE:11
+class ReverseFaq {
+    
+
+// @LINE:11
+def get(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.Faq.get(), HandlerDef(this, "controllers.Faq", "get", Seq(), "GET", """""", _prefix + """faq""")
+)
+                      
+    
+}
+                          
+
 // @LINE:9
 // @LINE:8
 class ReverseSignup {
@@ -690,18 +831,18 @@ def get(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
 }
                           
 
-// @LINE:21
-// @LINE:20
+// @LINE:24
+// @LINE:23
 class ReverseNotifications {
     
 
-// @LINE:21
+// @LINE:24
 def post(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Notifications.post(), HandlerDef(this, "controllers.Notifications", "post", Seq(), "POST", """""", _prefix + """notifications""")
 )
                       
 
-// @LINE:20
+// @LINE:23
 def get(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Notifications.get(), HandlerDef(this, "controllers.Notifications", "get", Seq(), "GET", """""", _prefix + """notifications""")
 )

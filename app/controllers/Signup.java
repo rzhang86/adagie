@@ -1,7 +1,6 @@
 package controllers;
 import java.util.*;
 
-import org.apache.commons.mail.*;
 import play.mvc.*;
 import play.data.*;
 import static play.data.Form.*;
@@ -79,21 +78,8 @@ public class Signup extends Controller {
             	user.setBalance(0L);
             	user.setCommittedBalance(0L);
             	user.save();
+            	//Application.sendEmail(email, "Welcome to Adagie", "Your usename is " + username);
                 //session("username", username);
-
-            	/*
-            	Email e = new SimpleEmail();
-            	e.setHostName("smtp.googlemail.com");
-            	e.setSmtpPort(465);
-            	e.setAuthenticator(new DefaultAuthenticator("bibimbop9", "S1_jeec87"));
-            	e.setSSLOnConnect(true);
-            	e.setFrom("info@Adagie.com");
-            	e.setSubject("Welcome to Adagie");
-            	e.setMsg("Your usename is " + username);
-            	e.addTo(email);
-            	e.send();
-            	*/
-            	
                 flash("success", "You have signed up");
                 return redirect("/");
             }

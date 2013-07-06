@@ -30,6 +30,9 @@
             textarea {max-width: 100%;}
             
             .nonform-div {height: 40px;}
+            .form-div {height: 40px;}
+            .nonpassword-div {height: 40px;}
+            .password-div {height: 40px;}
             .nonform-height {height: 40px;}
             .nonform-height2 {height: 30px;}
         </style>
@@ -66,25 +69,22 @@
                         <li><a href="@routes.Logout.get()">Log out</a></li>
                     </ul>
                 } else {
-                    <div class="form-horizontal text-right">
-                        <form action="@routes.Login.post()" method="post">
-                            <input type="text" class="span4" name="email" placeholder="Email address" maxlength=63>
-                            <input type="password" class="span3" name="password" placeholder="Password" maxlength=31>
-                            <button type="submit" class="btn btn-info">Log in</button>
-                            <a class="btn btn-warning" href="@routes.Signup.get()">Sign up</a>
-                        </form>
-                    </div>
+                    <ul class="nav nav-pills">
+                        <li @if(activeClass.equals("login")) {class="active"}><a href="@routes.Login.get()">Login</a></li>
+                        <li @if(activeClass.equals("signup")) {class="active"})><a href="@routes.Signup.get()">Signup</a></li>
+                        <li @if(activeClass.equals("about")) {class="active"})><a href="@routes.About.get()">About</a></li>
+                        <li @if(activeClass.equals("faq")) {class="active"})><a href="@routes.Faq.get()">FAQ</a></li>
+                        <li @if(activeClass.equals("contact")) {class="active"})><a href="@routes.Contact.get()">Contact</a></li>
+                    </ul>
                 }
-            </div>
-            <div class="row">
-                <div class="span12">
-                    @if(flash.contains("success")) {@flash.get("success")}
-                    @if(flash.contains("failure")) {@flash.get("failure")}
-                </div>
             </div>
             @content
             <div class="footer">
                 <p>by Ray</p>
+                <p>
+                    @if(flash.contains("success")) {@flash.get("success")}
+                    @if(flash.contains("failure")) {@flash.get("failure")}
+                </p>
             </div>      
         </div>
         

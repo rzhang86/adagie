@@ -5,97 +5,97 @@
         <div class="span12 well">
             <form action="@routes.Profile.post()" method="post">
                 <div class="row"><div class="span12 text-right"><button type="button" class="btn btn-info" id="edit-button" data-toggle="button">Edit</button></div></div>
-                <div class="row"><div class="span6 offset3 text-center"><strong>Required fields:</strong></div></div>
-                <div class="row nonform-height2">
-                    <div class="span4 offset1">Email:</div>
-                    <div class="span3">Password:</div>
-                    <div class="span4 form-div text-warning">
-                        <label class="checkbox pull-right"><input type="checkbox" id="change-password-box" name="changePassword" value="1"> Change password</label>
+                <div class="row">
+                    <div class="span4 offset1">
+                        <div class="row nonform-height2"><div class="span4">Email:</div></div>
+                        <div class="row"><div class="span4 text-info"><i>@user.getEmail()</i></div></div>
+                    </div>
+                    <div class="span7">
+                        <div class="row nonform-height2"><div class="span7">Password: <label class="checkbox pull-right text-warning" id="change-password-label"><input type="checkbox" id="change-password-box" name="changePassword" value="1"> Change password</label></div></div>
+                        <div class="row nonpassword-div"><div class="span7 text-info"><i>(not shown of course...)</i></div></div>
+                        <div class="row nonpassword-div"><div class="span7"></div></div>
+                        <div class="row password-div"><div class="span3"><input class="span3" type="password" id="password" name="password" placeholder="Current password" pattern=".{6,31}"></div></div>
+                        <div class="row password-div">
+                            <div class="span3"><input class="span3" type="password" id="newPassword" name="newPassword" placeholder="New password" pattern=".{6,31}"></div>
+                            <div class="span3"><input class="span3" type="password" id="newPasswordRepeat" name="newPasswordRepeat" placeholder="Repeat new password" pattern=".{6,31}"></div>
+                        </div>
+                    </div>
+                </div>
+                <br><div class="row"><div class="span10 offset1"><strong>- Optional fields: </strong><i>(These fields help match you with higher-paying ads)</i><strong> -</strong></div></div><br>
+                <div class="row">
+                    <div class="span10 offset1">
+                        <div class="row"><div class="span10">Occupations:</div></div>
+                        @defining(Occupation.findAll()) {occupations =>
+                        <div class="row nonform-div">
+                            <div class="span5 text-info"><i>@Occupation.getNameByString(form("occupation1").value)</i></div>
+                            <div class="span5 text-info"><i>@Occupation.getNameByString(form("occupation2").value)</i></div>
+                        </div>
+                        <div class="row form-div">
+                            <div class="span5"><select class="span5 occupation" id="occupation1" name="occupation1"><option value="-1"></option>@occupations.map {occupation => <option value="@occupation.getId()" @if(occupation.getId().toString().equals(form("occupation1").value)) {selected}>@occupation.getName()</option>}</select></div>
+                            <div class="span5"><select class="span5 occupation" id="occupation2" name="occupation2"><option value="-1"></option>@occupations.map {occupation => <option value="@occupation.getId()" @if(occupation.getId().toString().equals(form("occupation2").value)) {selected}>@occupation.getName()</option>}</select></div>
+                        </div>
+                        }
                     </div>
                 </div>
                 <div class="row">
-                    <div class="span4 offset1 nonform-height text-info"><i>@form("email").value</i></div>
-                    <div class="span5 nonpassword-div text-info"><i>(not shown of course...)</i></div>
-                    <div class="span3 password-div"><input class="span3" type="password" id="password" name="password" placeholder="Current password" pattern=".{6,31}"></div>
-                    <!--
-                    <div class="span3 nonform-div"></div>
-                    <div class="span4 offset1 form-div"><input class="span4" type="email" id="email" name="email" placeholder="Email" value="@form("email").value" pattern=".{1,63}"></div>
-                    <div class="span3 form-div"><input class="span3" type="password" id="password" name="password" placeholder="Password" pattern=".{6,31}"></div>
-                    <div class="span3 form-div"><input class="span3" type="password" id="passwordRepeat" name="passwordRepeat" placeholder="Repeat password" pattern=".{6,31}"></div>
-                    -->
+                    <div class="span2 offset1">
+                        <div class="row"><div class="span2">Age:</div></div>
+                        <div class="row nonform-div"><div class="span2 text-info"><i>@form("age").value</i></div></div>
+                        <div class="row form-div"><div class="span2"><input class="span2" type="number" id="age" name="age" placeholder="Age" maxlength="3" min="0" max="999" value="@form("age").value"></div></div>
+                    </div>
+                    <div class="span2">
+                        <div class="row"><div class="span2">Zip code:</div></div>
+                        <div class="row nonform-div"><div class="span2 text-info"><i>@form("zipCode").value</i></div></div>
+                        <div class="row form-div"><div class="span2"><input class="span2" type="text" id="zipCode" name="zipCode" placeholder="Zip code" maxlength="5" value="@form("zipCode").value" autocomplete="off"></div></div>
+                    </div>
+                    <div class="span2">
+                        <div class="row"><div class="span2">Gender:</div></div>
+                        <div class="row nonform-div">
+                            <div class="span1">@if(form("gender").value=="M") {<img src="assets/img/male.png" width="15px">}</div>
+                            <div class="span1">@if(form("gender").value=="F") {<img src="assets/img/female.png" width="15px">}</div>
+                        </div>
+                        <div class="row form-div">
+                            <div class="span1"><label class="radio inline" id="male"><input type="radio" name="gender" value="M" @if(form("gender").value=="M") {checked}><img src="assets/img/male.png" width="15px"></label></div>
+                            <div class="span1"><label class="radio inline" id="female"><input type="radio" name="gender" value="F" @if(form("gender").value=="F") {checked}><img src="assets/img/female.png" width="15px"></label></div>
+                        </div>
+                    </div>
+                    <div class="span4">
+                        <div class="row"><div class="span4">Interests:</div></div>
+                        @defining(Interest.findAll()) {interests =>
+                        <div class="row nonform-div"><div class="span4 text-info"><i>@Interest.getNameByString(form("interest1").value)</i></div></div>
+                        <div class="row nonform-div"><div class="span4 text-info"><i>@Interest.getNameByString(form("interest2").value)</i></div></div>
+                        <div class="row nonform-div"><div class="span4 text-info"><i>@Interest.getNameByString(form("interest3").value)</i></div></div>
+                        <div class="row nonform-div"><div class="span4 text-info"><i>@Interest.getNameByString(form("interest4").value)</i></div></div>
+                        <div class="row form-div"><div class="span4"><select class="span4 interest" id="interest1" name="interest1"><option value="-1"></option>@interests.map {interest => <option value="@interest.getId()" @if(interest.getId().toString().equals(form("interest1").value)) {selected}>@interest.getName()</option>}</select></div></div>
+                        <div class="row form-div"><div class="span4"><select class="span4 interest" id="interest2" name="interest2"><option value="-1"></option>@interests.map {interest => <option value="@interest.getId()" @if(interest.getId().toString().equals(form("interest2").value)) {selected}>@interest.getName()</option>}</select></div></div>
+                        <div class="row form-div"><div class="span4"><select class="span4 interest" id="interest3" name="interest3"><option value="-1"></option>@interests.map {interest => <option value="@interest.getId()" @if(interest.getId().toString().equals(form("interest3").value)) {selected}>@interest.getName()</option>}</select></div></div>
+                        <div class="row form-div"><div class="span4"><select class="span4 interest" id="interest4" name="interest4"><option value="-1"></option>@interests.map {interest => <option value="@interest.getId()" @if(interest.getId().toString().equals(form("interest4").value)) {selected}>@interest.getName()</option>}</select></div></div>
+                        }
+                    </div>
                 </div>
-                <div class="row">
-                    <div class="span6 offset5 nonform-height nonpassword-div"></div>
-                    <div class="span3 offset5 password-div"><input class="span3" type="password" id="newPassword" name="newPassword" placeholder="New password" pattern=".{6,31}"></div>
-                    <div class="span3 password-div"><input class="span3" type="password" id="newPasswordRepeat" name="newPasswordRepeat" placeholder="Repeat new password" pattern=".{6,31}"></div>
-                </div>
-                <div class="row"><div class="span6 offset3 text-center"><strong>Optional fields *:</strong></div></div>
-                <br>
-                <div class="row"><div class="span5 offset1">Occupations:</div></div>
-                @defining(Occupation.findAll()) {occupations =>
-                    <div class="row ">
-                        <div class="span5 offset1 nonform-div text-info"><i>@Occupation.getNameByString(form("occupation1").value)</i></div>
-                        <div class="span5 nonform-div text-info"><i>@Occupation.getNameByString(form("occupation2").value)</i></div>
-                        <div class="span5 offset1 form-div"><select class="span5 occupation" name="occupation1"><option value="-1"></option>@occupations.map {occupation => <option value="@occupation.getId()" @if(occupation.getId().toString().equals(form("occupation1").value)) {selected}>@occupation.getName()</option>}</select></div>
-                        <div class="span5 form-div"><select class="span5 occupation" name="occupation2"><option value="-1"></option>@occupations.map {occupation => <option value="@occupation.getId()" @if(occupation.getId().toString().equals(form("occupation2").value)) {selected}>@occupation.getName()</option>}</select></div>
-                    </div>
-                }
-                <div class="row">
-                    <div class="span2 offset1">Age:</div>
-                    <div class="span2">Zip code:</div>
-                    <div class="span2">Gender:</div>
-                    <div class="span4">Interests:</div>
-                </div>
-                @defining(Interest.findAll()) {interests =>
-                    <div class="row">
-                        <div class="span2 offset1 nonform-div text-info"><i>@form("age").value</i></div>
-                        <div class="span2 nonform-div text-info"><i>@form("zipCode").value</i></div>
-                        <div class="span1 nonform-div text-info">@if(form("gender").value=="M") {<img src="assets/img/male.png" width="15px">}</div>
-                        <div class="span1 nonform-div text-info">@if(form("gender").value=="F") {<img src="assets/img/female.png" width="15px">}</div>
-                        <div class="span4 nonform-div text-info"><i>@Interest.getNameByString(form("interest1").value)</i></div>
-                        <div class="span2 offset1 form-div"><input class="span2" type="number" id="age" name="age" placeholder="Age" maxlength="3" min="0" max="999" value="@form("age").value"></div>
-                        <div class="span2 form-div"><input class="span2" type="text" id="zipCode" name="zipCode" placeholder="Zip code" maxlength="5" value="@form("zipCode").value"></div>
-                        <div class="span1 form-div"><label class="radio inline" id="male"><input type="radio" name="gender" value="M" @if(form("gender").value=="M") {checked}><img src="assets/img/male.png" width="15px"></label></div>
-                        <div class="span1 form-div"><label class="radio inline" id="female"><input type="radio" name="gender" value="F" @if(form("gender").value=="F") {checked}><img src="assets/img/female.png" width="15px"></label></div>
-                        <div class="span4 form-div"><select class="span4 interest" name="interest1"><option value="-1"></option>@interests.map {interest => <option value="@interest.getId()" @if(interest.getId().toString().equals(form("interest1").value)) {selected}>@interest.getName()</option>}</select></div>
-                    </div>
-                    <div class="row ">
-                        <div class="span4 offset7 nonform-div text-info"><i>@Interest.getNameByString(form("interest2").value)</i></div>
-                        <div class="span4 offset7 form-div"><select class="span4 interest" name="interest2"><option value="-1"></option>@interests.map {interest => <option value="@interest.getId()" @if(interest.getId().toString().equals(form("interest2").value)) {selected}>@interest.getName()</option>}</select></div>
-                    </div>
-                    <div class="row">
-                        <div class="span4 offset7 nonform-div text-info"><i>@Interest.getNameByString(form("interest3").value)</i></div>
-                        <div class="span4 offset7 form-div"><select class="span4 interest" name="interest3"><option value="-1"></option>@interests.map {interest => <option value="@interest.getId()" @if(interest.getId().toString().equals(form("interest3").value)) {selected}>@interest.getName()</option>}</select></div>
-                    </div>
-                    <div class="row">
-                        <div class="span4 offset7 nonform-div text-info"><i>@Interest.getNameByString(form("interest4").value)</i></div>
-                        <div class="span4 offset7 form-div"><select class="span4 interest" name="interest4"><option value="-1"></option>@interests.map {interest => <option value="@interest.getId()" @if(interest.getId().toString().equals(form("interest4").value)) {selected}>@interest.getName()</option>}</select></div>
-                    </div>
-                }
-                <div class="row"><div class="span12 text-center"><i>* Optional fields help match you with higher-paying videos!</i></div></div>
-                <div class="row"><div class="span12 text-center"><button type="submit" class="btn btn-large btn-success" id="submit-button">Save</button></div></div>
+                <div class="row form-div"><div class="span12 text-center"><button type="submit" class="btn btn-large btn-warning">Save</button></div></div>
             </form>
         </div>
     </div>
     <script type="text/javascript">
         var editButton = $('#edit-button');
-    	var submitButton = $('#submit-button'); 
         var changePasswordBox = $('#change-password-box');
-		submitButton.hide();
     	$('.form-div').hide();
     	$('.password-div').hide();
+    	$('#change-password-label').hide();
     	$('.nonform-div').show();
     	$('.nonpassword-div').show();
     	editButton.click(function() {
             if (editButton.hasClass('active')) {
             	$('.form-div').hide();
             	$('.password-div').hide();
-            	$('#submit-button').hide();
+            	$('#change-password-label').hide();
             	$('.nonform-div').show();
             	$('.nonpassword-div').show();
             }
             else {
             	$('.form-div').show();
+            	$('#change-password-label').show();
             	if (changePasswordBox.prop('checked')) {
                 	$('.password-div').show();
                 	$('.nonpassword-div').hide();
@@ -104,20 +104,29 @@
                 	$('.password-div').hide();
                 	$('.nonpassword-div').show();
             	}
-            	$('#submit-button').show();
             	$('.nonform-div').hide();
             }
         });
     	changePasswordBox.change(function() {
     		if (changePasswordBox.prop('checked')) {
-    			changePasswordBox.val('1');
             	$('.nonpassword-div').hide();
             	$('.password-div').show();
+            	$('#password').prop('disabled', false);
+                $('#password').prop('required', true);
+                $('#newPassword').prop('disabled', false);
+                $('#newPassword').prop('required', true);
+                $('#newPpasswordRepeat').prop('disabled', false);
+                $('#newPpasswordRepeat').prop('required', true);
     		}
     		else {
-    			changePasswordBox.val('0');
-            	$('.nonpassword-div').show();
+                $('.nonpassword-div').show();
             	$('.password-div').hide();
+            	$('#password').prop('disabled', true);
+                $('#password').prop('required', false);
+                $('#newPassword').prop('disabled', true);
+                $('#newPassword').prop('required', false);
+                $('#newPpasswordRepeat').prop('disabled', true);
+                $('#newPpasswordRepeat').prop('required', false);
     		}
     	});
         @if(flash.contains("edit")) {editButton.click();}
@@ -131,14 +140,11 @@
                 .blur(function() {if($.inArray($(this).val(), zipCodes) == -1) {$('#zipCode').val('');}});
         });
     	
-        $('#email').tooltip({placement: "bottom", title: "Must be between 1 and 63 characters."})
-        $('#newPassword').tooltip({placement: "bottom", title: "Must be between 6 and 31 characters."})
-        $('#newPasswordRepeat').tooltip({placement: "bottom", title: "Must be between 6 and 31 characters."})
-        $('#age').tooltip({placement: "bottom", title: "Match with videos for your age group."})
-        $('#zipCode').tooltip({placement: "bottom", title: "Match with videos in your area."})
-        $('#male').tooltip({placement: "bottom", title: "Match you with videos for guys."})
-        $('#female').tooltip({placement: "bottom", title: "Match you with videos for gals."})
-        $('.occupation').tooltip({placement: "bottom", title: "Match with videos related to your job."})
-        $('.interest').tooltip({placement: "bottom", title: "Match with videos about your interests."})
+        $('#age').tooltip({placement: "bottom", title: "Match with ads for your age group."})
+        $('#zipCode').tooltip({placement: "bottom", title: "Match with ads in your area."})
+        $('#male').tooltip({placement: "bottom", title: "Match with ads for guys."})
+        $('#female').tooltip({placement: "bottom", title: "Match with ads for gals."})
+        $('.occupation').tooltip({placement: "bottom", title: "Match with ads related to your job."})
+        $('.interest').tooltip({placement: "bottom", title: "Match with ads about your interests."})
     </script>
 }
