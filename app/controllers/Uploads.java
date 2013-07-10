@@ -86,7 +86,7 @@ import views.html.*;
 		                flash("success", "Video uploaded");
 		                file.delete();
 		                tempFile.delete();
-		                return redirect(routes.Uploads.get());
+		                return redirect("/uploads");
 		            }
         		}
         	}
@@ -99,9 +99,11 @@ import views.html.*;
         finalFileMp4.delete();
         finalFileWebm.delete();
         video.delete();
+        flash("new", "1");
         return ok(uploads.render(user, uploadVideoForm));
     }
     
+    //todo: right now this is delete, have to also allow edits
     public static Result delete(Long id) {
     	User user = User.findByUsername(request().username());
         Video video = Video.find.byId(id);
@@ -115,7 +117,7 @@ import views.html.*;
             flash("failure", "You many not delete videos that you did not create");
             //return forbidden();
         }
-        return redirect(routes.Uploads.get());
+        return redirect("/uploads");
     }
 
     public static class UploadVideoForm {

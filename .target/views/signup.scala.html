@@ -7,13 +7,13 @@
                 <div class="row">
                     <div class="span4 offset1">
                         <div class="row nonform-height2"><div class="span4">Email:</div></div>
-                        <div class="row"><div class="span4"><input class="span4" type="email" id="email" name="email" placeholder="Email" value="@form("email").value" pattern=".{1,63}" required></div></div>
+                        <div class="row"><div class="span4"><input class="span4" type="email" id="email" name="email" placeholder="Email" value="@form("email").value" pattern=".{1,63}" maxlength="63" required></div></div>
                     </div>
                     <div class="span6">
                         <div class="row nonform-height2"><div class="span7">Password:</div></div>
                         <div class="row">
-                            <div class="span3"><input class="span3" type="password" id="password" name="password" placeholder="Password" pattern=".{6,31}" required></div>
-                            <div class="span3"><input class="span3" type="password" id="passwordRepeat" name="passwordRepeat" placeholder="Repeat password" pattern=".{6,31}" required></div>
+                            <div class="span3"><input class="span3" type="password" id="password" name="password" placeholder="Password" pattern=".{6,31}" maxlength="31" required></div>
+                            <div class="span3"><input class="span3" type="password" id="passwordRepeat" name="passwordRepeat" placeholder="Repeat password" pattern=".{6,31}" maxlength="31" required></div>
                         </div>
                     </div>
                 </div>
@@ -36,7 +36,7 @@
                     </div>
                     <div class="span2">
                         <div class="row"><div class="span2">Zip code:</div></div>
-                        <div class="row"><div class="span2"><input class="span2" type="text" id="zipCode" name="zipCode" placeholder="Zip code" maxlength="5" value="@form("zipCode").value" autocomplete="off"></div></div>
+                        <div class="row"><div class="span2"><input class="span2" type="text" id="zipCode" name="zipCode" pattern=".{5,5}" placeholder="Zip code" maxlength="5" value="@form("zipCode").value" autocomplete="off"></div></div>
                     </div>
                     <div class="span2">
                         <div class="row"><div class="span2">Gender:</div></div>
@@ -68,11 +68,14 @@
                 .blur(function() {if($.inArray($(this).val(), zipCodes) == -1) {$('#zipCode').val('');}});
         });
         
-        $('#age').tooltip({placement: "bottom", title: "Match with ads for your age group."})
-        $('#zipCode').tooltip({placement: "bottom", title: "Match with ads in your area."})
-        $('#male').tooltip({placement: "bottom", title: "Match with ads for guys."})
-        $('#female').tooltip({placement: "bottom", title: "Match with ads for gals."})
-        $('.occupation').tooltip({placement: "bottom", title: "Match with ads related to your job."})
-        $('.interest').tooltip({placement: "bottom", title: "Match with ads about your interests."})
+        $('#email').tooltip({placement: "bottom", animation: false, title: "Required. 1-63 characters."})
+        $('#password').tooltip({placement: "bottom", animation: false, title: "Required. 6-31 characters."})
+        $('#passwordRepeat').tooltip({placement: "bottom", animation: false, title: "Required. 6-31 characters."})
+        $('#age').tooltip({placement: "bottom", animation: false, title: "Optional. Match with ads for your age group."})
+        $('#zipCode').tooltip({placement: "bottom", animation: false, title: "Optional. Match with ads in your area."})
+        $('#male').tooltip({placement: "bottom", animation: false, title: "Optional. Match with ads for guys."})
+        $('#female').tooltip({placement: "bottom", animation: false, title: "Optional. Match with ads for gals."})
+        $('.occupation').tooltip({placement: "bottom", animation: false, title: "Optional. Match with ads related to your job."})
+        $('.interest').tooltip({placement: "bottom", animation: false, title: "Optional. Match with ads about your interests."})
     </script>
 }

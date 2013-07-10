@@ -1,6 +1,6 @@
 // @SOURCE:C:/programs/ray/adagie/conf/routes
-// @HASH:4070ee6b14a4f5c92cd7e7633209dc40504a156f
-// @DATE:Sat Jul 06 16:09:38 EDT 2013
+// @HASH:34bcce54af61ef30c5890cbca16e0a35d3d4b283
+// @DATE:Tue Jul 09 23:58:17 EDT 2013
 
 import Routes.{prefix => _prefix, defaultPrefix => _defaultPrefix}
 import play.core._
@@ -77,7 +77,7 @@ def post(): Call = {
 
 // @LINE:19
 def delete(id:Long): Call = {
-   Call("DELETE", _prefix + { _defaultPrefix } + "uploads/" + implicitly[PathBindable[Long]].unbind("id", id))
+   Call("POST", _prefix + { _defaultPrefix } + "uploads/" + implicitly[PathBindable[Long]].unbind("id", id))
 }
                                                 
 
@@ -340,7 +340,7 @@ def delete : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Uploads.delete",
    """
       function(id) {
-      return _wA({method:"DELETE", url:"""" + _prefix + { _defaultPrefix } + """" + "uploads/" + (""" + implicitly[PathBindable[Long]].javascriptUnbind + """)("id", id)})
+      return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "uploads/" + (""" + implicitly[PathBindable[Long]].javascriptUnbind + """)("id", id)})
       }
    """
 )
@@ -672,7 +672,7 @@ def post(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
 
 // @LINE:19
 def delete(id:Long): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.Uploads.delete(id), HandlerDef(this, "controllers.Uploads", "delete", Seq(classOf[Long]), "DELETE", """""", _prefix + """uploads/$id<[^/]+>""")
+   controllers.Uploads.delete(id), HandlerDef(this, "controllers.Uploads", "delete", Seq(classOf[Long]), "POST", """""", _prefix + """uploads/$id<[^/]+>""")
 )
                       
 

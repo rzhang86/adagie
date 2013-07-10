@@ -1,6 +1,6 @@
 // @SOURCE:C:/programs/ray/adagie/conf/routes
-// @HASH:4070ee6b14a4f5c92cd7e7633209dc40504a156f
-// @DATE:Sat Jul 06 16:09:38 EDT 2013
+// @HASH:34bcce54af61ef30c5890cbca16e0a35d3d4b283
+// @DATE:Tue Jul 09 23:58:17 EDT 2013
 
 
 import play.core._
@@ -81,7 +81,7 @@ private[this] lazy val controllers_Uploads_post12 = Route("POST", PathPattern(Li
         
 
 // @LINE:19
-private[this] lazy val controllers_Uploads_delete13 = Route("DELETE", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("uploads/"),DynamicPart("id", """[^/]+""",true))))
+private[this] lazy val controllers_Uploads_delete13 = Route("POST", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("uploads/"),DynamicPart("id", """[^/]+""",true))))
         
 
 // @LINE:20
@@ -111,7 +111,7 @@ private[this] lazy val controllers_Logout_get19 = Route("GET", PathPattern(List(
 // @LINE:28
 private[this] lazy val controllers_Assets_at20 = Route("GET", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("assets/"),DynamicPart("file", """.+""",false))))
         
-def documentation = List(("""GET""", prefix,"""controllers.Login.get()"""),("""POST""", prefix,"""controllers.Login.post()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """signup""","""controllers.Signup.get()"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """signup""","""controllers.Signup.post()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """about""","""controllers.About.get()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """faq""","""controllers.Faq.get()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """contact""","""controllers.Contact.get()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """home""","""controllers.Home.get()"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """home""","""controllers.Home.post()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """profile""","""controllers.Profile.get()"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """profile""","""controllers.Profile.post()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """uploads""","""controllers.Uploads.get()"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """uploads""","""controllers.Uploads.post()"""),("""DELETE""", prefix + (if(prefix.endsWith("/")) "" else "/") + """uploads/$id<[^/]+>""","""controllers.Uploads.delete(id:Long)"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """accounts""","""controllers.Accounts.get()"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """accounts""","""controllers.Accounts.post()"""),("""DELETE""", prefix + (if(prefix.endsWith("/")) "" else "/") + """accounts/$id<[^/]+>""","""controllers.Accounts.delete(id:Long)"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """notifications""","""controllers.Notifications.get()"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """notifications""","""controllers.Notifications.post()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """logout""","""controllers.Logout.get()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """assets/$file<.+>""","""controllers.Assets.at(path:String = "/public", file:String)""")).foldLeft(List.empty[(String,String,String)]) { (s,e) => e.asInstanceOf[Any] match {
+def documentation = List(("""GET""", prefix,"""controllers.Login.get()"""),("""POST""", prefix,"""controllers.Login.post()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """signup""","""controllers.Signup.get()"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """signup""","""controllers.Signup.post()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """about""","""controllers.About.get()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """faq""","""controllers.Faq.get()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """contact""","""controllers.Contact.get()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """home""","""controllers.Home.get()"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """home""","""controllers.Home.post()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """profile""","""controllers.Profile.get()"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """profile""","""controllers.Profile.post()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """uploads""","""controllers.Uploads.get()"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """uploads""","""controllers.Uploads.post()"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """uploads/$id<[^/]+>""","""controllers.Uploads.delete(id:Long)"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """accounts""","""controllers.Accounts.get()"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """accounts""","""controllers.Accounts.post()"""),("""DELETE""", prefix + (if(prefix.endsWith("/")) "" else "/") + """accounts/$id<[^/]+>""","""controllers.Accounts.delete(id:Long)"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """notifications""","""controllers.Notifications.get()"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """notifications""","""controllers.Notifications.post()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """logout""","""controllers.Logout.get()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """assets/$file<.+>""","""controllers.Assets.at(path:String = "/public", file:String)""")).foldLeft(List.empty[(String,String,String)]) { (s,e) => e.asInstanceOf[Any] match {
   case r @ (_,_,_) => s :+ r.asInstanceOf[(String,String,String)]
   case l => s ++ l.asInstanceOf[List[(String,String,String)]] 
 }}
@@ -226,7 +226,7 @@ case controllers_Uploads_post12(params) => {
 // @LINE:19
 case controllers_Uploads_delete13(params) => {
    call(params.fromPath[Long]("id", None)) { (id) =>
-        invokeHandler(controllers.Uploads.delete(id), HandlerDef(this, "controllers.Uploads", "delete", Seq(classOf[Long]),"DELETE", """""", Routes.prefix + """uploads/$id<[^/]+>"""))
+        invokeHandler(controllers.Uploads.delete(id), HandlerDef(this, "controllers.Uploads", "delete", Seq(classOf[Long]),"POST", """""", Routes.prefix + """uploads/$id<[^/]+>"""))
    }
 }
         
